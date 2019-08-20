@@ -1,0 +1,1497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="public void setSelected(Time time, boolean ignoreT..." line="997" />
+    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="//private final EventLoader mEventLoader;" line="326" />
+    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="// mEventLoader.loadEventsInBackground(mNumDays, e..." line="1991" />
+    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="extraLong" line="1443" />
+    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="extraLong" line="1444" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bff12509-9fc8-414d-8c57-7acd80a274fc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Android.mk" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PrivacyPolicy.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extensions_src/com/android/calendar/extensions/AllInOneMenuExtensions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/external/external.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ic_launcher-web.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/Etar Logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/Etar Logo.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/Etar notification Logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/Etar notification Logo.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/animation.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/changelogs/10.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/changelogs/11.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/changelogs/13.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/changelogs/14.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/changelogs/15.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/changelogs/6.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/changelogs/9.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/full_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/images/featureGraphic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/short_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ar-AR/title.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/changelogs/10.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/changelogs/13.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/changelogs/14.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/changelogs/15.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/changelogs/16.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/changelogs/17.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/changelogs/18.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/changelogs/19.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/changelogs/8.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/changelogs/9.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/full_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/short_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/de-DE/title.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/10.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/11.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/13.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/14.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/15.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/16.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/17.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/18.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/19.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/6.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/changelogs/9.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/full_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/featureGraphic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/phoneScreenshots/p1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/phoneScreenshots/p2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/phoneScreenshots/p3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/phoneScreenshots/p4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/phoneScreenshots/p5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/phoneScreenshots/t1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/phoneScreenshots/t2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/phoneScreenshots/t3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/phoneScreenshots/t4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/images/phoneScreenshots/t5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/short_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en-US/title.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en_fdroid.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/en_google_play.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/es-ES/full_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/es-ES/short_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/es-ES/title.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/fr-FR/full_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/fr-FR/short_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/fr-FR/title.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/it-IT/full_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/it-IT/short_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/it-IT/title.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/nb-NB/full_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/nb-NB/short_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/nb-NB/title.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ro-RO/full_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ro-RO/short_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ro-RO/title.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ru-RU/full_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ru-RU/short_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/ru-RU/title.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/zh-CN/changelogs/10.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/zh-CN/changelogs/11.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/zh-CN/changelogs/13.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/zh-CN/changelogs/14.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/zh-CN/changelogs/15.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/zh-CN/changelogs/6.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/zh-CN/changelogs/9.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/zh-CN/full_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/zh-CN/short_description.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/metadata/zh-CN/title.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mkprojectfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proguard.flags" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projects-calendar.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/anim/slide_left_in.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/anim/slide_left_out.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/anim/slide_right_in.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/anim/slide_right_out.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/color/recurrence_bubble_text_color.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/color/recurrence_done_text_color.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/color/recurrence_done_text_color_black.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/bg_event_cal_widget_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/cal_widget_date_bg.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calendar_widget_preview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_bottom_select_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_bottom_select_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_bottom_select_underunselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_bottom_select_underunselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_bottom_unselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_bottom_unselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_bottom_unselected_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_bottom_unselected_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_select_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_select_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_select_underunselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_select_underunselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_unselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_unselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_unselected_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/calname_unselected_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/dayline_minical_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/frame_event_color_cal_widget_holo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_add_event.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_alarm_holo_dark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_alarm_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_call.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_collapse_large_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_collapse_small_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_contact_picture.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_expand_large_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_expand_small_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_history_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_map.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_add_field_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_agenda_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_cancel_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_colorpicker_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_compose_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_day_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_done_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_email_holo_dark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_email_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_month_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_navigator.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_refresh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_remove_field_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_remove_field_holo_light_dark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_search.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_select_visible_calendars.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_settings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_today_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_trash_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_menu_week_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_recurrence_bubble_disabled.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_recurrence_bubble_fill.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_recurrence_bubble_outline.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_recurrence_bubble_outline_disabled.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_repeat_dark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_repeat_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/list_focused_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/list_multi_left_activated_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/list_multi_left_focused_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/list_multi_left_pressed_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/list_multi_left_primary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/list_multi_left_secondary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/list_pressed_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/list_primary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/list_secondary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/minical_bg_shadow_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/panel_month_event_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/stat_notify_calendar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/stat_notify_calendar_multiple.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/switch_thumb_activated_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/switch_thumb_disabled_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/switch_thumb_holo_light_v2.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/switch_thumb_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/timeline_indicator_activated_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/timeline_indicator_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/today_blue_week_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/widget_chip_not_responded_bg.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-hdpi/widget_chip_responded_bg.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/bg_event_cal_widget_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/cal_widget_date_bg.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calendar_widget_preview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_bottom_select_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_bottom_select_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_bottom_select_underunselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_bottom_select_underunselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_bottom_unselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_bottom_unselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_bottom_unselected_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_bottom_unselected_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_select_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_select_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_select_underunselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_select_underunselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_unselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_unselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_unselected_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/calname_unselected_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/dayline_minical_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/frame_event_color_cal_widget_holo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_add_event.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_alarm_holo_dark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_alarm_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_call.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_collapse_large_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_collapse_small_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_contact_picture.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_expand_large_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_expand_small_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_history_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_map.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_add_field_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_agenda_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_cancel_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_colorpicker_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_compose_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_day_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_done_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_email_holo_dark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_email_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_month_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_navigator.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_refresh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_remove_field_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_search.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_select_visible_calendars.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_settings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_today_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_trash_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_menu_week_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_recurrence_bubble_disabled.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_recurrence_bubble_fill.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_recurrence_bubble_outline.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_recurrence_bubble_outline_disabled.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_repeat_dark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_repeat_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/list_focused_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/list_multi_left_activated_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/list_multi_left_focused_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/list_multi_left_pressed_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/list_multi_left_primary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/list_multi_left_secondary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/list_pressed_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/list_primary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/list_secondary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/minical_bg_shadow_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/panel_month_event_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/stat_notify_calendar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/stat_notify_calendar_multiple.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/switch_thumb_activated_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/switch_thumb_disabled_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/switch_thumb_holo_light_v2.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/switch_thumb_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/timeline_indicator_activated_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/timeline_indicator_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/today_blue_week_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/widget_chip_not_responded_bg.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-mdpi/widget_chip_responded_bg.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-sw600dp/agenda_item_bg_primary.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-sw600dp/agenda_item_bg_secondary.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-sw600dp/ic_collapse_holo_light.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-sw600dp/ic_expand_holo_light.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-sw600dp/ic_menu_today_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/.directory" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/bg_event_cal_widget_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/cal_widget_date_bg.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calendar_widget_preview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_bottom_select_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_bottom_select_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_bottom_select_underunselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_bottom_select_underunselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_bottom_unselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_bottom_unselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_bottom_unselected_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_bottom_unselected_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_select_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_select_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_select_underunselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_select_underunselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_unselected_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_unselected_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_unselected_underselect_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/calname_unselected_underselect_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/dayline_minical_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/frame_event_color_cal_widget_holo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_add_event.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_alarm_holo_dark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_alarm_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_call.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_collapse_large_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_collapse_small_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_contact_picture.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_expand_large_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_expand_small_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_history_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_map.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_add_field_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_agenda_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_cancel_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_colorpicker_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_compose_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_day_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_done_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_email_holo_dark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_email_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_month_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_navigator.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_refresh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_remove_field_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_search.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_select_visible_calendars.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_settings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_today_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_trash_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_menu_week_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_recurrence_bubble_disabled.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_recurrence_bubble_fill.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_recurrence_bubble_outline.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_recurrence_bubble_outline_disabled.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_repeat_dark.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_repeat_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/list_focused_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/list_multi_left_activated_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/list_multi_left_focused_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/list_multi_left_pressed_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/list_multi_left_primary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/list_multi_left_secondary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/list_pressed_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/list_primary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/list_secondary_holo.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/minical_bg_shadow_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/panel_month_event_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/stat_notify_calendar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/stat_notify_calendar_multiple.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/switch_thumb_activated_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/switch_thumb_disabled_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/switch_thumb_holo_light_v2.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/switch_thumb_pressed_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/timeline_indicator_activated_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/timeline_indicator_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xhdpi/today_blue_week_holo_light.9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_add_event.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_agenda_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_cancel_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_compose_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_day_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_done_holo_light.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_month_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_navigator.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_refresh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_search.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_select_visible_calendars.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_settings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_trash_dialog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/ic_menu_week_view.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/stat_notify_calendar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxxhdpi/ic_add_event.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable-xxxhdpi/stat_notify_calendar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/actionbar_cursor.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/agenda_item_bg_primary.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/agenda_item_bg_secondary.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/calendar_color_square.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/calname_bottom_select_underselect.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/calname_bottom_select_underunselected.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/calname_bottom_unselected.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/calname_bottom_unselected_underselect.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/calname_select_underselect.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/calname_select_underunselected.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/calname_unselected.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/calname_unselected_underselect.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/ic_arrow_back_white_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/ic_collapse_holo_light.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/ic_color_lens_white_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/ic_delete_white_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/ic_edit_white_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/ic_expand_holo_light.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/ic_sd_storage_white_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/ic_share_white_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/recurrence_bubble_fill.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/switch_thumb.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/drawable/today_icon.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-land/all_in_one.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp-w960dp-h527dp-land/all_in_one.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/agenda_day.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/agenda_fragment.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/agenda_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/all_in_one.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/contact_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/edit_event.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/edit_event_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/edit_event_single_column.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/event_info_label.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/full_month_by_week.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout-sw600dp/full_month_header.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/account_calendars.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/account_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/actionbar_pulldown_menu_button.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/actionbar_pulldown_menu_top_button.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/actionbar_pulldown_menu_top_button_no_date.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/agenda_day.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/agenda_fragment.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/agenda_header_footer.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/agenda_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/alert_activity.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/alert_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/all_in_one.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/all_in_one_material.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/app_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/appwidget.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/appwidget_day.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/appwidget_loading.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/appwidget_no_events.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/bubble_event.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/calendar_sync_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/calendars_dropdown_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/calendars_spinner_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/contact_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/create_event_dialog.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/date_range_title.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/day_activity.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/edit_event.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/edit_event_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/edit_event_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/edit_event_custom_actionbar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/edit_event_single_column.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/edit_reminder_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/email_autocomplete_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/email_autocomplete_item_loading.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/event_info.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/event_info_dialog.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/event_info_headline.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/event_info_label.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/expandable_textview.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/full_month_by_week.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/full_month_header.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/location_dropdown_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/mini_calendar_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/mini_month_header.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/month_by_week.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/quick_response_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/recurrencepicker.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/recurrencepicker_end_text.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/recurrencepicker_freq_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/search.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/select_calendars_fragment.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/select_calendars_multi_accounts_fragment.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/simple_frame_layout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/simple_frame_layout_material.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/timezone_footer.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/widget_all_day_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/layout/widget_item.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/menu-land/all_in_one_title_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/menu-sw600dp-land/all_in_one_title_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/menu-sw600dp/all_in_one_title_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/menu/all_in_one_title_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/menu/calendar_view.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/menu/edit_event_title_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/menu/event_info_title_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/menu/search_title_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/menu/settings_title_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-af/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-af/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-am/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-am/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ar/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ar/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-be/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-be/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-bg/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-bg/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ca/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ca/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-cs/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-cs/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-cy/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-da/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-da/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-de/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-de/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-el/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-el/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-en-rGB/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-en-rGB/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-es-rUS/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-es-rUS/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-es/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-es/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-et/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-et/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-eu/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-fa/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-fa/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-fi/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-fi/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-fr/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-fr/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-hi/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-hi/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-hr/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-hr/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-hu/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-hu/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-in/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-in/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-it/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-it/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-iw/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-iw/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ja/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ja/colors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ja/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ko/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ko/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-land/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-lt/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-lt/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-lv/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-lv/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ms/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ms/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-nb/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-nb/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-nl/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-nl/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-pl/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-pl/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-pt-rBR/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-pt-rPT/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-pt-rPT/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-pt/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-pt/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ro/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ro/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ru/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ru/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sk/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sk/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sl/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sl/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sr/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sr/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sv/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sv/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sw/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sw/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sw600dp-land/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-sw600dp/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-szl/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-th/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-th/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-tl/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-tl/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-tr/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-tr/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ug/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-ug/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-uk/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-uk/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-vi/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-vi/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-w1280dp-h752dp/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-w600dp-h879dp/config.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-w600dp-h879dp/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-w600dp-h879dp/integers.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-w800dp-h1232dp/config.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-w800dp-h1232dp/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-w960dp-h527dp/config.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-w960dp-h527dp/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-w960dp-h527dp/integers.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-zh-rCN/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-zh-rCN/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-zh-rTW/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-zh-rTW/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-zu/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values-zu/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values/arrays.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values/attrs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values/colors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values/config.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values/integers.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values/styles.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/values/themes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/xml/about_preferences.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/xml/appwidget_info.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/xml/calendar_settings_headers.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/xml/general_preferences.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/xml/general_preferences_oreo_and_up.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/xml/other_preferences.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/xml/provider_paths.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/xml/searchable.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/xml/view_details_preferences.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/AboutPreferences.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/AbstractCalendarActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/AllInOneActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/AllInOneMenuExtensionsInterface.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/AsyncQueryService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/AsyncQueryServiceHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarBackupAgent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarColorPickerDialog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarEventModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarRecentSuggestionsProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarSettingsActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarToolbarHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CalendarViewAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/CloudNotificationBackplane.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/ColorChipView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/ContactsAsyncHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/DayFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/DayOfMonthCursor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/DayOfMonthDrawable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/DayView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/DeleteEventHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/DynamicTheme.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/EditResponseHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/EmailAddressAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/Event.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/EventGeometry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/EventInfoActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/EventInfoFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/EventLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/EventRecurrenceFormatter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/ExpandableTextView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/ExtensionsFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/GeneralPreferences.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/GoogleCalendarUriIntentFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/ImportActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/LunarUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/OtherPreferences.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/QuickResponseSettings.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/RecipientAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/SearchActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/StickyHeaderListView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/Utils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/ViewDetailsPreferences.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/agenda/AgendaAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/agenda/AgendaByDayAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/agenda/AgendaFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/agenda/AgendaListView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/agenda/AgendaWindowAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/AlarmManagerInterface.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/AlarmScheduler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/AlertActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/AlertAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/AlertReceiver.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/AlertService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/AlertUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/DismissAlarmsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/GlobalDismissManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/NotificationMgr.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/QuickResponseActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/SnoozeAlarmsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/alerts/SnoozeDelayActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/event/AttendeesView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/event/CreateEventDialogFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/event/EditEventActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/event/EditEventFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/event/EditEventHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/event/EditEventView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/event/EventColorCache.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/event/EventColorPickerDialog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/event/EventLocationAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/event/EventViewUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/icalendar/Attendee.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/icalendar/IcalendarUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/icalendar/Organizer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/icalendar/VCalendar.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/icalendar/VEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/month/MonthByWeekAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/month/MonthByWeekFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/month/MonthListView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/month/MonthWeekEventsView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/month/SimpleDayPickerFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/month/SimpleWeekView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/month/SimpleWeeksAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/recurrencepicker/LinearLayoutWithMaxWidth.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/recurrencepicker/RecurrencePickerDialog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/recurrencepicker/WeekButton.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/selectcalendars/CalendarColorCache.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/selectcalendars/CalendarColorSquare.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/selectcalendars/SelectCalendarsSimpleAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/selectcalendars/SelectCalendarsSyncAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/selectcalendars/SelectCalendarsSyncFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/selectcalendars/SelectSyncedCalendarsMultiAccountActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/selectcalendars/SelectSyncedCalendarsMultiAccountAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/selectcalendars/SelectVisibleCalendarsActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/selectcalendars/SelectVisibleCalendarsFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/widget/CalendarAppWidgetModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/widget/CalendarAppWidgetProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/android/calendar/widget/CalendarAppWidgetService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/Android.mk" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/AsyncQueryServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/DbTestUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/FakeSharedPreferences.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/FormatDateRangeTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/UtilsTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/WeekNumberTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/alerts/AlarmSchedulerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/alerts/AlertServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/alerts/MockAlarmManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/alerts/Utils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/event/EditEventHelperTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/src/com/android/calendar/widget/CalendarAppWidgetServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="116">
+              <caret line="4625" column="29" selection-start-line="4625" selection-start-column="29" selection-end-line="4625" selection-end-column="29" />
+              <folding>
+                <element signature="e#0#203244#0" expanded="true" />
+                <element signature="e#23307#23308#0" expanded="true" />
+                <element signature="e#23348#23349#0" expanded="true" />
+                <element signature="e#23427#23428#0" expanded="true" />
+                <element signature="e#23469#23470#0" expanded="true" />
+                <element signature="e#42697#42698#0" expanded="true" />
+                <element signature="e#42753#42754#0" expanded="true" />
+                <element signature="e#42786#42787#0" expanded="true" />
+                <element signature="e#42819#42820#0" expanded="true" />
+                <element signature="e#81038#81039#0" expanded="true" />
+                <element signature="e#81075#81076#0" expanded="true" />
+                <element signature="e#84140#84141#0" expanded="true" />
+                <element signature="e#84175#84176#0" expanded="true" />
+                <element signature="e#108621#108622#0" expanded="true" />
+                <element signature="e#108668#108669#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="671">
+              <caret line="425" column="33" selection-start-line="425" selection-start-column="16" selection-end-line="425" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/android/calendar/DayFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1451">
+              <caret line="273" column="9" selection-start-line="273" selection-start-column="9" selection-end-line="273" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/android/calendar/Event.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="643" selection-start-line="643" selection-end-line="643" />
+              <folding>
+                <element signature="e#0#24440#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/android/calendar/EventLoader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1095">
+              <caret line="101" column="23" selection-start-line="101" selection-start-column="23" selection-end-line="101" selection-end-column="23" />
+              <folding>
+                <element signature="e#0#10566#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>UpdateTitle</find>
+      <find>cursor</find>
+      <find>mEventLoader</find>
+      <find>eventLoader</find>
+      <find>reloadEvents</find>
+      <find>background</find>
+      <find>mEventHandler</find>
+      <find>run</find>
+      <find>backgroun</find>
+      <find>mevents</find>
+      <find>loadEvent</find>
+      <find>loadEventsInBak</find>
+      <find>computePositions</find>
+      <find>removeAlldayActiveEvents</find>
+      <find>removeNonAlldayActiveEvents</find>
+      <find>change</find>
+      <find>sendEventRelatedEvent</find>
+      <find>switchViews</find>
+      <find>launchEditEvent</find>
+      <find>sendEvent</find>
+      <find>CREATE_EVENT</find>
+      <find>VIEW_EVENT</find>
+      <find>VIEW_EVENT_DETAILS</find>
+      <find>EDIT_EVENT</find>
+      <find>launchCreateEvent</find>
+      <find>event</find>
+      <find>click</find>
+      <find>allDay</find>
+      <find>&lt;&lt;&lt;</find>
+      <find>setSelectedEvent</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/external/chips/build.gradle" />
+        <option value="$PROJECT_DIR$/src/com/android/calendar/Event.java" />
+        <option value="$PROJECT_DIR$/src/com/android/calendar/month/MonthByWeekFragment.java" />
+        <option value="$PROJECT_DIR$/src/com/android/calendar/EventLoader.java" />
+        <option value="$PROJECT_DIR$/src/com/android/calendar/CalendarController.java" />
+        <option value="$PROJECT_DIR$/src/com/android/calendar/DayView.java" />
+        <option value="$PROJECT_DIR$/src/com/android/calendar/DayFragment.java" />
+        <option value="$PROJECT_DIR$/README.md" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1280" />
+    <option name="height" value="734" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="calendar" type="b2602c69:ProjectViewProjectNode" />
+              <item name="calendar" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="AndroidView" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DEBUGGABLE_DEVICE" value="lge-nexus_5x-02682b90665fb14f" />
+    <property name="DEBUGGABLE_PROCESS" value="ws.xsoh.etar" />
+    <property name="DEBUGGER_ID" value="Auto" />
+    <property name="SHOW_ALL_PROCESSES" value="false" />
+    <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="false" />
+    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+    <property name="device.picker.selection" value="02682b90665fb14f" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="not.eligible.for.single.variant.sync" value="true" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="sync.plugin.last.upgrade.timestamp" value="1566298544981" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="projects-calendar" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="projects-calendar" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bff12509-9fc8-414d-8c57-7acd80a274fc" name="Default Changelist" comment="" />
+      <created>1566298504860</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1566298504860</updated>
+    </task>
+    <task id="LOCAL-00001" summary="initial commit">
+      <created>1566300794178</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1566300794179</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Set event from list">
+      <created>1566315476498</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1566315476498</updated>
+    </task>
+    <task id="LOCAL-00003" summary="WIP calender view">
+      <created>1566381176955</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1566381176955</updated>
+    </task>
+    <task id="LOCAL-00004" summary="WIP calender view">
+      <created>1566382988744</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1566382988745</updated>
+    </task>
+    <task id="LOCAL-00005" summary="WIP calender view">
+      <created>1566383149916</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1566383149916</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1280" height="734" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.32956383" />
+      <window_info id="Structure" order="2" side_tool="true" />
+      <window_info id="Build Variants" order="3" side_tool="true" />
+      <window_info id="Image Layers" order="4" />
+      <window_info id="Designer" order="5" />
+      <window_info id="Resources Explorer" order="6" />
+      <window_info id="Capture Tool" order="7" />
+      <window_info id="Favorites" order="8" side_tool="true" />
+      <window_info anchor="bottom" id="Find" />
+      <window_info anchor="bottom" id="Run" order="0" />
+      <window_info anchor="bottom" id="SonarLint" order="1" />
+      <window_info anchor="bottom" id="Logcat" order="2" sideWeight="0.49919224" weight="0.32956383" />
+      <window_info anchor="bottom" id="TODO" order="3" />
+      <window_info anchor="bottom" id="Android Profiler" order="4" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Debug" order="5" sideWeight="0.49919224" weight="0.30371568" />
+      <window_info anchor="bottom" id="Terminal" order="6" sideWeight="0.49919224" visible="true" weight="0.36672053" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50080776" side_tool="true" visible="true" weight="0.36672053" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49919224" weight="0.32956383" />
+      <window_info anchor="bottom" id="Build" order="9" weight="0.15670437" />
+      <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
+      <window_info anchor="right" id="Capture Analysis" order="1" />
+      <window_info anchor="right" id="Gradle" order="2" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info anchor="right" id="Palette&#9;" order="4" />
+    </layout>
+    <layout-to-restore>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.32956383" />
+      <window_info id="Structure" order="1" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Build Variants" order="6" side_tool="true" />
+      <window_info id="Resources Explorer" order="7" />
+      <window_info id="Captures" order="8" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Run" order="0" />
+      <window_info anchor="bottom" id="SonarLint" order="1" />
+      <window_info anchor="bottom" id="TODO" order="2" />
+      <window_info anchor="bottom" id="Logcat" order="3" />
+      <window_info anchor="bottom" id="Debug" order="4" />
+      <window_info anchor="bottom" id="Terminal" order="5" />
+      <window_info anchor="bottom" id="Event Log" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info active="true" anchor="bottom" id="Build" order="8" visible="true" weight="0.08885299" />
+      <window_info anchor="bottom" id="Android Profiler" order="9" />
+      <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
+      <window_info anchor="right" id="Capture Analysis" order="1" />
+      <window_info anchor="right" id="Gradle" order="2" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info anchor="right" id="Palette&#9;" order="4" />
+    </layout-to-restore>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+    <MESSAGE value="initial commit" />
+    <MESSAGE value="Set event from list" />
+    <MESSAGE value="WIP calender view" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP calender view" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>1854</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>326</line>
+          <properties />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>1991</line>
+          <properties />
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>576</line>
+          <properties />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>575</line>
+          <properties />
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>1454</line>
+          <properties />
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>592</line>
+          <properties />
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>605</line>
+          <properties />
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>615</line>
+          <properties />
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>1460</line>
+          <properties />
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>910</line>
+          <properties />
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>431</line>
+          <properties />
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>4847</line>
+          <properties />
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>4822</line>
+          <properties />
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>1418</line>
+          <properties />
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>3851</line>
+          <properties />
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>3850</line>
+          <properties />
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>3889</line>
+          <properties />
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>3888</line>
+          <properties />
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>1437</line>
+          <properties />
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>1426</line>
+          <properties />
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>1425</line>
+          <properties />
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>4830</line>
+          <properties />
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>4674</line>
+          <properties />
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>426</line>
+          <properties />
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>425</line>
+          <properties />
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>430</line>
+          <properties />
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>434</line>
+          <properties />
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>437</line>
+          <properties />
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>440</line>
+          <properties />
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
+          <line>443</line>
+          <properties />
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>4519</line>
+          <properties />
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
+          <line>2677</line>
+          <properties />
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3370" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/external/chips/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="18" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/android/calendar/DayOfMonthCursor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-448">
+          <folding>
+            <element signature="e#0#5456#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Library/Android/sdk/platforms/android-27/android.jar!/android/app/LoaderManager.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#1110#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/android/calendar/month/MonthByWeekFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="107">
+          <caret line="160" column="30" selection-start-line="160" selection-start-column="11" selection-end-line="160" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-27/android/widget/ViewAnimator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="128" column="25" selection-start-line="128" selection-start-column="8" selection-end-line="128" selection-end-column="25" />
+          <folding>
+            <element signature="e#4181#4182#0" expanded="true" />
+            <element signature="e#4231#4232#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-27/android/text/format/DateUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5564">
+          <caret line="90" column="57" selection-start-line="90" selection-start-column="50" selection-end-line="90" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/android/calendar/DynamicTheme.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="129" column="22" selection-start-line="129" selection-start-column="22" selection-end-line="129" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-27/android/view/View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="6166" column="16" selection-start-line="6166" selection-start-column="16" selection-end-line="6166" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-27/android/text/format/Time.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="193" selection-start-line="193" selection-end-line="193" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/android/calendar/EventLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1095">
+          <caret line="101" column="23" selection-start-line="101" selection-start-column="23" selection-end-line="101" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#10566#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/metadata/Etar notification Logo.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/android/calendar/DayFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1451">
+          <caret line="273" column="9" selection-start-line="273" selection-start-column="9" selection-end-line="273" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="671">
+          <caret line="425" column="33" selection-start-line="425" selection-start-column="16" selection-end-line="425" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/android/calendar/Event.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="643" selection-start-line="643" selection-end-line="643" />
+          <folding>
+            <element signature="e#0#24440#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="4625" column="29" selection-start-line="4625" selection-start-column="29" selection-end-line="4625" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#203244#0" expanded="true" />
+            <element signature="e#23307#23308#0" expanded="true" />
+            <element signature="e#23348#23349#0" expanded="true" />
+            <element signature="e#23427#23428#0" expanded="true" />
+            <element signature="e#23469#23470#0" expanded="true" />
+            <element signature="e#42697#42698#0" expanded="true" />
+            <element signature="e#42753#42754#0" expanded="true" />
+            <element signature="e#42786#42787#0" expanded="true" />
+            <element signature="e#42819#42820#0" expanded="true" />
+            <element signature="e#81038#81039#0" expanded="true" />
+            <element signature="e#81075#81076#0" expanded="true" />
+            <element signature="e#84140#84141#0" expanded="true" />
+            <element signature="e#84175#84176#0" expanded="true" />
+            <element signature="e#108621#108622#0" expanded="true" />
+            <element signature="e#108668#108669#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
