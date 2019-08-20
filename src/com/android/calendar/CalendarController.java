@@ -575,6 +575,7 @@ public class CalendarController {
                 calendarId);
         mEventId = -1;
         mContext.startActivity(intent);
+
     }
 
     public Intent generateCreateEventIntent(long startMillis, long endMillis,

@@ -16,32 +16,14 @@
 
 package com.android.calendar;
 
-import android.Manifest;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Debug;
 import android.provider.CalendarContract.Attendees;
-import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Instances;
-import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import ws.xsoh.etar.R;
 
 // TODO: should Event be Parcelable so it can be passed via Intents?
 public class Event implements Cloneable {
@@ -146,6 +128,57 @@ public class Event implements Cloneable {
     private int mColumn;
     private int mMaxColumns;
 
+
+    public Event() {
+    }
+
+    public Event(long id, int color, CharSequence title, CharSequence location, boolean allDay, String organizer, boolean guestsCanModify, int startDay, int endDay, int startTime, int endTime, long startMillis, long endMillis, boolean hasAlarm, boolean isRepeating) {
+        this.id = id;
+        this.color = color;
+        this.title = title;
+        this.location = location;
+        this.allDay = allDay;
+        this.organizer = organizer;
+        this.guestsCanModify = guestsCanModify;
+        this.startDay = startDay;
+        this.endDay = endDay;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startMillis = startMillis;
+        this.endMillis = endMillis;
+        this.hasAlarm = hasAlarm;
+        this.isRepeating = isRepeating;
+    }
+
+    public Event(long id, int color, CharSequence title, CharSequence location, boolean allDay, String organizer, boolean guestsCanModify, int startDay, int endDay, int startTime, int endTime, long startMillis, long endMillis, boolean hasAlarm, boolean isRepeating, int selfAttendeeStatus, float left, float right, float top, float bottom, Event nextRight, Event nextLeft, Event nextUp, Event nextDown, int mColumn, int mMaxColumns) {
+        this.id = id;
+        this.color = color;
+        this.title = title;
+        this.location = location;
+        this.allDay = allDay;
+        this.organizer = organizer;
+        this.guestsCanModify = guestsCanModify;
+        this.startDay = startDay;
+        this.endDay = endDay;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startMillis = startMillis;
+        this.endMillis = endMillis;
+        this.hasAlarm = hasAlarm;
+        this.isRepeating = isRepeating;
+        this.selfAttendeeStatus = selfAttendeeStatus;
+        this.left = left;
+        this.right = right;
+        this.top = top;
+        this.bottom = bottom;
+        this.nextRight = nextRight;
+        this.nextLeft = nextLeft;
+        this.nextUp = nextUp;
+        this.nextDown = nextDown;
+        this.mColumn = mColumn;
+        this.mMaxColumns = mMaxColumns;
+    }
+
     public static final Event newInstance() {
         Event e = new Event();
 
@@ -167,10 +200,11 @@ public class Event implements Cloneable {
         return e;
     }
 
+
     /**
      * Loads <i>days</i> days worth of instances starting at <i>startDay</i>.
      */
-    public static void loadEvents(Context context, ArrayList<Event> events, int startDay, int days,
+    /*public static void loadEvents(Context context, ArrayList<Event> events, int startDay, int days,
                                   int requestId, AtomicInteger sequenceNumber) {
 
         if (PROFILE) {
@@ -240,7 +274,7 @@ public class Event implements Cloneable {
                 Debug.stopMethodTracing();
             }
         }
-    }
+    }*/
 
     /**
      * Performs a query to return all visible instances in the given range
@@ -252,16 +286,16 @@ public class Event implements Cloneable {
      *
      * @param cr            The ContentResolver to use for the query
      * @param projection    The columns to return
-     * @param begin         The start of the time range to query in UTC millis since
+     * @param startDay         The start of the time range to query in UTC millis since
      *                      epoch
-     * @param end           The end of the time range to query in UTC millis since
+     * @param endDay          The end of the time range to query in UTC millis since
      *                      epoch
      * @param selection     Filter on the query as an SQL WHERE statement
      * @param selectionArgs Args to replace any '?'s in the selection
      * @param orderBy       How to order the rows as an SQL ORDER BY statement
      * @return A Cursor of instances matching the selection
      */
-    private static final Cursor instancesQuery(ContentResolver cr, String[] projection,
+    /*private static final Cursor instancesQuery(ContentResolver cr, String[] projection,
                                                int startDay, int endDay, String selection, String[] selectionArgs, String orderBy) {
         String WHERE_CALENDARS_SELECTED = Calendars.VISIBLE + "=?";
         String[] WHERE_CALENDARS_ARGS = {"1"};
@@ -284,7 +318,7 @@ public class Event implements Cloneable {
         }
         return cr.query(builder.build(), projection, selection, selectionArgs,
                 orderBy == null ? DEFAULT_SORT_ORDER : orderBy);
-    }
+    }*/
 
     /**
      * Adds all the events from the cursors to the events list.
@@ -295,7 +329,7 @@ public class Event implements Cloneable {
      * @param startDay
      * @param endDay
      */
-    public static void buildEventsFromCursor(
+    /*public static void buildEventsFromCursor(
             ArrayList<Event> events, Cursor cEvents, Context context, int startDay, int endDay) {
         if (cEvents == null || events == null) {
             Log.e(TAG, "buildEventsFromCursor: null cursor or null events list!");
@@ -321,13 +355,13 @@ public class Event implements Cloneable {
             }
             events.add(e);
         }
-    }
+    }*/
 
     /**
      * @param cEvents Cursor pointing at event
      * @return An event created from the cursor
      */
-    private static Event generateEventFromCursor(Cursor cEvents) {
+   /* private static Event generateEventFromCursor(Cursor cEvents) {
         Event e = new Event();
 
         e.id = cEvents.getLong(PROJECTION_EVENT_ID_INDEX);
@@ -372,7 +406,7 @@ public class Event implements Cloneable {
 
         e.selfAttendeeStatus = cEvents.getInt(PROJECTION_SELF_ATTENDEE_STATUS_INDEX);
         return e;
-    }
+    }*/
 
     /**
      * Computes a position for each event.  Each event is displayed
@@ -401,10 +435,11 @@ public class Event implements Cloneable {
         doComputePositions(eventsList, minimumDurationMillis, true);
     }
 
+
     private static void doComputePositions(ArrayList<Event> eventsList,
                                            long minimumDurationMillis, boolean doAlldayEvents) {
-        final ArrayList<Event> activeList = new ArrayList<Event>();
-        final ArrayList<Event> groupList = new ArrayList<Event>();
+        final ArrayList<Event> activeList = new ArrayList<>();
+        final ArrayList<Event> groupList = new ArrayList<>();
 
         if (minimumDurationMillis < 0) {
             minimumDurationMillis = 0;

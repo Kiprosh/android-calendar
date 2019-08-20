@@ -33,6 +33,8 @@ import android.widget.ViewSwitcher.ViewFactory;
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 
+import java.util.ArrayList;
+
 import ws.xsoh.etar.R;
 
 /**
@@ -52,7 +54,7 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
     protected Animation mOutAnimationForward;
     protected Animation mInAnimationBackward;
     protected Animation mOutAnimationBackward;
-    EventLoader mEventLoader;
+    //EventLoader mEventLoader;
 
     Time mSelectedDay = new Time();
 
@@ -94,7 +96,7 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         mInAnimationBackward = AnimationUtils.loadAnimation(context, R.anim.slide_right_in);
         mOutAnimationBackward = AnimationUtils.loadAnimation(context, R.anim.slide_right_out);
 
-        mEventLoader = new EventLoader(context);
+        // mEventLoader = new EventLoader(context);
     }
 
     @Override
@@ -111,20 +113,34 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
     }
 
     public View makeView() {
-        mTZUpdater.run();
+        //mTZUpdater.run();
         DayView view = new DayView(getActivity(), CalendarController
-                .getInstance(getActivity()), mViewSwitcher, mEventLoader, mNumDays);
+                .getInstance(getActivity()), mViewSwitcher, mNumDays);
         view.setId(VIEW_ID);
         view.setLayoutParams(new ViewSwitcher.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         view.setSelected(mSelectedDay, false, false);
+        ArrayList<Event> eventList = new ArrayList<>();
+        eventList.add(new Event(1059, -5242874, "Single session 1", "", true, "kavitamp19@googlemail.com", false
+                , 2458711, 2458711, 990, 1050, 1565866800000l, 1565870400000l, false, false, 0, 0.0f, 0.0f,
+                0.0f, 0.0f, null, null, null, null, 0, 0));
+
+        eventList.add(new Event(1059, -5242874, "Single session 2", "", true, "kavitamp19@googlemail.com", false
+                , 2458716, 2458716, 990, 1050, 1565866800000l, 1565870400000l, false, false, 0, 0.0f, 0.0f,
+                0.0f, 0.0f, null, null, null, null, 0, 0));
+
+
+        eventList.add(new Event(1059, -5242874, "Single session 3", "", true, "kavitamp19@googlemail.com", false
+                , 2458716, 2458716, 990, 1050, 1565866800000l, 1565870400000l, false, false, 0, 0.0f, 0.0f,
+                0.0f, 0.0f, null, null, null, null, 0, 0));
+        view.setmEvents(eventList);
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mEventLoader.startBackgroundThread();
+        //mEventLoader.startBackgroundThread();
         mTZUpdater.run();
         eventsChanged();
         DayView view = (DayView) mViewSwitcher.getCurrentView();
@@ -153,7 +169,7 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         view.cleanup();
         view = (DayView) mViewSwitcher.getNextView();
         view.cleanup();
-        mEventLoader.stopBackgroundThread();
+        //mEventLoader.stopBackgroundThread();
 
         // Stop events cross-fade animation
         view.stopEventsAnimation();

@@ -99,7 +99,7 @@ public class EventLoader {
      *
      * @param startDay   First day to check for events
      * @param numDays    Days following the start day to check
-     * @param eventDay   Whether or not an event exists on that day
+     * @param eventDays   Whether or not an event exists on that day
      * @param uiCallback What to do when done (log data, redraw screen)
      */
     void loadEventDaysInBackground(int startDay, int numDays, boolean[] eventDays,
@@ -214,8 +214,8 @@ public class EventLoader {
         }
 
         public void processRequest(EventLoader eventLoader) {
-            Event.loadEvents(eventLoader.mContext, events, startDay,
-                    numDays, id, eventLoader.mSequenceNumber);
+            //Event.loadEvents(eventLoader.mContext, events, startDay,
+            //       numDays, id, eventLoader.mSequenceNumber);
 
             // Check if we are still the most recent request.
             if (id == eventLoader.mSequenceNumber.get()) {

@@ -387,10 +387,10 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
                 return;
             }
             ArrayList<Event> events = new ArrayList<Event>();
-            Event.buildEventsFromCursor(
+            /*Event.buildEventsFromCursor(
                     events, data, mContext, mFirstLoadedJulianDay, mLastLoadedJulianDay);
             ((MonthByWeekAdapter) mAdapter).setEvents(mFirstLoadedJulianDay,
-                    mLastLoadedJulianDay - mFirstLoadedJulianDay + 1, events);
+                    mLastLoadedJulianDay - mFirstLoadedJulianDay + 1, events);*/
         }
     }
 
