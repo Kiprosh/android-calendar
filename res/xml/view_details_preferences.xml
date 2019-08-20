@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/preferences_month_view_portrait">
+        <ListPreference
+            android:defaultValue="7"
+            android:entries="@array/number_of_lines"
+            android:entryValues="@array/number_of_lines"
+            android:key="pref_number_of_lines_vertical"
+            android:summary="%s"
+            android:title="@string/maximum_number_of_lines" />
+        <ListPreference
+            android:entries="@array/show_time"
+            android:entryValues="@array/show_time_values"
+            android:key="pref_display_time_vertical"
+            android:summary="%s"
+            android:title="@string/display_time" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_display_location_vertical"
+            android:title="@string/display_location" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/preferences_month_view_landscape">
+        <ListPreference
+            android:defaultValue="7"
+            android:entries="@array/number_of_lines"
+            android:entryValues="@array/number_of_lines"
+            android:key="pref_number_of_lines_horizontal"
+            android:summary="%s"
+            android:title="@string/maximum_number_of_lines" />
+        <ListPreference
+            android:entries="@array/show_time"
+            android:entryValues="@array/show_time_values"
+            android:key="pref_display_time_horizontal"
+            android:summary="%s"
+            android:title="@string/display_time" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_display_location_horizontal"
+            android:title="@string/display_location" />
+    </PreferenceCategory>
+</PreferenceScreen>
