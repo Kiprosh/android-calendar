@@ -16,7 +16,9 @@
     <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="extraLong" line="1444" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bff12509-9fc8-414d-8c57-7acd80a274fc" name="Default Changelist" comment="" />
+    <list default="true" id="bff12509-9fc8-414d-8c57-7acd80a274fc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,39 +46,34 @@
               <caret line="4625" column="29" selection-start-line="4625" selection-start-column="29" selection-end-line="4625" selection-end-column="29" />
               <folding>
                 <element signature="e#0#203244#0" expanded="true" />
-                <element signature="e#23307#23308#0" expanded="true" />
-                <element signature="e#23348#23349#0" expanded="true" />
-                <element signature="e#23427#23428#0" expanded="true" />
-                <element signature="e#23469#23470#0" expanded="true" />
-                <element signature="e#42697#42698#0" expanded="true" />
-                <element signature="e#42753#42754#0" expanded="true" />
-                <element signature="e#42786#42787#0" expanded="true" />
-                <element signature="e#42819#42820#0" expanded="true" />
-                <element signature="e#81038#81039#0" expanded="true" />
-                <element signature="e#81075#81076#0" expanded="true" />
-                <element signature="e#84140#84141#0" expanded="true" />
-                <element signature="e#84175#84176#0" expanded="true" />
-                <element signature="e#108621#108622#0" expanded="true" />
-                <element signature="e#108668#108669#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
-              <caret line="1" column="23" selection-start-line="1" selection-start-column="20" selection-end-line="1" selection-end-column="23" />
+              <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="245">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/external/chips/chips.iml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="103">
+              <caret line="28" column="7" selection-start-line="28" selection-start-column="7" selection-end-line="28" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -127,7 +124,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>cursor</find>
       <find>mEventLoader</find>
       <find>eventLoader</find>
       <find>reloadEvents</find>
@@ -154,9 +150,10 @@
       <find>event</find>
       <find>click</find>
       <find>allDay</find>
-      <find>&lt;&lt;&lt;</find>
       <find>&lt;&lt;&lt;&lt;</find>
       <find>setSelectedEvent</find>
+      <find>idea</find>
+      <find>&lt;&lt;&lt;</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -173,9 +170,10 @@
         <option value="$PROJECT_DIR$/src/com/android/calendar/CalendarController.java" />
         <option value="$PROJECT_DIR$/src/com/android/calendar/DayView.java" />
         <option value="$PROJECT_DIR$/src/com/android/calendar/DayFragment.java" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
         <option value="$PROJECT_DIR$/external/chips/chips.iml" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -748,20 +746,6 @@
           <caret line="4625" column="29" selection-start-line="4625" selection-start-column="29" selection-end-line="4625" selection-end-column="29" />
           <folding>
             <element signature="e#0#203244#0" expanded="true" />
-            <element signature="e#23307#23308#0" expanded="true" />
-            <element signature="e#23348#23349#0" expanded="true" />
-            <element signature="e#23427#23428#0" expanded="true" />
-            <element signature="e#23469#23470#0" expanded="true" />
-            <element signature="e#42697#42698#0" expanded="true" />
-            <element signature="e#42753#42754#0" expanded="true" />
-            <element signature="e#42786#42787#0" expanded="true" />
-            <element signature="e#42819#42820#0" expanded="true" />
-            <element signature="e#81038#81039#0" expanded="true" />
-            <element signature="e#81075#81076#0" expanded="true" />
-            <element signature="e#84140#84141#0" expanded="true" />
-            <element signature="e#84175#84176#0" expanded="true" />
-            <element signature="e#108621#108622#0" expanded="true" />
-            <element signature="e#108668#108669#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -773,17 +757,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="23" selection-start-line="1" selection-start-column="20" selection-end-line="1" selection-end-column="23" />
+        <state relative-caret-position="245">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/external/chips/chips.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="103">
+          <caret line="28" column="7" selection-start-line="28" selection-start-column="7" selection-end-line="28" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
         </state>
       </provider>
     </entry>
