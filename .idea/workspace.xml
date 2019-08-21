@@ -9,15 +9,15 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="public void setSelected(Time time, boolean ignoreT..." line="997" />
+    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="public void setSelected(Time time, boolean ignoreT..." line="998" />
     <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="//private final EventLoader mEventLoader;" line="326" />
-    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="// mEventLoader.loadEventsInBackground(mNumDays, e..." line="1991" />
-    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="extraLong" line="1443" />
-    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="extraLong" line="1444" />
+    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="// mEventLoader.loadEventsInBackground(mNumDays, e..." line="1994" />
+    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="extraLong" line="1447" />
+    <bookmark url="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java" description="extraLong" line="1448" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bff12509-9fc8-414d-8c57-7acd80a274fc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,7 +43,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="116">
-              <caret line="4625" column="29" selection-start-line="4625" selection-start-column="29" selection-end-line="4625" selection-end-column="29" />
+              <caret line="4626" column="29" selection-start-line="4626" selection-start-column="29" selection-end-line="4626" selection-end-column="29" />
               <folding>
                 <element signature="e#0#203244#0" expanded="true" />
               </folding>
@@ -51,7 +51,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
@@ -69,11 +69,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/external/chips/chips.iml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="103">
-              <caret line="28" column="7" selection-start-line="28" selection-start-column="7" selection-end-line="28" selection-end-column="7" />
+            <state relative-caret-position="117">
+              <caret line="18" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
         </entry>
@@ -91,7 +91,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/android/calendar/DayFragment.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1451">
-              <caret line="273" column="9" selection-start-line="273" selection-start-column="9" selection-end-line="273" selection-end-column="9" />
+              <caret line="289" column="9" selection-start-line="289" selection-start-column="9" selection-end-line="289" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -100,7 +100,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/android/calendar/Event.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="306">
-              <caret line="643" selection-start-line="643" selection-end-line="643" />
+              <caret line="678" selection-start-line="678" selection-end-line="678" />
               <folding>
                 <element signature="e#0#24440#0" expanded="true" />
               </folding>
@@ -171,9 +171,9 @@
         <option value="$PROJECT_DIR$/src/com/android/calendar/DayView.java" />
         <option value="$PROJECT_DIR$/src/com/android/calendar/DayFragment.java" />
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
-        <option value="$PROJECT_DIR$/external/chips/chips.iml" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/external/chips/chips.iml" />
       </list>
     </option>
   </component>
@@ -427,7 +427,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>1854</line>
+          <line>1858</line>
           <properties />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
@@ -439,7 +439,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>1991</line>
+          <line>1994</line>
           <properties />
           <option name="timeStamp" value="4" />
         </line-breakpoint>
@@ -457,31 +457,31 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>1454</line>
+          <line>1458</line>
           <properties />
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
-          <line>592</line>
+          <line>593</line>
           <properties />
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
-          <line>605</line>
+          <line>606</line>
           <properties />
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/CalendarController.java</url>
-          <line>615</line>
+          <line>616</line>
           <properties />
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>1460</line>
+          <line>1464</line>
           <properties />
           <option name="timeStamp" value="12" />
         </line-breakpoint>
@@ -499,19 +499,19 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>4847</line>
+          <line>4848</line>
           <properties />
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>4822</line>
+          <line>4823</line>
           <properties />
           <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>1418</line>
+          <line>1422</line>
           <properties />
           <option name="timeStamp" value="18" />
         </line-breakpoint>
@@ -529,43 +529,43 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>3889</line>
+          <line>3890</line>
           <properties />
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>3888</line>
+          <line>3889</line>
           <properties />
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>1437</line>
+          <line>1441</line>
           <properties />
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>1426</line>
+          <line>1430</line>
           <properties />
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>1425</line>
+          <line>1429</line>
           <properties />
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>4830</line>
+          <line>4831</line>
           <properties />
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>4674</line>
+          <line>4675</line>
           <properties />
           <option name="timeStamp" value="29" />
         </line-breakpoint>
@@ -613,7 +613,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/android/calendar/DayView.java</url>
-          <line>4519</line>
+          <line>4520</line>
           <properties />
           <option name="timeStamp" value="45" />
         </line-breakpoint>
@@ -719,7 +719,7 @@
     <entry file="file://$PROJECT_DIR$/src/com/android/calendar/DayFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1451">
-          <caret line="273" column="9" selection-start-line="273" selection-start-column="9" selection-end-line="273" selection-end-column="9" />
+          <caret line="289" column="9" selection-start-line="289" selection-start-column="9" selection-end-line="289" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -733,7 +733,7 @@
     <entry file="file://$PROJECT_DIR$/src/com/android/calendar/Event.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
-          <caret line="643" selection-start-line="643" selection-end-line="643" />
+          <caret line="678" selection-start-line="678" selection-end-line="678" />
           <folding>
             <element signature="e#0#24440#0" expanded="true" />
           </folding>
@@ -743,7 +743,7 @@
     <entry file="file://$PROJECT_DIR$/src/com/android/calendar/DayView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="116">
-          <caret line="4625" column="29" selection-start-line="4625" selection-start-column="29" selection-end-line="4625" selection-end-column="29" />
+          <caret line="4626" column="29" selection-start-line="4626" selection-start-column="29" selection-end-line="4626" selection-end-column="29" />
           <folding>
             <element signature="e#0#203244#0" expanded="true" />
           </folding>
@@ -764,17 +764,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/external/chips/chips.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="103">
-          <caret line="28" column="7" selection-start-line="28" selection-start-column="7" selection-end-line="28" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/external/chips/chips.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
         </state>
       </provider>
     </entry>
