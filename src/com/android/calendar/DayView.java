@@ -83,6 +83,7 @@ import android.widget.ViewSwitcher;
 
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
+import com.android.calendar.event.EventClickListeners;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -418,21 +419,25 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
             clearCachedEvents();
         }
     };
-    private ArrayList<Event> mEvents = new ArrayList<Event>();
-    private ArrayList<Event> mAllDayEvents = new ArrayList<Event>();
+    private ArrayList<Event> mEvents = new ArrayList<>();
+    private ArrayList<Event> mAllDayEvents = new ArrayList<>();
     private StaticLayout[] mLayouts = null;
     private StaticLayout[] mAllDayLayouts = null;
     private int mSelectionDay;        // Julian day
     private int mSelectionHour;
+    private EventClickListeners mEventClickListener;
     // Clears the "clicked" color from the clicked event and launch the event
     private final Runnable mClearClick = new Runnable() {
         @Override
         public void run() {
-            if (mClickedEvent != null) {
+            if (mClickedEvent != null && mEventClickListener != null) {
+                mEventClickListener.onEventClick(mClickedEvent);
+                /*Log.e("Click Event 2 ",mClickedEvent.title + " " );
+
                 mController.sendEventRelatedEvent(this, EventType.VIEW_EVENT, mClickedEvent.id,
                         mClickedEvent.startMillis, mClickedEvent.endMillis,
                         DayView.this.getWidth() / 2, mClickedYLocation,
-                        getSelectedTimeInMillis());
+                        getSelectedTimeInMillis());*/
             }
             mClickedEvent = null;
             DayView.this.invalidate();
@@ -699,6 +704,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         OVERFLING_DISTANCE = vc.getScaledOverflingDistance();
 
         init(context);
+    }
+
+    public void setEventClickListener(EventClickListeners eventClickListener) {
+        this.mEventClickListener = eventClickListener;
     }
 
     static Event getNewEvent(int julianDay, long utcMillis,
@@ -4472,6 +4481,9 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
             mSelectionHour = savedHour;
             mSelectionAllday = savedAllDay;
         }
+        if (mSelectedEvent != null) {
+            Log.e("Selected Event", mSelectedEvent.title + " ");
+        }
         return true;
     }
 
@@ -4914,7 +4926,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     }
 
     class DismissPopup implements Runnable {
-
         public void run() {
             // Protect against null-pointer exceptions
             if (mPopup != null) {
@@ -4924,7 +4935,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     }
 
     class UpdateCurrentTime implements Runnable {
-
         public void run() {
             long currentTime = System.currentTimeMillis();
             mCurrentTime.set(currentTime);

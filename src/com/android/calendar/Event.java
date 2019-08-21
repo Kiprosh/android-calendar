@@ -181,7 +181,6 @@ public class Event implements Cloneable {
 
     public static final Event newInstance() {
         Event e = new Event();
-
         e.id = 0;
         e.title = null;
         e.color = 0;
@@ -196,10 +195,64 @@ public class Event implements Cloneable {
         e.hasAlarm = false;
         e.isRepeating = false;
         e.selfAttendeeStatus = Attendees.ATTENDEE_STATUS_NONE;
-
         return e;
     }
 
+    public CharSequence getTitle() {
+        return title;
+    }
+
+    public void setTitle(CharSequence title) {
+        this.title = title;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public boolean isAllDay() {
+        return allDay;
+    }
+
+    public void setAllDay(boolean allDay) {
+        this.allDay = allDay;
+    }
+
+    public int getStartDay() {
+        return startDay;
+    }
+
+    public void setStartDay(int startDay) {
+        this.startDay = startDay;
+    }
+
+    public int getEndDay() {
+        return endDay;
+    }
+
+    public void setEndDay(int endDay) {
+        this.endDay = endDay;
+    }
+
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(int endTime) {
+        this.endTime = endTime;
+    }
 
     /**
      * Loads <i>days</i> days worth of instances starting at <i>startDay</i>.

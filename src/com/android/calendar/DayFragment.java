@@ -32,6 +32,7 @@ import android.widget.ViewSwitcher.ViewFactory;
 
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
+import com.android.calendar.event.EventClickListeners;
 
 import java.util.ArrayList;
 
@@ -88,9 +89,7 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
         Context context = getActivity();
-
         mInAnimationForward = AnimationUtils.loadAnimation(context, R.anim.slide_left_in);
         mOutAnimationForward = AnimationUtils.loadAnimation(context, R.anim.slide_left_out);
         mInAnimationBackward = AnimationUtils.loadAnimation(context, R.anim.slide_right_in);
@@ -99,18 +98,12 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         // mEventLoader = new EventLoader(context);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.day_activity, null);
+    EventClickListeners eventClickListeners = new EventClickListeners() {
+        @Override
+        public void onEventClick(Event clickedEvent) {
 
-        mViewSwitcher = (ViewSwitcher) v.findViewById(R.id.switcher);
-        mViewSwitcher.setFactory(this);
-        mViewSwitcher.getCurrentView().requestFocus();
-        ((DayView) mViewSwitcher.getCurrentView()).updateTitle();
-
-        return v;
-    }
+        }
+    };
 
     public View makeView() {
         //mTZUpdater.run();
@@ -138,9 +131,19 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.day_activity, null);
+        mViewSwitcher = v.findViewById(R.id.switcher);
+        mViewSwitcher.setFactory(this);
+        mViewSwitcher.getCurrentView().requestFocus();
+        ((DayView) mViewSwitcher.getCurrentView()).updateTitle();
+        return v;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        //mEventLoader.startBackgroundThread();
         mTZUpdater.run();
         eventsChanged();
         DayView view = (DayView) mViewSwitcher.getCurrentView();
@@ -150,6 +153,7 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         view = (DayView) mViewSwitcher.getNextView();
         view.handleOnResume();
         view.restartCurrentTimeUpdates();
+        view.setEventClickListener(eventClickListeners);
     }
 
     @Override
