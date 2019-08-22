@@ -20,6 +20,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ import android.widget.ViewSwitcher.ViewFactory;
 
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
-import com.android.calendar.event.EventClickListeners;
+import com.android.calendar.event.CalendarListeners;
 
 import java.util.ArrayList;
 
@@ -98,17 +99,24 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         // mEventLoader = new EventLoader(context);
     }
 
-    EventClickListeners eventClickListeners = new EventClickListeners() {
-        @Override
-        public void onEventClick(Event clickedEvent) {
-
-        }
-    };
 
     public View makeView() {
         //mTZUpdater.run();
         DayView view = new DayView(getActivity(), CalendarController
-                .getInstance(getActivity()), mViewSwitcher, mNumDays);
+                .getInstance(getActivity()), mViewSwitcher, mNumDays, new CalendarListeners() {
+            @Override
+            public void onEventClick(Time tapEvent, Event clickedEvent) {
+                Log.e("Selected Time", "Time " + tapEvent.hour + " ");
+            }
+
+            @Override
+            public void onDayChange(Time selectedDay) {
+                Log.e(selectedDay.monthDay + " ", selectedDay.hour + " ");
+
+            }
+        });
+        view.setEmptyCellClickEnable(false);
+        view.setLongClickEnable(false);
         view.setId(VIEW_ID);
         view.setLayoutParams(new ViewSwitcher.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -153,7 +161,6 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         view = (DayView) mViewSwitcher.getNextView();
         view.handleOnResume();
         view.restartCurrentTimeUpdates();
-        view.setEventClickListener(eventClickListeners);
     }
 
     @Override
@@ -284,9 +291,9 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
 
     public void handleEvent(EventInfo msg) {
         if (msg.eventType == EventType.GO_TO) {
-// TODO support a range of time
-// TODO support event_id
-// TODO support select message
+            // TODO support a range of time
+            // TODO support event_id
+            // TODO support select message
             goTo(msg.selectedTime, (msg.extraLong & CalendarController.EXTRA_GOTO_DATE) != 0,
                     (msg.extraLong & CalendarController.EXTRA_GOTO_TODAY) != 0);
         } else if (msg.eventType == EventType.EVENTS_CHANGED) {
