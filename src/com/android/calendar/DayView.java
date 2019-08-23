@@ -311,8 +311,7 @@ public class DayView extends View implements
     private final Paint mEventTextPaint = new Paint();
     private final Paint mSelectionPaint = new Paint();
     private final DismissPopup mDismissPopup = new DismissPopup();
-    //private final EventLoader mEventLoader;
-    private final ArrayList<Event> mSelectedEvents = new ArrayList<Event>();
+    private final ArrayList<Event> mSelectedEvents = new ArrayList<>();
     private final Rect mPrevBox = new Rect();
     private final ViewSwitcher mViewSwitcher;
     private final GestureDetector mGestureDetector;
@@ -4904,5 +4903,10 @@ public class DayView extends View implements
 
             return t;
         }
+    }
+
+    public void setmIs24HourFormat(boolean mIs24HourFormat) {
+        this.mIs24HourFormat = mIs24HourFormat;
+        invalidate();
     }
 }

@@ -114,6 +114,7 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
 
             }
         });
+        view.setmIs24HourFormat(false);
         view.setEmptyCellClickEnable(false);
         view.setLongClickEnable(false);
         view.setId(VIEW_ID);
