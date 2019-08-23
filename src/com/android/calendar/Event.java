@@ -146,6 +146,28 @@ public class Event implements Cloneable {
     private int mColumn;
     private int mMaxColumns;
 
+    public Event() {
+
+    }
+
+    public Event(long id, int color, CharSequence title, CharSequence location, boolean allDay, String organizer, boolean guestsCanModify, int startDay, int endDay, int startTime, int endTime, long startMillis, long endMillis, boolean hasAlarm, boolean isRepeating) {
+        this.id = id;
+        this.color = color;
+        this.title = title;
+        this.location = location;
+        this.allDay = allDay;
+        this.organizer = organizer;
+        this.guestsCanModify = guestsCanModify;
+        this.startDay = startDay;
+        this.endDay = endDay;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startMillis = startMillis;
+        this.endMillis = endMillis;
+        this.hasAlarm = hasAlarm;
+        this.isRepeating = isRepeating;
+    }
+
     public static final Event newInstance() {
         Event e = new Event();
 
