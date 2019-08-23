@@ -16,7 +16,7 @@ allprojects {
     }
 }
 
-project(':external:calendar') {
+/*project(':external:calendar') {
     apply plugin: 'android-library'
 
     android {
@@ -45,7 +45,7 @@ project(':external:calendar') {
             abortOnError false
         }
     }
-}
+}*/
 
 project(':external:timezonepicker') {
     apply plugin: 'android-library'
@@ -85,7 +85,7 @@ apply plugin: 'com.android.application'
 dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:design:27.1.1'
-    implementation project(':external:calendar')
+    //implementation project(':external:calendar')
     //implementation project(':external:colorpicker')
     //implementation project(':external:datetimepicker')
     implementation project(':external:timezonepicker')
