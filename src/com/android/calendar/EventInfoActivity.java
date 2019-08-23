@@ -15,8 +15,6 @@
  */
 package com.android.calendar;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -57,7 +55,7 @@ public class EventInfoActivity extends AppCompatActivity {
         public void onChange(boolean selfChange) {
             if (selfChange) return;
             if (mInfoFragment != null) {
-                mInfoFragment.reloadEvents();
+                //mInfoFragment.reloadEvents();
             }
         }
     };
@@ -77,13 +75,13 @@ public class EventInfoActivity extends AppCompatActivity {
         ArrayList<ReminderEntry> reminders = null;
 
         if (icicle != null) {
-            mEventId = icicle.getLong(EventInfoFragment.BUNDLE_KEY_EVENT_ID);
+            /*mEventId = icicle.getLong(EventInfoFragment.BUNDLE_KEY_EVENT_ID);
             mStartMillis = icicle.getLong(EventInfoFragment.BUNDLE_KEY_START_MILLIS);
             mEndMillis = icicle.getLong(EventInfoFragment.BUNDLE_KEY_END_MILLIS);
             attendeeResponse = icicle.getInt(EventInfoFragment.BUNDLE_KEY_ATTENDEE_RESPONSE);
             isDialog = icicle.getBoolean(EventInfoFragment.BUNDLE_KEY_IS_DIALOG);
 
-            reminders = Utils.readRemindersFromBundle(icicle);
+            reminders = Utils.readRemindersFromBundle(icicle);*/
         } else if (intent != null && Intent.ACTION_VIEW.equals(intent.getAction())) {
             mStartMillis = intent.getLongExtra(EXTRA_EVENT_BEGIN_TIME, 0);
             mEndMillis = intent.getLongExtra(EXTRA_EVENT_END_TIME, 0);
@@ -144,7 +142,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
         // Create a new fragment if none exists
         if (mInfoFragment == null) {
-            FragmentManager fragmentManager = getFragmentManager();
+            /*FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             mInfoFragment = new EventInfoFragment(this, mEventId, mStartMillis, mEndMillis,
                     attendeeResponse, isDialog, (isDialog ?
@@ -152,7 +150,7 @@ public class EventInfoActivity extends AppCompatActivity {
                     EventInfoFragment.FULL_WINDOW_STYLE),
                     reminders);
             ft.replace(R.id.main_frame, mInfoFragment);
-            ft.commit();
+            ft.commit();*/
         }
     }
 

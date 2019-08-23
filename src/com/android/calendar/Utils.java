@@ -50,7 +50,6 @@ import android.text.util.Linkify;
 import android.util.Log;
 
 import com.android.calendar.CalendarController.ViewType;
-import com.android.calendar.CalendarEventModel.ReminderEntry;
 import com.android.calendar.CalendarUtils.TimeZoneUtils;
 
 import java.util.ArrayList;
@@ -2020,7 +2019,7 @@ public class Utils {
      * @param bundle The incoming bundle that contains the reminder info.
      * @return ArrayList<ReminderEntry> of the reminder minutes and methods.
      */
-    public static ArrayList<ReminderEntry> readRemindersFromBundle(Bundle bundle) {
+    /*public static ArrayList<ReminderEntry> readRemindersFromBundle(Bundle bundle) {
         ArrayList<ReminderEntry> reminders = null;
 
         ArrayList<Integer> reminderMinutes = bundle.getIntegerArrayList(
@@ -2056,7 +2055,7 @@ public class Utils {
         }
 
         return reminders;
-    }
+    }*/
 
     // A single strand represents one color of events. Events are divided up by
     // color to make them convenient to draw. The black strand is special in

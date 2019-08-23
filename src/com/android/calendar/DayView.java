@@ -327,7 +327,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private final EventLoader mEventLoader;
     private final ArrayList<Event> mSelectedEvents = new ArrayList<Event>();
     private final Rect mPrevBox = new Rect();
-    private final DeleteEventHelper mDeleteEventHelper;
+    //private final DeleteEventHelper mDeleteEventHelper;
     private final ContextMenuHandler mContextMenuHandler = new ContextMenuHandler();
     private final CalendarController mController;
     private final ViewSwitcher mViewSwitcher;
@@ -678,7 +678,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                 mResources.getString(R.string.new_event_dialog_option)
         };
         mLongPressTitle = mResources.getString(R.string.new_event_dialog_label);
-        mDeleteEventHelper = new DeleteEventHelper(context, null, false /* don't exit when done */);
+        //mDeleteEventHelper = new DeleteEventHelper(context, null, false /* don't exit when done */);
         mLastPopupEventID = INVALID_EVENT_ID;
         mController = controller;
         mViewSwitcher = viewSwitcher;
@@ -1545,7 +1545,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                 long begin = selectedEvent.startMillis;
                 long end = selectedEvent.endMillis;
                 long id = selectedEvent.id;
-                mDeleteEventHelper.delete(begin, end, id, -1);
+                //mDeleteEventHelper.delete(begin, end, id, -1);
                 return true;
             case KeyEvent.KEYCODE_ENTER:
                 switchViews(true /* trackball or keyboard */);

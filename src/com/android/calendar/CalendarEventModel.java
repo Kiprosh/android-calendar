@@ -24,17 +24,13 @@ import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 import android.text.TextUtils;
-import android.text.util.Rfc822Token;
 
-import com.android.calendar.event.EditEventHelper;
 import com.android.calendar.event.EventColorCache;
-import com.android.common.Rfc822Validator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.TimeZone;
 
 /**
@@ -283,19 +279,6 @@ public class CalendarEventModel implements Serializable {
         mAttendeesList.put(attendee.mEmail, attendee);
     }
 
-    public void addAttendees(String attendees, Rfc822Validator validator) {
-        final LinkedHashSet<Rfc822Token> addresses = EditEventHelper.getAddressesFromList(
-                attendees, validator);
-        synchronized (this) {
-            for (final Rfc822Token address : addresses) {
-                final Attendee attendee = new Attendee(address.getName(), address.getAddress());
-                if (TextUtils.isEmpty(attendee.mName)) {
-                    attendee.mName = attendee.mEmail;
-                }
-                addAttendee(attendee);
-            }
-        }
-    }
 
     public void removeAttendee(Attendee attendee) {
         mAttendeesList.remove(attendee.mEmail);

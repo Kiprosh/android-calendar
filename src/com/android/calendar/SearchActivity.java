@@ -78,7 +78,7 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
     private long mCurrentEventId = -1;
     private String mQuery;
     private SearchView mSearchView;
-    private DeleteEventHelper mDeleteEventHelper;
+    //private DeleteEventHelper mDeleteEventHelper;
     private Handler mHandler;
     // runs when a timezone was changed and updates the today icon
     private final Runnable mTimeChangesUpdater = new Runnable() {
@@ -124,9 +124,9 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
         // list of event handlers in it's handle method. This affects who the
         // rest of the handlers the controller dispatches to are.
         mController.registerEventHandler(HANDLER_KEY, this);
-
+/*
         mDeleteEventHelper = new DeleteEventHelper(this, this,
-                false /* don't exit when done */);
+                false *//* don't exit when done *//*);*/
 
         long millis = 0;
         if (icicle != null) {
@@ -179,15 +179,15 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
 
     private void showEventInfo(EventInfo event) {
         if (mShowEventDetailsWithAgenda) {
-            FragmentManager fragmentManager = getFragmentManager();
+            /*FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
 
             mEventInfoFragment = new EventInfoFragment(this, event.id,
                     event.startTime.toMillis(false), event.endTime.toMillis(false),
                     event.getResponse(), false, EventInfoFragment.DIALOG_WINDOW_STYLE,
-                    null /* No reminders to explicitly pass in. */);
+                    null *//* No reminders to explicitly pass in. *//*);
             ft.replace(R.id.agenda_event_info, mEventInfoFragment);
-            ft.commit();
+            ft.commit();*/
         } else {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             Uri eventUri = ContentUris.withAppendedId(Events.CONTENT_URI, event.id);
@@ -226,7 +226,7 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
     }
 
     private void deleteEvent(long eventId, long startMillis, long endMillis) {
-        mDeleteEventHelper.delete(startMillis, endMillis, eventId, -1);
+        //mDeleteEventHelper.delete(startMillis, endMillis, eventId, -1);
         if (mIsMultipane && mEventInfoFragment != null
                 && eventId == mCurrentEventId) {
             FragmentManager fragmentManager = getFragmentManager();

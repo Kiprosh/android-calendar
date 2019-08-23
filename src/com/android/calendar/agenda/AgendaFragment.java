@@ -23,7 +23,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.CalendarContract.Attendees;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,8 +41,6 @@ import com.android.calendar.EventInfoFragment;
 import com.android.calendar.GeneralPreferences;
 import com.android.calendar.StickyHeaderListView;
 import com.android.calendar.Utils;
-
-import java.util.Date;
 
 import ws.xsoh.etar.R;
 
@@ -388,7 +385,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
         mLastShownEventId = event.id;
 
         // Create a fragment to show the event to the side of the agenda list
-        if (mShowEventDetailsWithAgenda) {
+        /*if (mShowEventDetailsWithAgenda) {
             FragmentManager fragmentManager = getFragmentManager();
             if (fragmentManager == null) {
                 // Got a goto event before the fragment finished attaching,
@@ -427,7 +424,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
             } else {
                 fOld.reloadEvents();
             }
-        }
+        }*/
     }
 
     // OnScrollListener implementation to update the date on the pull-down menu of the app

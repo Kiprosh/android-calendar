@@ -18,7 +18,6 @@ package com.android.calendar;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
@@ -35,7 +34,6 @@ import android.text.format.Time;
 import android.util.Log;
 import android.util.Pair;
 
-import com.android.calendar.event.EditEventActivity;
 import com.android.calendar.selectcalendars.SelectVisibleCalendarsActivity;
 
 import java.lang.ref.WeakReference;
@@ -438,7 +436,7 @@ public class CalendarController {
                 launchEditEvent(event.id, event.startTime.toMillis(false), endTime, false);
                 return;
             } else if (event.eventType == EventType.DELETE_EVENT) {
-                launchDeleteEvent(event.id, event.startTime.toMillis(false), endTime);
+                //launchDeleteEvent(event.id, event.startTime.toMillis(false), endTime);
                 return;
             } else if (event.eventType == EventType.SEARCH) {
                 launchSearch(event.id, event.query, event.componentName);
@@ -580,7 +578,6 @@ public class CalendarController {
     public Intent generateCreateEventIntent(long startMillis, long endMillis,
                                             boolean allDayEvent, String title, long calendarId) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setClass(mContext, EditEventActivity.class);
         intent.putExtra(EXTRA_EVENT_BEGIN_TIME, startMillis);
         intent.putExtra(EXTRA_EVENT_END_TIME, endMillis);
         intent.putExtra(EXTRA_EVENT_ALL_DAY, allDayEvent);
@@ -606,22 +603,22 @@ public class CalendarController {
         Intent intent = new Intent(Intent.ACTION_EDIT, uri);
         intent.putExtra(EXTRA_EVENT_BEGIN_TIME, startMillis);
         intent.putExtra(EXTRA_EVENT_END_TIME, endMillis);
-        intent.setClass(mContext, EditEventActivity.class);
+        //intent.setClass(mContext, EditEventActivity.class);
         intent.putExtra(EVENT_EDIT_ON_LAUNCH, edit);
         mEventId = eventId;
         mContext.startActivity(intent);
     }
 
-    private void launchDeleteEvent(long eventId, long startMillis, long endMillis) {
+    /*private void launchDeleteEvent(long eventId, long startMillis, long endMillis) {
         launchDeleteEventAndFinish(null, eventId, startMillis, endMillis, -1);
-    }
+    }*/
 
-    private void launchDeleteEventAndFinish(Activity parentActivity, long eventId, long startMillis,
+   /* private void launchDeleteEventAndFinish(Activity parentActivity, long eventId, long startMillis,
                                             long endMillis, int deleteWhich) {
         DeleteEventHelper deleteEventHelper = new DeleteEventHelper(mContext, parentActivity,
-                parentActivity != null /* exit when done */);
+                parentActivity != null *//* exit when done *//*);
         deleteEventHelper.delete(startMillis, endMillis, eventId, deleteWhich);
-    }
+    }*/
 
 //    private void launchAlerts() {
 //        Intent intent = new Intent();

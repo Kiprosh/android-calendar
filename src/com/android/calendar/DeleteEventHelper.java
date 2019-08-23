@@ -16,31 +16,6 @@
 
 package com.android.calendar;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.CalendarContract;
-import android.provider.CalendarContract.Events;
-import android.text.TextUtils;
-import android.text.format.Time;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-
-import com.android.calendar.event.EditEventHelper;
-import com.android.calendarcommon2.EventRecurrence;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import ws.xsoh.etar.R;
-
 /**
  * A helper class for deleting events.  If a normal event is selected for
  * deletion, then this pops up a confirmation dialog.  If the user confirms,
@@ -63,10 +38,11 @@ import ws.xsoh.etar.R;
  * {@link #delete()} multiple times).
  */
 public class DeleteEventHelper {
-    /**
+}/*{
+ *//**
      * These are the corresponding indices into the array of strings
      * "R.array.delete_repeating_labels" in the resource file.
-     */
+ *//*
     public static final int DELETE_SELECTED = 0;
     public static final int DELETE_ALL_FOLLOWING = 1;
     public static final int DELETE_ALL = 2;
@@ -75,9 +51,9 @@ public class DeleteEventHelper {
     private long mStartMillis;
     private long mEndMillis;
     private CalendarEventModel mModel;
-    /**
+    *//**
      * If true, then call finish() on the parent activity when done.
-     */
+ *//*
     private boolean mExitWhenDone;
     // the runnable to execute when the delete is confirmed
     private Runnable mCallback;
@@ -91,9 +67,9 @@ public class DeleteEventHelper {
     private AsyncQueryService mService;
 
     private DeleteNotifyListener mDeleteStartedListener = null;
-    /**
+    *//**
      * This callback is used when a normal event is deleted.
-     */
+ *//*
     private DialogInterface.OnClickListener mDeleteNormalDialogListener =
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int button) {
@@ -109,9 +85,9 @@ public class DeleteEventHelper {
                     }
                 }
             };
-    /**
+    *//**
      * This callback is used when an exception to an event is deleted
-     */
+ *//*
     private DialogInterface.OnClickListener mDeleteExceptionDialogListener =
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int button) {
@@ -125,9 +101,9 @@ public class DeleteEventHelper {
                     }
                 }
             };
-    /**
+    *//**
      * This callback is used when a list item for a repeating event is selected
-     */
+ *//*
     private DialogInterface.OnClickListener mDeleteListListener =
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int button) {
@@ -140,9 +116,9 @@ public class DeleteEventHelper {
                     ok.setEnabled(true);
                 }
             };
-    /**
+    *//**
      * This callback is used when a repeating event is deleted.
-     */
+ *//*
     private DialogInterface.OnClickListener mDeleteRepeatingDialogListener =
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int button) {
@@ -169,7 +145,7 @@ public class DeleteEventHelper {
                 }
                 cursor.moveToFirst();
                 CalendarEventModel mModel = new CalendarEventModel();
-                EditEventHelper.setModelFromCursor(mModel, cursor);
+                //EditEventHelper.setModelFromCursor(mModel, cursor);
                 cursor.close();
                 DeleteEventHelper.this.delete(mStartMillis, mEndMillis, mModel, mWhichDelete);
             }
@@ -181,7 +157,7 @@ public class DeleteEventHelper {
         mExitWhenDone = exitWhenDone;
     }
 
-    /**
+    *//**
      * Does the required processing for deleting an event, which includes
      * first popping up a dialog asking for confirmation (if the event is
      * a normal event) or a dialog asking which events to delete (if the
@@ -194,7 +170,7 @@ public class DeleteEventHelper {
      * @param eventId the event id
      * @param which   one of the values {@link DELETE_SELECTED},
      *                {@link DELETE_ALL_FOLLOWING}, {@link DELETE_ALL}, or -1
-     */
+ *//*
     public void delete(long begin, long end, long eventId, int which) {
         Uri uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId);
         mService.startQuery(mService.getNextToken(), null, uri, EditEventHelper.EVENT_PROJECTION,
@@ -209,7 +185,7 @@ public class DeleteEventHelper {
         mCallback = callback;
     }
 
-    /**
+    *//**
      * Does the required processing for deleting an event.  This method
      * takes a {@link CalendarEventModel} object, which must have a valid
      * uri for referencing the event in the database and have the required
@@ -242,7 +218,7 @@ public class DeleteEventHelper {
      * @param cursor the database cursor containing the required fields
      * @param which  one of the values {@link DELETE_SELECTED},
      *               {@link DELETE_ALL_FOLLOWING}, {@link DELETE_ALL}, or -1
-     */
+ *//*
     public void delete(long begin, long end, CalendarEventModel model, int which) {
         mWhichDelete = which;
         mStartMillis = begin;
@@ -456,4 +432,4 @@ public class DeleteEventHelper {
     public interface DeleteNotifyListener {
         public void onDeleteStarted();
     }
-}
+}*/

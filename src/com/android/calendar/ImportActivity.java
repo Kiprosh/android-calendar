@@ -13,13 +13,11 @@ import android.provider.CalendarContract;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.android.calendar.event.EditEventActivity;
 import com.android.calendar.icalendar.Attendee;
 import com.android.calendar.icalendar.IcalendarUtils;
 import com.android.calendar.icalendar.VCalendar;
 import com.android.calendar.icalendar.VEvent;
 
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -35,9 +33,10 @@ public class ImportActivity extends Activity {
     }
 
     public static boolean hasThingsToImport() {
-        File folder = EventInfoFragment.EXPORT_SDCARD_DIRECTORY;
+   /*     File folder = EventInfoFragment.EXPORT_SDCARD_DIRECTORY;
         File[] files = folder.listFiles();
-        return files != null && files.length > 0;
+        return files != null && files.length > 0;*/
+        return false;
     }
 
     @Override
@@ -158,7 +157,7 @@ public class ImportActivity extends Activity {
                     getLocalTimeFromString(dtEnd, dtEndParam));
         }
 
-        calIntent.putExtra(EditEventActivity.EXTRA_READ_ONLY, true);
+        //calIntent.putExtra(EditEventActivity.EXTRA_READ_ONLY, true);
 
         try {
             startActivity(calIntent);
@@ -193,15 +192,15 @@ public class ImportActivity extends Activity {
 
         @Override
         protected String[] doInBackground(Void... params) {
-            if (!hasThingsToImport()) {
+            /*if (!hasThingsToImport()) {
                 return null;
             }
             File folder = EventInfoFragment.EXPORT_SDCARD_DIRECTORY;
             String[] result = null;
             if (folder.exists()) {
                 result = folder.list();
-            }
-            return result;
+            }*/
+            return null;
         }
 
         @Override
@@ -216,11 +215,11 @@ public class ImportActivity extends Activity {
             builder.setTitle(R.string.cal_pick_ics)
                     .setItems(files, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent i = new Intent(mActivity, ImportActivity.class);
+                           /* Intent i = new Intent(mActivity, ImportActivity.class);
                             File f = new File(EventInfoFragment.EXPORT_SDCARD_DIRECTORY,
                                     files[which]);
                             i.setData(Uri.fromFile(f));
-                            mActivity.startActivity(i);
+                            mActivity.startActivity(i);*/
                         }
                     });
             builder.show();

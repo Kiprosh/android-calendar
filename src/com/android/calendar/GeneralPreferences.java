@@ -48,7 +48,6 @@ import android.text.format.Time;
 import android.util.SparseIntArray;
 import android.widget.Toast;
 
-import com.android.calendar.alerts.AlertReceiver;
 import com.android.calendar.event.EventViewUtils;
 import com.android.colorpicker.ColorPickerDialog;
 import com.android.colorpicker.ColorPickerSwatch;
@@ -380,7 +379,7 @@ public class GeneralPreferences extends PreferenceFragment implements
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Activity a = getActivity();
-        if (key.equals(KEY_ALERTS)) {
+        /*if (key.equals(KEY_ALERTS)) {
 
             if (a != null) {
                 Intent intent = new Intent();
@@ -392,7 +391,7 @@ public class GeneralPreferences extends PreferenceFragment implements
                 }
                 a.sendBroadcast(intent);
             }
-        }
+        }*/
         if (a != null) {
             BackupManager.dataChanged(a.getPackageName());
         }

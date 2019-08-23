@@ -31,7 +31,6 @@ import android.widget.TextView;
 
 import com.android.calendar.CalendarController;
 import com.android.calendar.CalendarController.EventType;
-import com.android.calendar.DeleteEventHelper;
 import com.android.calendar.Utils;
 import com.android.calendar.agenda.AgendaAdapter.ViewHolder;
 import com.android.calendar.agenda.AgendaWindowAdapter.AgendaItem;
@@ -46,7 +45,7 @@ public class AgendaListView extends ListView implements OnItemClickListener {
     private static final int EVENT_UPDATE_TIME = 300000;  // 5 minutes
 
     private AgendaWindowAdapter mWindowAdapter;
-    private DeleteEventHelper mDeleteEventHelper;
+    //private DeleteEventHelper mDeleteEventHelper;
     private Context mContext;
     private String mTimeZone;
     private Time mTime;
@@ -96,8 +95,9 @@ public class AgendaListView extends ListView implements OnItemClickListener {
         mWindowAdapter.setSelectedInstanceId(-1/* TODO:instanceId */);
         setAdapter(mWindowAdapter);
         setCacheColorHint(context.getResources().getColor(R.color.agenda_item_not_selected));
-        mDeleteEventHelper =
-                new DeleteEventHelper(context, null, false /* don't exit when done */);
+        /*mDeleteEventHelper =
+                new DeleteEventHelper(context, null, false *//* don't exit when done *//*);
+         */
         mShowEventDetailsWithAgenda = Utils.getConfigBool(mContext,
                 R.bool.show_event_details_with_agenda);
         // Hide ListView dividers, they are done in the item views themselves
@@ -231,7 +231,7 @@ public class AgendaListView extends ListView implements OnItemClickListener {
         int position = getSelectedItemPosition();
         AgendaItem agendaItem = mWindowAdapter.getAgendaItemByPosition(position);
         if (agendaItem != null) {
-            mDeleteEventHelper.delete(agendaItem.begin, agendaItem.end, agendaItem.id, -1);
+            //mDeleteEventHelper.delete(agendaItem.begin, agendaItem.end, agendaItem.id, -1);
         }
     }
 

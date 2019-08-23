@@ -94,29 +94,27 @@
                 android:value="com.android.calendar.AllInOneActivity" />
         </activity>
 
-        <activity
-            android:name="com.android.calendar.event.EditEventActivity"
-            android:theme="@style/Base.CalendarAppThemeWithActionBar"></activity>
+        <!--
+                <activity-alias
+                    android:name="com.android.calendar.EditEventActivity"
+                    android:exported="true"
+                    android:targetActivity="com.android.calendar.event.EditEventActivity">
+                    <intent-filter>
+                        <action android:name="android.intent.action.EDIT" />
+                        <action android:name="android.intent.action.INSERT" />
 
-        <activity-alias
-            android:name="com.android.calendar.EditEventActivity"
-            android:exported="true"
-            android:targetActivity="com.android.calendar.event.EditEventActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.EDIT" />
-                <action android:name="android.intent.action.INSERT" />
+                        <category android:name="android.intent.category.DEFAULT" />
+                        <data android:mimeType="vnd.android.cursor.item/event" />
+                    </intent-filter>
+                    <intent-filter>
+                        <action android:name="android.intent.action.EDIT" />
+                        <action android:name="android.intent.action.INSERT" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/event" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.EDIT" />
-                <action android:name="android.intent.action.INSERT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.dir/event" />
-            </intent-filter>
-        </activity-alias>
+                        <category android:name="android.intent.category.DEFAULT" />
+                        <data android:mimeType="vnd.android.cursor.dir/event" />
+                    </intent-filter>
+                </activity-alias>
+        -->
 
         <activity
             android:name="com.android.calendar.GoogleCalendarUriIntentFilter"
@@ -215,7 +213,7 @@
             android:authorities="com.android.calendar.CalendarRecentSuggestionsProvider" />-->
 
         <!-- Declarations for alerts/reminders -->
-        <activity
+        <!--<activity
             android:name="com.android.calendar.alerts.AlertActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
@@ -250,9 +248,9 @@
                 <data android:scheme="content" />
                 <data android:host="com.android.calendar" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
-        <receiver
+        <!--<receiver
             android:name="com.android.calendar.alerts.GlobalDismissManager"
             android:exported="false" />
 
@@ -261,7 +259,7 @@
         <service android:name="com.android.calendar.alerts.DismissAlarmsService" />
 
         <service android:name="com.android.calendar.alerts.SnoozeAlarmsService" />
-
+-->
         <!-- Declarations for the widget -->
         <!--receiver android:name="com.android.calendar.widget.CalendarAppWidgetProvider" android:label="@string/gadget_title">
             <intent-filter>

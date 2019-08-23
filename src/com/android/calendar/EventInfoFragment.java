@@ -16,120 +16,10 @@
 
 package com.android.calendar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.app.Activity;
-import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.FragmentManager;
-import android.app.Service;
-import android.content.ActivityNotFoundException;
-import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.CalendarContract;
-import android.provider.CalendarContract.Attendees;
-import android.provider.CalendarContract.Calendars;
-import android.provider.CalendarContract.Colors;
-import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds;
-import android.provider.ContactsContract.Intents;
-import android.provider.ContactsContract.QuickContact;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
-import android.text.format.Time;
-import android.text.method.LinkMovementMethod;
-import android.text.method.MovementMethod;
-import android.text.style.ForegroundColorSpan;
-import android.text.util.Rfc822Token;
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.calendar.CalendarController.EventInfo;
-import com.android.calendar.CalendarController.EventType;
-import com.android.calendar.CalendarEventModel.Attendee;
-import com.android.calendar.CalendarEventModel.ReminderEntry;
-import com.android.calendar.alerts.QuickResponseActivity;
-import com.android.calendar.event.AttendeesView;
-import com.android.calendar.event.EditEventActivity;
-import com.android.calendar.event.EditEventHelper;
-import com.android.calendar.event.EventColorPickerDialog;
-import com.android.calendar.event.EventViewUtils;
-import com.android.calendar.icalendar.IcalendarUtils;
-import com.android.calendar.icalendar.Organizer;
-import com.android.calendar.icalendar.VCalendar;
-import com.android.calendar.icalendar.VEvent;
-import com.android.calendarcommon2.DateException;
-import com.android.calendarcommon2.Duration;
-import com.android.calendarcommon2.EventRecurrence;
-import com.android.colorpicker.ColorPickerSwatch.OnColorSelectedListener;
-import com.android.colorpicker.HsvColorComparator;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import ws.xsoh.etar.BuildConfig;
-import ws.xsoh.etar.R;
-
-import static android.provider.CalendarContract.EXTRA_EVENT_ALL_DAY;
-import static android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME;
-import static android.provider.CalendarContract.EXTRA_EVENT_END_TIME;
-import static com.android.calendar.CalendarController.EVENT_EDIT_ON_LAUNCH;
-
-public class EventInfoFragment extends DialogFragment implements OnCheckedChangeListener,
-        CalendarController.EventHandler, OnClickListener, DeleteEventHelper.DeleteNotifyListener,
-        OnColorSelectedListener {
+public class EventInfoFragment extends DialogFragment {/*
 
     public static final boolean DEBUG = false;
 
@@ -163,10 +53,10 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
     protected static final String BUNDLE_KEY_RESPONSE_WHICH_EVENTS = "key_response_which_events";
     protected static final String BUNDLE_KEY_REMINDER_MINUTES = "key_reminder_minutes";
     protected static final String BUNDLE_KEY_REMINDER_METHODS = "key_reminder_methods";
-    /**
+    *//**
      * These are the corresponding indices into the array of strings
      * "R.array.change_response_labels" in the resource file.
-     */
+ *//*
     static final int UPDATE_SINGLE = 0;
     static final int UPDATE_ALL = 1;
     static final String[] CALENDARS_PROJECTION = new String[]{
@@ -344,7 +234,6 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
     private TextView mWhenDateTime;
     private TextView mWhere;
     private ExpandableTextView mDesc;
-    private AttendeesView mLongAttendees;
     private Button emailAttendeesButton;
     private Menu mMenu = null;
     private View mHeadlines;
@@ -377,17 +266,17 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
     private RadioGroup mResponseRadioGroup;
     private int mDefaultReminderMinutes;
     private boolean mUserModifiedReminders = false;
-    /**
+    *//**
      * Contents of the "minutes" spinner.  This has default values from the XML file, augmented
      * with any additional values that were already associated with the event.
-     */
+ *//*
     private ArrayList<Integer> mReminderMinuteValues;
     private ArrayList<String> mReminderMinuteLabels;
-    /**
+    *//**
      * Contents of the "methods" spinner.  The "values" list specifies the method constant
      * (e.g. {@link Reminders#METHOD_ALERT}) associated with the labels.  Any methods that
      * aren't allowed by the Calendar will be removed.
-     */
+ *//*
     private ArrayList<Integer> mReminderMethodValues;
     private ArrayList<String> mReminderMethodLabels;
     private QueryHandler mHandler;
@@ -497,9 +386,9 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         return buttonId;
     }
 
-    /**
+    *//**
      * Loads an integer array asset into a list.
-     */
+ *//*
     private static ArrayList<Integer> loadIntegerArray(Resources r, int resNum) {
         int[] vals = r.getIntArray(resNum);
         int size = vals.length;
@@ -512,9 +401,9 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         return list;
     }
 
-    /**
+    *//**
      * Loads a String array asset into a list.
-     */
+ *//*
     private static ArrayList<String> loadStringArray(Resources r, int resNum) {
         String[] labels = r.getStringArray(resNum);
         ArrayList<String> list = new ArrayList<String>(Arrays.asList(labels));
@@ -823,7 +712,7 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
                     return;
                 }
                 mDeleteHelper =
-                        new DeleteEventHelper(mContext, mActivity, !mIsDialog && !mIsTabletConfig /* exitWhenDone */);
+                        new DeleteEventHelper(mContext, mActivity, !mIsDialog && !mIsTabletConfig *//* exitWhenDone *//*);
                 mDeleteHelper.setDeleteNotificationListener(EventInfoFragment.this);
                 mDeleteHelper.setOnDismissListener(createDeleteOnDismissListener());
                 mDeleteDialogVisible = true;
@@ -853,7 +742,7 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
             emailAttendeesButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    emailAttendees();
+                    //emailAttendees();
                 }
             });
         }
@@ -889,12 +778,12 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         }
     }
 
-    /**
+    *//**
      * Initializes the event cursor, which is expected to point to the first
      * (and only) result from a query.
      *
      * @return true if the cursor is empty.
-     */
+ *//*
     private boolean initEventCursor() {
         if ((mEventCursor == null) || (mEventCursor.getCount() == 0)) {
             return true;
@@ -1077,7 +966,7 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
             mActivity.finish();
         } else if (itemId == R.id.info_action_delete) {
             mDeleteHelper =
-                    new DeleteEventHelper(mActivity, mActivity, true /* exitWhenDone */);
+                    new DeleteEventHelper(mActivity, mActivity, true *//* exitWhenDone *//*);
             mDeleteHelper.setDeleteNotificationListener(EventInfoFragment.this);
             mDeleteHelper.setOnDismissListener(createDeleteOnDismissListener());
             mDeleteDialogVisible = true;
@@ -1092,10 +981,10 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         return super.onOptionsItemSelected(item);
     }
 
-    /**
+    *//**
      * Generates an .ics formatted file with the event info and launches intent chooser to
      * share said file
-     */
+ *//*
     private void shareEvent(ShareType type) {
         // Create the respective ICalendar objects from the event info
         VCalendar calendar = new VCalendar();
@@ -1294,12 +1183,12 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         super.onDestroy();
     }
 
-    /**
+    *//**
      * Asynchronously saves the response to an invitation if the user changed
      * the response. Returns true if the database will be updated.
      *
      * @return true if the database will be changed
-     */
+ *//*
     private boolean saveResponse() {
         if (mAttendeesCursor == null || mEventCursor == null) {
             return false;
@@ -1367,14 +1256,14 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
                 null, null, Utils.UNDO_DELAY);
     }
 
-    /**
+    *//**
      * Creates an exception to a recurring event.  The only change we're making is to the
      * "self attendee status" value.  The provider will take care of updating the corresponding
      * Attendees.attendeeStatus entry.
      *
      * @param eventId The recurring event.
      * @param status  The new value for selfAttendeeStatus.
-     */
+ *//*
     private void createExceptionResponse(long eventId, int status) {
         ContentValues values = new ContentValues();
         values.put(Events.ORIGINAL_INSTANCE_TIME, mStartMillis);
@@ -1765,9 +1654,9 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         }
     }
 
-    /**
+    *//**
      *
-     */
+ *//*
     private void updateMenu() {
         if (mMenu == null) {
             return;
@@ -1818,9 +1707,9 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         }
     }
 
-    /**
+    *//**
      * Returns true if there is at least 1 attendee that is not the viewer.
-     */
+ *//*
     private boolean hasEmailableAttendees() {
         for (Attendee attendee : mAcceptedAttendees) {
             if (Utils.isEmailableFrom(attendee.mEmail, mSyncAccountName)) {
@@ -1964,11 +1853,11 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         return;
     }
 
-    /**
+    *//**
      * Taken from com.google.android.gm.HtmlConversationActivity
      * <p>
      * Send the intent that shows the Contact info corresponding to the email address.
-     */
+ *//*
     public void showContactInfo(Attendee attendee, Rect rect) {
         // First perform lookup query to find existing contact
         final ContentResolver resolver = getActivity().getContentResolver();
@@ -2033,7 +1922,7 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         if (mDeleteDialogVisible) {
             mDeleteHelper = new DeleteEventHelper(
                     mContext, mActivity,
-                    !mIsDialog && !mIsTabletConfig /* exitWhenDone */);
+                    !mIsDialog && !mIsTabletConfig *//* exitWhenDone *//*);
             mDeleteHelper.setOnDismissListener(createDeleteOnDismissListener());
             mDeleteHelper.delete(mStartMillis, mEndMillis, mEventId, -1, onDeleteRunnable);
         } else if (mTentativeUserSetResponse != Attendees.ATTENDEE_STATUS_NONE) {
@@ -2076,10 +1965,10 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         EventViewUtils.updateAddReminderButton(mView, mReminderViews, mMaxReminders);
     }
 
-    /**
+    *//**
      * Add a new reminder when the user hits the "add reminder" button.  We use the default
      * reminder time and method.
-     */
+ *//*
     private void addReminder() {
         // TODO: when adding a new reminder, make it different from the
         // last one in the list (if any).
@@ -2142,7 +2031,7 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
 
         // Check if there are any changes in the reminder
         boolean changed = EditEventHelper.saveReminders(ops, mEventId, mReminders,
-                mOriginalReminders, false /* no force save */);
+                mOriginalReminders, false *//* no force save *//*);
 
         if (!changed) {
             return false;
@@ -2164,16 +2053,16 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         return true;
     }
 
-    /**
+   *//* *//**//**
      * Email all the attendees of the event, except for the viewer (so as to not email
      * himself) and resources like conference rooms.
-     */
+ *//**//*
     private void emailAttendees() {
         Intent i = new Intent(getActivity(), QuickResponseActivity.class);
         i.putExtra(QuickResponseActivity.EXTRA_EVENT_ID, mEventId);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
-    }
+    }*//*
 
     @Override
     public void onDeleteStarted() {
@@ -2407,5 +2296,5 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
                 }
             }
         }
-    }
+    }*/
 }
