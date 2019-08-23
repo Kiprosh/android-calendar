@@ -45,8 +45,6 @@ import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.SparseIntArray;
 
-import com.android.colorpicker.ColorPickerDialog;
-import com.android.colorpicker.ColorPickerSwatch;
 import com.android.timezonepicker.TimeZoneInfo;
 import com.android.timezonepicker.TimeZonePickerDialog;
 import com.android.timezonepicker.TimeZonePickerDialog.OnTimeZoneSetListener;
@@ -232,7 +230,7 @@ public class GeneralPreferences extends PreferenceFragment implements
         mColor.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                showColorPickerDialog();
+                //showColorPickerDialog();
                 return true;
             }
         });
@@ -274,7 +272,7 @@ public class GeneralPreferences extends PreferenceFragment implements
         migrateOldPreferences(sharedPreferences);
 
     }
-
+/*
     private void showColorPickerDialog() {
         final ColorPickerDialog colorPickerDialog = new ColorPickerDialog();
         // Retrieve current color to show it as selected
@@ -300,7 +298,7 @@ public class GeneralPreferences extends PreferenceFragment implements
 
         FragmentManager fm = this.getFragmentManager();
         colorPickerDialog.show(fm, "colorpicker");
-    }
+    }*/
 
     private void initializeColorMap() {
         colorMap.put(getResources().getColor(R.color.colorPrimary), R.color.colorPrimary);

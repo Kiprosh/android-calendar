@@ -121,10 +121,7 @@
     <orderEntry type="library" name="Gradle: com.android.support:appcompat-v7:27.1.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.1.0@jar" level="project" />
     <orderEntry type="module" module-name="external-calendar" />
-    <orderEntry type="module" module-name="chips" />
-    <orderEntry type="module" module-name="datetimepicker" />
     <orderEntry type="module" module-name="timezonepicker" />
-    <orderEntry type="module" module-name="colorpicker" />
     <orderEntry type="library" name="Gradle: org.apache.http.legacy-android-27" level="project" />
   </component>
 </module>

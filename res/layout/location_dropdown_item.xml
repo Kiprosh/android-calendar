@@ -43,7 +43,6 @@
             android:ellipsize="end"
             android:paddingLeft="8dip"
             android:singleLine="true"
-            android:textColor="@drawable/list_item_font_primary"
             android:textSize="18sp" />
 
         <TextView
@@ -54,7 +53,6 @@
             android:ellipsize="end"
             android:paddingLeft="8dip"
             android:singleLine="true"
-            android:textColor="@drawable/list_item_font_secondary"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

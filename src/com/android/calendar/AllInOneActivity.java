@@ -74,7 +74,6 @@ import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.month.MonthByWeekFragment;
-import com.android.datetimepicker.date.DatePickerDialog;
 
 import java.io.File;
 import java.util.List;
@@ -874,6 +873,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
             if (todayTime.month == t.month) {
                 t = todayTime;
             }
+/*
 
             DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
                 @Override
@@ -887,6 +887,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
                 }
             }, t.year, t.month, t.monthDay);
             datePickerDialog.show(getFragmentManager(), "datePickerDialog");
+*/
 
         } else if (itemId == R.id.action_hide_controls) {
             mHideControls = !mHideControls;
