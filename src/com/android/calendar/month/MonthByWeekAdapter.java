@@ -31,15 +31,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.LayoutParams;
 
 import com.android.calendar.CalendarController;
-import com.android.calendar.CalendarController.EventType;
-import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.Event;
 import com.android.calendar.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ws.xsoh.etar.R;
 
 public class MonthByWeekAdapter extends SimpleWeeksAdapter {
     public static final String WEEK_PARAMS_IS_MINI = "mini_month";
@@ -115,7 +112,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
         if (params.containsKey(WEEK_PARAMS_IS_MINI)) {
             mIsMiniMonth = params.get(WEEK_PARAMS_IS_MINI) != 0;
         }
-        mShowAgendaWithMonth = Utils.getConfigBool(context, R.bool.show_agenda_with_month);
+        mShowAgendaWithMonth = false;
         ViewConfiguration vc = ViewConfiguration.get(context);
         mOnDownDelay = ViewConfiguration.getTapTimeout();
         mMovedPixelToCancel = vc.getScaledTouchSlop();
@@ -318,12 +315,12 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
         if (mShowAgendaWithMonth || mIsMiniMonth) {
             // If agenda view is visible with month view , refresh the views
             // with the selected day's info
-            mController.sendEvent(mContext, EventType.GO_TO, day, day, -1,
-                    ViewType.CURRENT, CalendarController.EXTRA_GOTO_DATE, null, null);
+            mController.sendEvent(mContext, CalendarController.EventType.GO_TO, day, day, -1,
+                    CalendarController.ViewType.CURRENT, CalendarController.EXTRA_GOTO_DATE, null, null);
         } else {
             // Else , switch to the detailed view
-            mController.sendEvent(mContext, EventType.GO_TO, day, day, -1,
-                    ViewType.DETAIL,
+            mController.sendEvent(mContext, CalendarController.EventType.GO_TO, day, day, -1,
+                    CalendarController.ViewType.DETAIL,
                     CalendarController.EXTRA_GOTO_DATE
                             | CalendarController.EXTRA_GOTO_BACK_TO_PREVIOUS, null, null);
         }

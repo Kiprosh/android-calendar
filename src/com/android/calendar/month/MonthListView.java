@@ -97,6 +97,13 @@ public class MonthListView extends ListView {
         return processEvent(ev) || super.onInterceptTouchEvent(ev);
     }
 
+    /*@Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_MOVE)
+            return true;
+        return super.dispatchTouchEvent(ev);
+    }*/
+
     private boolean processEvent(MotionEvent ev) {
         switch (ev.getAction() & MotionEvent.ACTION_MASK) {
             // Since doFling sends a cancel, make sure not to process it.
