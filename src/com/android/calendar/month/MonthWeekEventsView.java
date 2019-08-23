@@ -881,7 +881,7 @@ public class MonthWeekEventsView extends SimpleWeekView {
                     ArrayList<Event> events = mEvents.get(dayPosition);
                     List<CharSequence> text = accessEvent.getText();
                     for (Event e : events) {
-                        text.add(e.getTitleAndLocation() + ". ");
+                        //text.add(e.getTitleAndLocation() + ". ");
                         int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR;
                         if (!e.allDay) {
                             flags |= DateUtils.FORMAT_SHOW_TIME;
