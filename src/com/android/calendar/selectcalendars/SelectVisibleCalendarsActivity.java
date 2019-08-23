@@ -17,7 +17,6 @@
 package com.android.calendar.selectcalendars;
 
 import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.os.Bundle;
@@ -39,7 +38,7 @@ import ws.xsoh.etar.R;
 
 public class SelectVisibleCalendarsActivity extends AbstractCalendarActivity {
     private final DynamicTheme dynamicTheme = new DynamicTheme();
-    private SelectVisibleCalendarsFragment mFragment;
+    //private SelectVisibleCalendarsFragment mFragment;
     private CalendarController mController;
     // Create an observer so that we can update the views whenever a
     // Calendar event changes.
@@ -65,7 +64,7 @@ public class SelectVisibleCalendarsActivity extends AbstractCalendarActivity {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         setSupportActionBar(toolbar);
         mController = CalendarController.getInstance(this);
-        mFragment = (SelectVisibleCalendarsFragment) getFragmentManager().findFragmentById(
+        /*mFragment = (SelectVisibleCalendarsFragment) getFragmentManager().findFragmentById(
                 R.id.body_frame);
 
         if (mFragment == null) {
@@ -75,7 +74,7 @@ public class SelectVisibleCalendarsActivity extends AbstractCalendarActivity {
             ft.replace(R.id.body_frame, mFragment);
             ft.show(mFragment);
             ft.commit();
-        }
+        }*/
     }
 
     @Override

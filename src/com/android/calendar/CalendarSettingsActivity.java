@@ -43,8 +43,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.android.calendar.selectcalendars.SelectCalendarsSyncFragment;
-
 import java.util.List;
 
 import ws.xsoh.etar.R;

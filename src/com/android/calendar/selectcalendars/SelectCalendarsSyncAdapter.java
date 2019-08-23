@@ -37,7 +37,6 @@ import android.widget.TextView;
 
 import com.android.calendar.CalendarColorPickerDialog;
 import com.android.calendar.Utils;
-import com.android.calendar.selectcalendars.CalendarColorCache.OnCalendarColorsLoadedListener;
 
 import java.util.HashMap;
 

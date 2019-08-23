@@ -23,7 +23,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.CalendarContract.Attendees;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,7 +37,6 @@ import com.android.calendar.CalendarController;
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
-import com.android.calendar.EventInfoFragment;
 import com.android.calendar.GeneralPreferences;
 import com.android.calendar.StickyHeaderListView;
 import com.android.calendar.Utils;
@@ -71,7 +69,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     };
     private boolean mShowEventDetailsWithAgenda;
     private CalendarController mController;
-    private EventInfoFragment mEventFragment;
+    // private EventInfoFragment mEventFragment;
     private String mQuery;
     private boolean mUsedForSearch = false;
     private boolean mIsTabletConfig;
@@ -414,7 +412,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
 
             long startMillis = event.startTime.toMillis(true);
             long endMillis = event.endTime.toMillis(true);
-            EventInfoFragment fOld =
+            /*EventInfoFragment fOld =
                     (EventInfoFragment) fragmentManager.findFragmentById(R.id.agenda_event_info);
             if (fOld == null || replaceFragment || fOld.getStartMillis() != startMillis ||
                     fOld.getEndMillis() != endMillis || fOld.getEventId() != event.id) {
@@ -426,7 +424,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
                 ft.commit();
             } else {
                 fOld.reloadEvents();
-            }
+            }*/
         }
     }
 

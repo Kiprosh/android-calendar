@@ -26,7 +26,6 @@ import android.provider.CalendarContract.Reminders;
 import android.text.TextUtils;
 import android.text.util.Rfc822Token;
 
-import com.android.calendar.event.EditEventHelper;
 import com.android.calendar.event.EventColorCache;
 import com.android.common.Rfc822Validator;
 

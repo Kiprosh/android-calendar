@@ -56,7 +56,7 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
     protected Animation mOutAnimationForward;
     protected Animation mInAnimationBackward;
     protected Animation mOutAnimationBackward;
-    //EventLoader mEventLoader;
+
 
     Time mSelectedDay = new Time();
 
@@ -291,9 +291,6 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
 
     public void handleEvent(EventInfo msg) {
         if (msg.eventType == EventType.GO_TO) {
-            // TODO support a range of time
-            // TODO support event_id
-            // TODO support select message
             goTo(msg.selectedTime, (msg.extraLong & CalendarController.EXTRA_GOTO_DATE) != 0,
                     (msg.extraLong & CalendarController.EXTRA_GOTO_TODAY) != 0);
         } else if (msg.eventType == EventType.EVENTS_CHANGED) {

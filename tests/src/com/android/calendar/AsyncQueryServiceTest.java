@@ -16,9 +16,6 @@
 
 package com.android.calendar;
 
-import com.android.calendar.AsyncQueryService.Operation;
-import com.android.calendar.AsyncQueryServiceHelper.OperationInfo;
-
 import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;

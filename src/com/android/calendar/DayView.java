@@ -261,17 +261,11 @@ public class DayView extends View implements
     private static int mNewEventHintColor;
     private static int mCalendarHourLabelColor;
     private static int mMoreAlldayEventsTextAlpha = MORE_EVENTS_MAX_ALPHA;
-    //private final ContextMenuHandler mContextMenuHandler = new ContextMenuHandler();
-    private final CalendarController mController;
-    private boolean isLongClickEnable;
-
     // Actual cell height we're using (may be modified by all day
     // events), shared among all DayViews
     private static int mCellHeight = 0; // shared among all DayViews
-
     // Last cell height set by user gesture
     private static int mPreferredCellHeight = 0;
-
     private static int mScaledPagingTouchSlop = 0;
     /**
      * Whether to use the expand or collapse icon.
@@ -301,6 +295,8 @@ public class DayView extends View implements
     protected final Drawable mTodayHeaderDrawable;
     protected final Drawable mExpandAlldayDrawable;
     protected final Drawable mCollapseAlldayDrawable;
+    //private final ContextMenuHandler mContextMenuHandler = new ContextMenuHandler();
+    private final CalendarController mController;
     private final ContinueScroll mContinueScroll = new ContinueScroll();
     private final UpdateCurrentTime mUpdateCurrentTime = new UpdateCurrentTime();
     private final Typeface mBold = Typeface.DEFAULT_BOLD;
@@ -320,8 +316,6 @@ public class DayView extends View implements
     //private final EventLoader mEventLoader;
     private final ArrayList<Event> mSelectedEvents = new ArrayList<Event>();
     private final Rect mPrevBox = new Rect();
-    private final DeleteEventHelper mDeleteEventHelper;
-    private boolean isEmptyCellClickEnable;
     private final ViewSwitcher mViewSwitcher;
     private final GestureDetector mGestureDetector;
     private final OverScroller mScroller;
@@ -348,6 +342,9 @@ public class DayView extends View implements
     ObjectAnimator mMoreAlldayEventsAnimator;
     // Animates the current time marker when Today is pressed
     ObjectAnimator mTodayAnimator;
+    private boolean isLongClickEnable;
+    //private final DeleteEventHelper mDeleteEventHelper;
+    private boolean isEmptyCellClickEnable;
     private boolean mOnFlingCalled;
     private boolean mStartingScroll = false;
     private Handler mHandler;
@@ -428,142 +425,6 @@ public class DayView extends View implements
             DayView.this.invalidate();
         }
     };
-
-    public DayView(Context context, CalendarController controller,
-                   ViewSwitcher viewSwitcher, int numDays, CalendarListeners calendarListeners) {
-        super(context);
-        mContext = context;
-        initAccessibilityVariables();
-
-        mResources = context.getResources();
-        mCreateNewEventString = mResources.getString(R.string.event_create);
-        mNewEventHintString = mResources.getString(R.string.day_view_new_event_hint);
-        mNumDays = numDays;
-        mEventClickListener = calendarListeners;
-
-        DATE_HEADER_FONT_SIZE = (int) mResources.getDimension(R.dimen.date_header_text_size);
-        DAY_HEADER_FONT_SIZE = (int) mResources.getDimension(R.dimen.day_label_text_size);
-        ONE_DAY_HEADER_HEIGHT = (int) mResources.getDimension(R.dimen.one_day_header_height);
-        DAY_HEADER_BOTTOM_MARGIN = (int) mResources.getDimension(R.dimen.day_header_bottom_margin);
-        EXPAND_ALL_DAY_BOTTOM_MARGIN = (int) mResources.getDimension(R.dimen.all_day_bottom_margin);
-        HOURS_TEXT_SIZE = (int) mResources.getDimension(R.dimen.hours_text_size);
-        MIN_HOURS_WIDTH = (int) mResources.getDimension(R.dimen.min_hours_width);
-        HOURS_LEFT_MARGIN = (int) mResources.getDimension(R.dimen.hours_left_margin);
-        HOURS_RIGHT_MARGIN = (int) mResources.getDimension(R.dimen.hours_right_margin);
-        MULTI_DAY_HEADER_HEIGHT = (int) mResources.getDimension(R.dimen.day_header_height);
-        int eventTextSizeId;
-        if (mNumDays == 1) {
-            eventTextSizeId = R.dimen.day_view_event_text_size;
-        } else {
-            eventTextSizeId = R.dimen.week_view_event_text_size;
-        }
-        EVENT_TEXT_FONT_SIZE = (int) mResources.getDimension(eventTextSizeId);
-        NEW_EVENT_HINT_FONT_SIZE = (int) mResources.getDimension(R.dimen.new_event_hint_text_size);
-        MIN_EVENT_HEIGHT = mResources.getDimension(R.dimen.event_min_height);
-        MIN_UNEXPANDED_ALLDAY_EVENT_HEIGHT = MIN_EVENT_HEIGHT;
-        EVENT_TEXT_TOP_MARGIN = (int) mResources.getDimension(R.dimen.event_text_vertical_margin);
-        EVENT_TEXT_BOTTOM_MARGIN = EVENT_TEXT_TOP_MARGIN;
-        EVENT_ALL_DAY_TEXT_TOP_MARGIN = EVENT_TEXT_TOP_MARGIN;
-        EVENT_ALL_DAY_TEXT_BOTTOM_MARGIN = EVENT_TEXT_TOP_MARGIN;
-
-        EVENT_TEXT_LEFT_MARGIN = (int) mResources
-                .getDimension(R.dimen.event_text_horizontal_margin);
-        EVENT_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
-        EVENT_ALL_DAY_TEXT_LEFT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
-        EVENT_ALL_DAY_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
-
-        if (mScale == 0) {
-
-            mScale = mResources.getDisplayMetrics().density;
-            if (mScale != 1) {
-                SINGLE_ALLDAY_HEIGHT *= mScale;
-                ALLDAY_TOP_MARGIN *= mScale;
-                MAX_HEIGHT_OF_ONE_ALLDAY_EVENT *= mScale;
-
-                NORMAL_FONT_SIZE *= mScale;
-                GRID_LINE_LEFT_MARGIN *= mScale;
-                HOURS_TOP_MARGIN *= mScale;
-                MIN_CELL_WIDTH_FOR_TEXT *= mScale;
-                MAX_UNEXPANDED_ALLDAY_HEIGHT *= mScale;
-                mAnimateDayEventHeight = (int) MIN_UNEXPANDED_ALLDAY_EVENT_HEIGHT;
-
-                CURRENT_TIME_LINE_SIDE_BUFFER *= mScale;
-                CURRENT_TIME_LINE_TOP_OFFSET *= mScale;
-
-                MIN_Y_SPAN *= mScale;
-                MAX_CELL_HEIGHT *= mScale;
-                DEFAULT_CELL_HEIGHT *= mScale;
-                DAY_HEADER_HEIGHT *= mScale;
-                DAY_HEADER_RIGHT_MARGIN *= mScale;
-                DAY_HEADER_ONE_DAY_LEFT_MARGIN *= mScale;
-                DAY_HEADER_ONE_DAY_RIGHT_MARGIN *= mScale;
-                DAY_HEADER_ONE_DAY_BOTTOM_MARGIN *= mScale;
-                CALENDAR_COLOR_SQUARE_SIZE *= mScale;
-                EVENT_RECT_TOP_MARGIN *= mScale;
-                EVENT_RECT_BOTTOM_MARGIN *= mScale;
-                ALL_DAY_EVENT_RECT_BOTTOM_MARGIN *= mScale;
-                EVENT_RECT_LEFT_MARGIN *= mScale;
-                EVENT_RECT_RIGHT_MARGIN *= mScale;
-                EVENT_RECT_STROKE_WIDTH *= mScale;
-                EVENT_SQUARE_WIDTH *= mScale;
-                EVENT_LINE_PADDING *= mScale;
-                NEW_EVENT_MARGIN *= mScale;
-                NEW_EVENT_WIDTH *= mScale;
-                NEW_EVENT_MAX_LENGTH *= mScale;
-            }
-        }
-        HOURS_MARGIN = HOURS_LEFT_MARGIN + HOURS_RIGHT_MARGIN;
-        DAY_HEADER_HEIGHT = mNumDays == 1 ? ONE_DAY_HEADER_HEIGHT : MULTI_DAY_HEADER_HEIGHT;
-        if (LunarUtils.showLunar(mContext) && mNumDays != 1) {
-            DAY_HEADER_HEIGHT = (int) (DAY_HEADER_HEIGHT + DAY_HEADER_FONT_SIZE + 2);
-        }
-
-        mCurrentTimeLine = mResources.getDrawable(R.drawable.timeline_indicator_holo_light);
-        mCurrentTimeAnimateLine = mResources
-                .getDrawable(R.drawable.timeline_indicator_activated_holo_light);
-        mTodayHeaderDrawable = mResources.getDrawable(R.drawable.today_blue_week_holo_light);
-        mExpandAlldayDrawable = mResources.getDrawable(R.drawable.ic_expand_holo_light);
-        mCollapseAlldayDrawable = mResources.getDrawable(R.drawable.ic_collapse_holo_light);
-        mNewEventHintColor = mResources.getColor(R.color.new_event_hint_text_color);
-        mAcceptedOrTentativeEventBoxDrawable = mResources
-                .getDrawable(R.drawable.panel_month_event_holo_light);
-
-        //mEventLoader = eventLoader;
-        mEventGeometry = new EventGeometry();
-        mEventGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
-        mEventGeometry.setHourGap(HOUR_GAP);
-        mEventGeometry.setCellMargin(DAY_GAP);
-        mLongPressItems = new CharSequence[]{
-                mResources.getString(R.string.new_event_dialog_option)
-        };
-        mLongPressTitle = mResources.getString(R.string.new_event_dialog_label);
-        mDeleteEventHelper = new DeleteEventHelper(context, null, false /* don't exit when done */);
-        mLastPopupEventID = INVALID_EVENT_ID;
-        mController = controller;
-        mViewSwitcher = viewSwitcher;
-        mGestureDetector = new GestureDetector(context, new CalendarGestureListener());
-        mScaleGestureDetector = new ScaleGestureDetector(getContext(), this);
-        if (mPreferredCellHeight == 0) {
-            mPreferredCellHeight = Utils.getSharedPreference(mContext,
-                    GeneralPreferences.KEY_DEFAULT_CELL_HEIGHT, DEFAULT_CELL_HEIGHT);
-        }
-        mCellHeight = mPreferredCellHeight;
-        mScroller = new OverScroller(context);
-        mHScrollInterpolator = new ScrollInterpolator();
-        mEdgeEffectTop = new EdgeEffect(context);
-        mEdgeEffectBottom = new EdgeEffect(context);
-        ViewConfiguration vc = ViewConfiguration.get(context);
-        mScaledPagingTouchSlop = vc.getScaledPagingTouchSlop();
-        mOnDownDelay = ViewConfiguration.getTapTimeout();
-        OVERFLING_DISTANCE = vc.getScaledOverflingDistance();
-
-        init(context);
-    }
-
-    public void setLongClickEnable(boolean longClickEnable) {
-        isLongClickEnable = longClickEnable;
-    }
-
     // Current selection info for accessibility
     private int mSelectionDayForAccessibility;        // Julian day
     private int mSelectionHourForAccessibility;
@@ -697,12 +558,135 @@ public class DayView extends View implements
     private boolean mIsAccessibilityEnabled = false;
     private boolean mTouchExplorationEnabled = false;
 
-    public void setEmptyCellClickEnable(boolean emptyCellClickEnable) {
-        isEmptyCellClickEnable = emptyCellClickEnable;
-    }
+    public DayView(Context context, CalendarController controller,
+                   ViewSwitcher viewSwitcher, int numDays, CalendarListeners calendarListeners) {
+        super(context);
+        mContext = context;
+        initAccessibilityVariables();
 
-    public void setEventClickListener(CalendarListeners eventClickListener) {
-        this.mEventClickListener = eventClickListener;
+        mResources = context.getResources();
+        mCreateNewEventString = mResources.getString(R.string.event_create);
+        mNewEventHintString = mResources.getString(R.string.day_view_new_event_hint);
+        mNumDays = numDays;
+        mEventClickListener = calendarListeners;
+
+        DATE_HEADER_FONT_SIZE = (int) mResources.getDimension(R.dimen.date_header_text_size);
+        DAY_HEADER_FONT_SIZE = (int) mResources.getDimension(R.dimen.day_label_text_size);
+        ONE_DAY_HEADER_HEIGHT = (int) mResources.getDimension(R.dimen.one_day_header_height);
+        DAY_HEADER_BOTTOM_MARGIN = (int) mResources.getDimension(R.dimen.day_header_bottom_margin);
+        EXPAND_ALL_DAY_BOTTOM_MARGIN = (int) mResources.getDimension(R.dimen.all_day_bottom_margin);
+        HOURS_TEXT_SIZE = (int) mResources.getDimension(R.dimen.hours_text_size);
+        MIN_HOURS_WIDTH = (int) mResources.getDimension(R.dimen.min_hours_width);
+        HOURS_LEFT_MARGIN = (int) mResources.getDimension(R.dimen.hours_left_margin);
+        HOURS_RIGHT_MARGIN = (int) mResources.getDimension(R.dimen.hours_right_margin);
+        MULTI_DAY_HEADER_HEIGHT = (int) mResources.getDimension(R.dimen.day_header_height);
+        int eventTextSizeId;
+        if (mNumDays == 1) {
+            eventTextSizeId = R.dimen.day_view_event_text_size;
+        } else {
+            eventTextSizeId = R.dimen.week_view_event_text_size;
+        }
+        EVENT_TEXT_FONT_SIZE = (int) mResources.getDimension(eventTextSizeId);
+        NEW_EVENT_HINT_FONT_SIZE = (int) mResources.getDimension(R.dimen.new_event_hint_text_size);
+        MIN_EVENT_HEIGHT = mResources.getDimension(R.dimen.event_min_height);
+        MIN_UNEXPANDED_ALLDAY_EVENT_HEIGHT = MIN_EVENT_HEIGHT;
+        EVENT_TEXT_TOP_MARGIN = (int) mResources.getDimension(R.dimen.event_text_vertical_margin);
+        EVENT_TEXT_BOTTOM_MARGIN = EVENT_TEXT_TOP_MARGIN;
+        EVENT_ALL_DAY_TEXT_TOP_MARGIN = EVENT_TEXT_TOP_MARGIN;
+        EVENT_ALL_DAY_TEXT_BOTTOM_MARGIN = EVENT_TEXT_TOP_MARGIN;
+
+        EVENT_TEXT_LEFT_MARGIN = (int) mResources
+                .getDimension(R.dimen.event_text_horizontal_margin);
+        EVENT_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
+        EVENT_ALL_DAY_TEXT_LEFT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
+        EVENT_ALL_DAY_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
+
+        if (mScale == 0) {
+
+            mScale = mResources.getDisplayMetrics().density;
+            if (mScale != 1) {
+                SINGLE_ALLDAY_HEIGHT *= mScale;
+                ALLDAY_TOP_MARGIN *= mScale;
+                MAX_HEIGHT_OF_ONE_ALLDAY_EVENT *= mScale;
+
+                NORMAL_FONT_SIZE *= mScale;
+                GRID_LINE_LEFT_MARGIN *= mScale;
+                HOURS_TOP_MARGIN *= mScale;
+                MIN_CELL_WIDTH_FOR_TEXT *= mScale;
+                MAX_UNEXPANDED_ALLDAY_HEIGHT *= mScale;
+                mAnimateDayEventHeight = (int) MIN_UNEXPANDED_ALLDAY_EVENT_HEIGHT;
+
+                CURRENT_TIME_LINE_SIDE_BUFFER *= mScale;
+                CURRENT_TIME_LINE_TOP_OFFSET *= mScale;
+
+                MIN_Y_SPAN *= mScale;
+                MAX_CELL_HEIGHT *= mScale;
+                DEFAULT_CELL_HEIGHT *= mScale;
+                DAY_HEADER_HEIGHT *= mScale;
+                DAY_HEADER_RIGHT_MARGIN *= mScale;
+                DAY_HEADER_ONE_DAY_LEFT_MARGIN *= mScale;
+                DAY_HEADER_ONE_DAY_RIGHT_MARGIN *= mScale;
+                DAY_HEADER_ONE_DAY_BOTTOM_MARGIN *= mScale;
+                CALENDAR_COLOR_SQUARE_SIZE *= mScale;
+                EVENT_RECT_TOP_MARGIN *= mScale;
+                EVENT_RECT_BOTTOM_MARGIN *= mScale;
+                ALL_DAY_EVENT_RECT_BOTTOM_MARGIN *= mScale;
+                EVENT_RECT_LEFT_MARGIN *= mScale;
+                EVENT_RECT_RIGHT_MARGIN *= mScale;
+                EVENT_RECT_STROKE_WIDTH *= mScale;
+                EVENT_SQUARE_WIDTH *= mScale;
+                EVENT_LINE_PADDING *= mScale;
+                NEW_EVENT_MARGIN *= mScale;
+                NEW_EVENT_WIDTH *= mScale;
+                NEW_EVENT_MAX_LENGTH *= mScale;
+            }
+        }
+        HOURS_MARGIN = HOURS_LEFT_MARGIN + HOURS_RIGHT_MARGIN;
+        DAY_HEADER_HEIGHT = mNumDays == 1 ? ONE_DAY_HEADER_HEIGHT : MULTI_DAY_HEADER_HEIGHT;
+        if (LunarUtils.showLunar(mContext) && mNumDays != 1) {
+            DAY_HEADER_HEIGHT = (int) (DAY_HEADER_HEIGHT + DAY_HEADER_FONT_SIZE + 2);
+        }
+
+        mCurrentTimeLine = mResources.getDrawable(R.drawable.timeline_indicator_holo_light);
+        mCurrentTimeAnimateLine = mResources
+                .getDrawable(R.drawable.timeline_indicator_activated_holo_light);
+        mTodayHeaderDrawable = mResources.getDrawable(R.drawable.today_blue_week_holo_light);
+        mExpandAlldayDrawable = mResources.getDrawable(R.drawable.ic_expand_holo_light);
+        mCollapseAlldayDrawable = mResources.getDrawable(R.drawable.ic_collapse_holo_light);
+        mNewEventHintColor = mResources.getColor(R.color.new_event_hint_text_color);
+        mAcceptedOrTentativeEventBoxDrawable = mResources
+                .getDrawable(R.drawable.panel_month_event_holo_light);
+
+        //mEventLoader = eventLoader;
+        mEventGeometry = new EventGeometry();
+        mEventGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
+        mEventGeometry.setHourGap(HOUR_GAP);
+        mEventGeometry.setCellMargin(DAY_GAP);
+        mLongPressItems = new CharSequence[]{
+                mResources.getString(R.string.new_event_dialog_option)
+        };
+        mLongPressTitle = mResources.getString(R.string.new_event_dialog_label);
+        //mDeleteEventHelper = new DeleteEventHelper(context, null, false /* don't exit when done */);
+        mLastPopupEventID = INVALID_EVENT_ID;
+        mController = controller;
+        mViewSwitcher = viewSwitcher;
+        mGestureDetector = new GestureDetector(context, new CalendarGestureListener());
+        mScaleGestureDetector = new ScaleGestureDetector(getContext(), this);
+        if (mPreferredCellHeight == 0) {
+            mPreferredCellHeight = Utils.getSharedPreference(mContext,
+                    GeneralPreferences.KEY_DEFAULT_CELL_HEIGHT, DEFAULT_CELL_HEIGHT);
+        }
+        mCellHeight = mPreferredCellHeight;
+        mScroller = new OverScroller(context);
+        mHScrollInterpolator = new ScrollInterpolator();
+        mEdgeEffectTop = new EdgeEffect(context);
+        mEdgeEffectBottom = new EdgeEffect(context);
+        ViewConfiguration vc = ViewConfiguration.get(context);
+        mScaledPagingTouchSlop = vc.getScaledPagingTouchSlop();
+        mOnDownDelay = ViewConfiguration.getTapTimeout();
+        OVERFLING_DISTANCE = vc.getScaledOverflingDistance();
+
+        init(context);
     }
 
     static Event getNewEvent(int julianDay, long utcMillis,
@@ -775,6 +759,14 @@ public class DayView extends View implements
         }
 
         return ACCESS_LEVEL_DELETE;
+    }
+
+    public void setLongClickEnable(boolean longClickEnable) {
+        isLongClickEnable = longClickEnable;
+    }
+
+    public void setEmptyCellClickEnable(boolean emptyCellClickEnable) {
+        isEmptyCellClickEnable = emptyCellClickEnable;
     }
 
     @Override
@@ -1332,7 +1324,7 @@ public class DayView extends View implements
 
         final long minimumDurationMillis = (long)
                 (MIN_EVENT_HEIGHT * DateUtils.MINUTE_IN_MILLIS / (mCellHeight / 60.0f));
-        Event.computePositions(mEvents, minimumDurationMillis);
+        EventHelper.computePositions(mEvents, minimumDurationMillis);
 
         // Compute the top of our reachable view
         mMaxViewStartY = HOUR_GAP + 24 * (mCellHeight + HOUR_GAP) - mGridAreaHeight;
@@ -1555,7 +1547,7 @@ public class DayView extends View implements
                 long begin = selectedEvent.startMillis;
                 long end = selectedEvent.endMillis;
                 long id = selectedEvent.id;
-                mDeleteEventHelper.delete(begin, end, id, -1);
+                //mDeleteEventHelper.delete(begin, end, id, -1);
                 return true;
             case KeyEvent.KEYCODE_ENTER:
                 switchViews(true /* trackball or keyboard */);
@@ -1742,7 +1734,7 @@ public class DayView extends View implements
                                 b.append(mFormatter.format(mEventCountTemplate, i++, numEvents));
                                 b.append(" ");
                             }
-                            appendEventAccessibilityString(b, calEvent);
+                            //appendEventAccessibilityString(b, calEvent);
                         }
                     } else {
                         if (numEvents > 1) {
@@ -1752,7 +1744,7 @@ public class DayView extends View implements
                                     .indexOf(mSelectedEventForAccessibility) + 1, numEvents));
                             b.append(" ");
                         }
-                        appendEventAccessibilityString(b, mSelectedEventForAccessibility);
+                        //appendEventAccessibilityString(b, mSelectedEventForAccessibility);
                     }
                 } else {
                     b.append(mCreateNewEventString);
@@ -1774,7 +1766,7 @@ public class DayView extends View implements
      * @param b
      * @param calEvent
      */
-    private void appendEventAccessibilityString(StringBuilder b, Event calEvent) {
+    /*private void appendEventAccessibilityString(StringBuilder b, Event calEvent) {
         b.append(calEvent.getTitleAndLocation());
         b.append(PERIOD_SPACE);
         String when;
@@ -1790,8 +1782,7 @@ public class DayView extends View implements
         when = Utils.formatDateRange(mContext, calEvent.startMillis, calEvent.endMillis, flags);
         b.append(when);
         b.append(PERIOD_SPACE);
-    }
-
+    }*/
     private View switchViews(boolean forward, float xOffSet, float width, float velocity) {
         mAnimationDistance = width - xOffSet;
         if (DEBUG) {
@@ -4657,6 +4648,50 @@ public class DayView extends View implements
         f -= 0.5f; // center the values about 0.
         f *= 0.3f * Math.PI / 2.0f;
         return (float) Math.sin(f);
+    }
+
+    public void setColor(@CalendarColor.Type int type, int colorId) {
+        int color = mContext.getResources().getColor(colorId);
+        switch (type) {
+            case CalendarColor.WEEK_TODAY:
+                mWeek_todayColor = color;
+                break;
+            case CalendarColor.WEEK_SATURDAY:
+                mWeek_saturdayColor = color;
+                break;
+            case CalendarColor.WEEK_SUNDAY:
+                break;
+            case CalendarColor.CALENDAR_DATE_BANNER_TEXT_COLOR:
+                mCalendarDateBannerTextColor = color;
+            case CalendarColor.FUTURE_BG_COLOR:
+                mFutureBgColorRes = color;
+            case CalendarColor.BG_COLOR:
+                mBgColor = color;
+                break;
+            case CalendarColor.CALENDAR_HOUR_LABEL_COLOR:
+                mCalendarHourLabelColor = color;
+                break;
+            case CalendarColor.CALENDAR_GRID_AREA_SELECTED:
+                mCalendarGridAreaSelected = color;
+                break;
+            case CalendarColor.CALENDAR_GRIDLINE_INNER_HORIZONTAL_COLOR:
+                mCalendarGridLineInnerHorizontalColor = color;
+                break;
+            case CalendarColor.CALENDAR_GRIDLINE_INNER_VERTICAL_COLOR:
+                mCalendarGridLineInnerVerticalColor = color;
+                break;
+            case CalendarColor.PRESSED_COLOR:
+                mPressedColor = color;
+            case CalendarColor.CLICKED_COLOR:
+                mClickedColor = color;
+                break;
+            case CalendarColor.EVENT_TEXT_COLOR:
+                mEventTextColor = color;
+                break;
+            case CalendarColor.MORE_EVENTS_TEXT_COLOR:
+                mMoreEventsTextColor = color;
+        }
+        invalidate();
     }
 
     class TodayAnimatorListener extends AnimatorListenerAdapter {

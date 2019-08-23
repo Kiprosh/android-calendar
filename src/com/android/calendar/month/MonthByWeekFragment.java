@@ -51,7 +51,6 @@ import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.Utils;
-import com.android.calendar.event.CreateEventDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -100,7 +99,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     protected boolean mHideDeclined;
     protected int mFirstLoadedJulianDay;
     protected int mLastLoadedJulianDay;
-    private CreateEventDialogFragment mEventDialog;
+    //private CreateEventDialogFragment mEventDialog;
     private CursorLoader mLoader;
     private Uri mEventUri;
     private volatile boolean mShouldLoad = true;
@@ -147,8 +146,8 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
             final FragmentManager manager = getFragmentManager();
             if (manager != null) {
                 Time day = (Time) msg.obj;
-                mEventDialog = new CreateEventDialogFragment(day);
-                mEventDialog.show(manager, TAG_EVENT_DIALOG);
+                /*mEventDialog = new CreateEventDialogFragment(day);
+                mEventDialog.show(manager, TAG_EVENT_DIALOG);*/
             }
         }
     };
@@ -334,7 +333,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
         if (mIsMiniMonth) {
             return null;
         }
-        CursorLoader loader;
+        CursorLoader loader = null;
         synchronized (mUpdateLoader) {
             mFirstLoadedJulianDay =
                     Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff)
@@ -342,10 +341,10 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
             mEventUri = updateUri();
             String where = updateWhere();
 
-            loader = new CursorLoader(
+           /* loader = new CursorLoader(
                     getActivity(), mEventUri, Event.EVENT_PROJECTION, where,
-                    null /* WHERE_CALENDARS_SELECTED_ARGS */, INSTANCES_SORT_ORDER);
-            loader.setUpdateThrottle(LOADER_THROTTLE_DELAY);
+                    null *//* WHERE_CALENDARS_SELECTED_ARGS *//*, INSTANCES_SORT_ORDER);
+            loader.setUpdateThrottle(LOADER_THROTTLE_DELAY);*/
         }
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log.d(TAG, "Returning new loader with uri: " + mEventUri);

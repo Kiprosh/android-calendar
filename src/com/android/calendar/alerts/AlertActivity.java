@@ -37,7 +37,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.android.calendar.AsyncQueryService;
 import com.android.calendar.EventInfoActivity;
 import com.android.calendar.Utils;
 import com.android.calendar.alerts.GlobalDismissManager.AlarmId;

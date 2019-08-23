@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
-import com.android.calendar.ColorChipView;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
 

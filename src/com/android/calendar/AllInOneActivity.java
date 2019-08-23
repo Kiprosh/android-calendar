@@ -80,7 +80,6 @@ import com.android.calendar.agenda.AgendaFragment;
 import com.android.calendar.alerts.AlertService;
 import com.android.calendar.alerts.NotificationMgr;
 import com.android.calendar.month.MonthByWeekFragment;
-import com.android.calendar.selectcalendars.SelectVisibleCalendarsFragment;
 import com.android.datetimepicker.date.DatePickerDialog;
 
 import java.io.File;
@@ -719,14 +718,14 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
         if (mShowCalendarControls) {
-            Fragment miniMonthFrag = new MonthByWeekFragment(timeMillis, true);
+           /* Fragment miniMonthFrag = new MonthByWeekFragment(timeMillis, true);
             ft.replace(R.id.mini_month, miniMonthFrag);
             mController.registerEventHandler(R.id.mini_month, (EventHandler) miniMonthFrag);
 
-            Fragment selectCalendarsFrag = new SelectVisibleCalendarsFragment();
+            //Fragment selectCalendarsFrag = new SelectVisibleCalendarsFragment();
             ft.replace(R.id.calendar_list, selectCalendarsFrag);
             mController.registerEventHandler(
-                    R.id.calendar_list, (EventHandler) selectCalendarsFrag);
+                    R.id.calendar_list, (EventHandler) selectCalendarsFrag);*/
         }
         if (!mShowCalendarControls || viewType == ViewType.EDIT) {
             mMiniMonth.setVisibility(View.GONE);
@@ -1341,11 +1340,11 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                     startActivity(intent);
                 } else {
                     // start event info as a dialog
-                    EventInfoFragment fragment = new EventInfoFragment(this,
+                   /* EventInfoFragment fragment = new EventInfoFragment(this,
                             event.id, event.startTime.toMillis(false),
                             event.endTime.toMillis(false), response, true,
                             EventInfoFragment.DIALOG_WINDOW_STYLE,
-                            null /* No reminders to explicitly pass in. */);
+                            null *//* No reminders to explicitly pass in. *//*);
                     fragment.setDialogParams(event.x, event.y, mActionBar.getHeight());
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
@@ -1354,8 +1353,8 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                     if (fOld != null && fOld.isAdded()) {
                         ft.remove(fOld);
                     }
-                    ft.add(fragment, EVENT_INFO_FRAGMENT_TAG);
-                    ft.commit();
+                    ft.add(fragment, EVENT_INFO_FRAGMENT_TAG);*/
+                    //ft.commit();
                 }
             }
             displayTime = event.startTime.toMillis(true);
