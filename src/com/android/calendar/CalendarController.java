@@ -34,8 +34,6 @@ import android.text.format.Time;
 import android.util.Log;
 import android.util.Pair;
 
-import com.android.calendar.selectcalendars.SelectVisibleCalendarsActivity;
-
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -414,7 +412,7 @@ public class CalendarController {
 
             // Launch Calendar Visible Selector
             if (event.eventType == EventType.LAUNCH_SELECT_VISIBLE_CALENDARS) {
-                launchSelectVisibleCalendars();
+                //launchSelectVisibleCalendars();
                 return;
             }
 
@@ -554,17 +552,17 @@ public class CalendarController {
     }
 
     private void launchSelectVisibleCalendars() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
+        /*Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setClass(mContext, SelectVisibleCalendarsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        mContext.startActivity(intent);
+        mContext.startActivity(intent);*/
     }
 
     private void launchSettings() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
+        /*Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setClass(mContext, CalendarSettingsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        mContext.startActivity(intent);
+        mContext.startActivity(intent);*/
     }
 
     private void launchCreateEvent(long startMillis, long endMillis, boolean allDayEvent,

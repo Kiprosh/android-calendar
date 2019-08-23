@@ -35,10 +35,6 @@ import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.text.util.Rfc822Token;
 
-import com.android.calendar.AbstractCalendarActivity;
-import com.android.calendar.AsyncQueryService;
-import com.android.calendar.CalendarEventModel;
-import com.android.calendar.CalendarEventModel.ReminderEntry;
 import com.android.calendar.R;
 import com.android.calendar.Utils;
 import com.android.common.Rfc822Validator;

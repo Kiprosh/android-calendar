@@ -40,7 +40,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.preference.PreferenceActivity;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Events;
@@ -51,6 +50,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -73,9 +73,7 @@ import com.android.calendar.CalendarController.EventHandler;
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
-import com.android.calendar.agenda.AgendaFragment;
 import com.android.calendar.month.MonthByWeekFragment;
-import com.android.calendar.selectcalendars.SelectVisibleCalendarsFragment;
 import com.android.datetimepicker.date.DatePickerDialog;
 
 import java.io.File;
@@ -90,7 +88,7 @@ import static android.provider.CalendarContract.EXTRA_EVENT_ALL_DAY;
 import static android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME;
 import static android.provider.CalendarContract.EXTRA_EVENT_END_TIME;
 
-public class AllInOneActivity extends AbstractCalendarActivity implements EventHandler,
+public class AllInOneActivity extends AppCompatActivity implements EventHandler,
         OnSharedPreferenceChangeListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener, NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "AllInOneActivity";
     private static final boolean DEBUG = false;
@@ -219,8 +217,8 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     // Params for animating the controls on the right
     private LayoutParams mControlsParams;
     private LinearLayout.LayoutParams mVerticalControlsParams;
-    private AllInOneMenuExtensionsInterface mExtensions = ExtensionsFactory
-            .getAllInOneMenuExtensions();
+    /*private AllInOneMenuExtensionsInterface mExtensions = ExtensionsFactory
+            .getAllInOneMenuExtensions();*/
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -656,9 +654,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         } else if (mCurrentView == ViewType.AGENDA) {
             FragmentManager fm = getFragmentManager();
             Fragment f = fm.findFragmentById(R.id.main_pane);
-            if (f instanceof AgendaFragment) {
+            /*if (f instanceof AgendaFragment) {
                 outState.putLong(BUNDLE_KEY_EVENT_ID, ((AgendaFragment) f).getLastShowEventId());
-            }
+            }*/
         }
 
     }
@@ -712,7 +710,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         }
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-        if (mShowCalendarControls) {
+        /*if (mShowCalendarControls) {
             Fragment miniMonthFrag = new MonthByWeekFragment(timeMillis, true);
             ft.replace(R.id.mini_month, miniMonthFrag);
             mController.registerEventHandler(R.id.mini_month, (EventHandler) miniMonthFrag);
@@ -721,7 +719,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             ft.replace(R.id.calendar_list, selectCalendarsFrag);
             mController.registerEventHandler(
                     R.id.calendar_list, (EventHandler) selectCalendarsFrag);
-        }
+        }*/
         if (!mShowCalendarControls || viewType == ViewType.EDIT) {
             mMiniMonth.setVisibility(View.GONE);
             mCalendarsList.setVisibility(View.GONE);
@@ -805,13 +803,13 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         getMenuInflater().inflate(R.menu.all_in_one_title_bar, menu);
 
         // Add additional options (if any).
-        Integer extensionMenuRes = mExtensions.getExtensionMenuResource(menu);
+        /*Integer extensionMenuRes = mExtensions.getExtensionMenuResource(menu);
         if (extensionMenuRes != null) {
             getMenuInflater().inflate(extensionMenuRes, menu);
-        }
-
+        }*/
+/*
         MenuItem item = menu.findItem(R.id.action_import);
-        item.setVisible(ImportActivity.hasThingsToImport());
+        item.setVisible(ImportActivity.hasThingsToImport());*/
 
         mSearchMenu = menu.findItem(R.id.action_search);
         mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchMenu);
@@ -910,14 +908,14 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         } else if (itemId == R.id.action_search) {
             return false;
         } else if (itemId == R.id.action_import) {
-            ImportActivity.pickImportFile(this);
+            //ImportActivity.pickImportFile(this);
         } else if (itemId == R.id.action_view_settings) {
-            Intent intent = new Intent(this, CalendarSettingsActivity.class);
+            /*Intent intent = new Intent(this, CalendarSettingsActivity.class);
             intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, ViewDetailsPreferences.class.getName());
             intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
-            startActivity(intent);
+            startActivity(intent);*/
         } else {
-            return mExtensions.handleItemSelected(item, this);
+            //return mExtensions.handleItemSelected(item, this);
         }
         mController.sendEvent(this, EventType.GO_TO, t, null, t, -1, viewType, extras, null, null);
         return true;
@@ -1012,9 +1010,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             // If it was, we need to do some cleanup on it to prevent the
             // edit/delete buttons from coming back on a rotation.
             Fragment oldFrag = fragmentManager.findFragmentById(viewId);
-            if (oldFrag instanceof AgendaFragment) {
+            /*if (oldFrag instanceof AgendaFragment) {
                 ((AgendaFragment) oldFrag).removeFragments(fragmentManager);
-            }
+            }*/
         }
 
         if (viewType != mCurrentView) {
@@ -1031,10 +1029,10 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         switch (viewType) {
             case ViewType.AGENDA:
                 mNavigationView.getMenu().findItem(R.id.agenda_menu_item).setChecked(true);
-                frag = new AgendaFragment(timeMillis, false);
+                /*frag = new AgendaFragment(timeMillis, false);
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.agenda_view);
-                }
+                }*/
                 break;
             case ViewType.DAY:
                 mNavigationView.getMenu().findItem(R.id.day_menu_item).setChecked(true);
@@ -1046,9 +1044,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             case ViewType.MONTH:
                 mNavigationView.getMenu().findItem(R.id.month_menu_item).setChecked(true);
                 frag = new MonthByWeekFragment(timeMillis, false);
-                if (mShowAgendaWithMonth) {
+                /*if (mShowAgendaWithMonth) {
                     secFrag = new AgendaFragment(timeMillis, false);
-                }
+                }*/
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.month_view);
                 }
@@ -1326,7 +1324,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     Uri eventUri = ContentUris.withAppendedId(Events.CONTENT_URI, event.id);
                     intent.setData(eventUri);
-                    intent.setClass(this, EventInfoActivity.class);
+                    //intent.setClass(this, EventInfoActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT |
                             Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     intent.putExtra(EXTRA_EVENT_BEGIN_TIME, event.startTime.toMillis(false));
@@ -1390,7 +1388,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
 
     //@Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        switch (itemPosition) {
+        /*switch (itemPosition) {
             case CalendarViewAdapter.DAY_BUTTON_INDEX:
                 if (mCurrentView != ViewType.DAY) {
                     mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.DAY);
@@ -1413,11 +1411,11 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                 break;
             default:
                 Log.w(TAG, "ItemSelected event from unknown button: " + itemPosition);
-                /*Log.w(TAG, "CurrentView:" + mCurrentView + " Button:" + itemPosition +
+                *//*Log.w(TAG, "CurrentView:" + mCurrentView + " Button:" + itemPosition +
                         " Day:" + mDayTab + " Week:" + mWeekTab + " Month:" + mMonthTab +
-                        " Agenda:" + mAgendaTab);*/
+                        " Agenda:" + mAgendaTab);*//*
                 break;
-        }
+        }*/
         return false;
     }
 

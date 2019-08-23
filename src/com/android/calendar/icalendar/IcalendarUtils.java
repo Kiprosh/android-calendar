@@ -19,11 +19,8 @@ package com.android.calendar.icalendar;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
-import android.provider.CalendarContract;
 import android.system.ErrnoException;
 import android.system.OsConstants;
-
-import com.android.calendar.CalendarEventModel;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -247,7 +244,7 @@ public class IcalendarUtils {
      * @param attendee
      * @param event
      */
-    public static void addAttendeeToEvent(CalendarEventModel.Attendee attendee, VEvent event) {
+    /*public static void addAttendeeToEvent(CalendarEventModel.Attendee attendee, VEvent event) {
         if (attendee == null || event == null) return;
         Attendee vAttendee = new Attendee();
         vAttendee.addProperty(Attendee.CN, attendee.mName);
@@ -272,7 +269,7 @@ public class IcalendarUtils {
         vAttendee.mEmail = attendee.mEmail;
 
         event.addAttendee(vAttendee);
-    }
+    }*/
 
     /**
      * Returns an iCalendar formatted UTC date-time

@@ -41,14 +41,10 @@ import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.CalendarCache;
-import android.provider.SearchRecentSuggestions;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.SparseIntArray;
-import android.widget.Toast;
 
-import com.android.calendar.event.EventViewUtils;
 import com.android.colorpicker.ColorPickerDialog;
 import com.android.colorpicker.ColorPickerSwatch;
 import com.android.timezonepicker.TimeZoneInfo;
@@ -397,7 +393,7 @@ public class GeneralPreferences extends PreferenceFragment implements
         }
 
         if (key.equals(KEY_THEME_PREF) || key.equals(KEY_COLOR_PREF)) {
-            ((CalendarSettingsActivity) getActivity()).restartActivity();
+            //((CalendarSettingsActivity) getActivity()).restartActivity();
         }
     }
 
@@ -492,7 +488,7 @@ public class GeneralPreferences extends PreferenceFragment implements
 
         for (int i = 0; i < count; i++) {
             int value = Integer.parseInt(values[i].toString());
-            entries[i] = EventViewUtils.constructReminderLabel(getActivity(), value, false);
+            // entries[i] = EventViewUtils.constructReminderLabel(getActivity(), value, false);
         }
 
         mSnoozeDelay.setEntries(entries);
@@ -502,7 +498,7 @@ public class GeneralPreferences extends PreferenceFragment implements
     public boolean onPreferenceTreeClick(
             PreferenceScreen preferenceScreen, Preference preference) {
         final String key = preference.getKey();
-        if (KEY_CLEAR_SEARCH_HISTORY.equals(key)) {
+        /*if (KEY_CLEAR_SEARCH_HISTORY.equals(key)) {
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getActivity(),
                     Utils.getSearchAuthority(getActivity()),
                     CalendarRecentSuggestionsProvider.MODE);
@@ -518,7 +514,8 @@ public class GeneralPreferences extends PreferenceFragment implements
             return true;
         } else {
             return super.onPreferenceTreeClick(preferenceScreen, preference);
-        }
+        }*/
+        return true;
     }
 
     @Override
