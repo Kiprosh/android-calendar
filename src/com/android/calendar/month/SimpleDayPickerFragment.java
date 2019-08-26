@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -37,6 +36,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
 
 import java.util.Calendar;
@@ -169,9 +169,10 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
         mTempTime.timezone = tz;
 
         Context c = getActivity();
-        mSaturdayColor = Color.parseColor("#de7302");
-        mSundayColor = Color.parseColor("#de7302");
-        mDayNameColor = Color.parseColor("#000000");
+        DynamicTheme theme = new DynamicTheme();
+        mSaturdayColor = theme.getColor(c, "month_saturday");
+        mSundayColor = theme.getColor(c, "month_sunday");
+        mDayNameColor = theme.getColor(c, "month_day_names_color");
 
         // Adjust sizes for screen density
         if (mScale == 0) {

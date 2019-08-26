@@ -21,30 +21,22 @@ import android.app.FragmentManager;
 import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Instances;
 import android.text.format.DateUtils;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
 import com.android.calendar.CalendarController;
-import com.android.calendar.CalendarController.EventInfo;
-import com.android.calendar.CalendarController.EventType;
-import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.Utils;
@@ -57,7 +49,6 @@ import java.util.List;
 import ws.xsoh.etar.R;
 
 public class MonthByWeekFragment extends SimpleDayPickerFragment implements CalendarController.EventHandler {
-    //{
     private static final String TAG = "MonthFragment";
     private static final String TAG_EVENT_DIALOG = "event_dialog";
     // Selection and selection args for adding event queries
@@ -95,56 +86,18 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
     protected boolean mHideDeclined;
     protected int mFirstLoadedJulianDay;
     protected int mLastLoadedJulianDay;
-    //private CreateEventDialogFragment mEventDialog;
     private CursorLoader mLoader;
     private Uri mEventUri;
     private volatile boolean mShouldLoad = true;
-    private final Runnable mUpdateLoader = new Runnable() {
-        @Override
-        public void run() {
-            /*synchronized (this) {
-                if (!mShouldLoad || mLoader == null) {
-                    return;
-                }
-                // Stop any previous loads while we update the uri
-                stopLoader();
-
-                // Start the loader again
-                mEventUri = updateUri();
-
-                mLoader.setUri(mEventUri);
-                mLoader.startLoading();
-                mLoader.onContentChanged();
-                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                    Log.d(TAG, "Started loader with uri: " + mEventUri);
-                }
-            }*/
-        }
-    };
     private boolean mUserScrolled = false;
     private int mEventsLoadingDelay;
     private boolean mShowCalendarControls;
     private boolean mIsDetached;
-    // Used to load the events when a delay is needed
-    /*Runnable mLoadingRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (!mIsDetached) {
-                mLoader = (CursorLoader) getLoaderManager().initLoader(0, null,
-                        MonthByWeekFragment.this);
-            }
-        }
-    };*/
     private Handler mEventDialogHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
             final FragmentManager manager = getFragmentManager();
-            if (manager != null) {
-                Time day = (Time) msg.obj;
-                /*mEventDialog = new CreateEventDialogFragment(day);
-                mEventDialog.show(manager, TAG_EVENT_DIALOG);*/
-            }
         }
     };
 
@@ -200,28 +153,6 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
         mLastLoadedJulianDay = Time.getJulianDay(last, mTempTime.gmtoff);
     }
 
-    protected String updateWhere() {
-        // TODO fix selection/selection args after b/3206641 is fixed
-        String where = WHERE_CALENDARS_VISIBLE;
-        if (mHideDeclined || !mShowDetailsInMonth) {
-            where += " AND " + Instances.SELF_ATTENDEE_STATUS + "!="
-                    + Attendees.ATTENDEE_STATUS_DECLINED;
-        }
-        return where;
-    }
-
-    /*private void stopLoader() {
-        synchronized (mUpdateLoader) {
-            mHandler.removeCallbacks(mUpdateLoader);
-            if (mLoader != null) {
-                mLoader.stopLoading();
-                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                    Log.d(TAG, "Stopped loader from loading");
-                }
-            }
-        }
-    }*/
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -238,26 +169,21 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
         // Synchronized the loading time of the month's events with the animation of the
         // calendar controls.
         if (mShowCalendarControls) {
-            mEventsLoadingDelay = 400;//res.getInteger(R.integer.calendar_controls_animation_time);
+            mEventsLoadingDelay = res.getInteger(R.integer.calendar_controls_animation_time);
         }
-        mShowDetailsInMonth = true;//res.getBoolean(R.bool.show_details_in_month);
+        mShowDetailsInMonth = res.getBoolean(R.bool.show_details_in_month);
     }
 
     @Override
     public void onDetach() {
         mIsDetached = true;
         super.onDetach();
-        if (mShowCalendarControls) {
-            if (mListView != null) {
-                //mListView.removeCallbacks(mLoadingRunnable);
-            }
-        }
     }
 
     @Override
     protected void setUpAdapter() {
-        mFirstDayOfWeek = 0; //Utils.getFirstDayOfWeek(mContext);
-        mShowWeekNumber = false; //Utils.getShowWeekNumber(mContext);
+        mFirstDayOfWeek = Utils.getFirstDayOfWeek(mContext);
+        mShowWeekNumber = Utils.getShowWeekNumber(mContext);
 
         HashMap<String, Integer> weekParams = new HashMap<String, Integer>();
         weekParams.put(SimpleWeeksAdapter.WEEK_PARAMS_NUM_WEEKS, mNumWeeks);
@@ -280,11 +206,6 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v;
-        /*if (mIsMiniMonth) {
-            v = inflater.inflate(R.layout.month_by_week, container, false);
-        } else {
-            v = inflater.inflate(R.layout.full_month_by_week, container, false);
-        }*/
         v = inflater.inflate(R.layout.full_month_by_week, container, false);
         mDayNamesHeader = (ViewGroup) v.findViewById(R.id.day_names);
         return v;
@@ -294,19 +215,8 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mListView.setSelector(new StateListDrawable());
-        //mListView.setOnTouchListener(this);
-
         if (!mIsMiniMonth) {
-            mListView.setBackgroundColor(Color.parseColor("#DCDCDC"));
-        }
-
-        // To get a smoother transition when showing this fragment, delay loading of events until
-        // the fragment is expended fully and the calendar controls are gone.
-        if (mShowCalendarControls) {
-            //mListView.postDelayed(mLoadingRunnable, mEventsLoadingDelay);
-        } else {
-            //This method calls the loader
-            //mLoader = (CursorLoader) getLoaderManager().initLoader(0, null, this);
+            mListView.setBackgroundColor(new DynamicTheme().getColor(getActivity(), "month_bgcolor"));
         }
         mAdapter.setListView(mListView);
     }
@@ -331,29 +241,8 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
                 Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff)
                         - (mNumWeeks * 7 / 2);
         mEventUri = updateUri();
-            /*String where = updateWhere();
 
-            loader = new CursorLoader(
-                    getActivity(), mEventUri, Event.EVENT_PROJECTION, where,
-                    null *//* WHERE_CALENDARS_SELECTED_ARGS *//*, INSTANCES_SORT_ORDER);
-            loader.setUpdateThrottle(LOADER_THROTTLE_DELAY);*/
-
-        /*iif (Log.isLoggable(TAG, Log.DEBUG)) {
-                    //Log.d(TAG, "Found " + data.getCount() + " cursor entries for uri " + mEventUri);
-                }
-                CursorLoader cLoader = (CursorLoader) loader;
-                if (mEventUri == null) {
-                    mEventUri = cLoader.getUri();
-                    updateLoadedDays();
-                }
-                f (cLoader.getUri().compareTo(mEventUri) != 0) {
-                    // We've started a new query since this loader ran so ignore the
-                    // result
-                    return null;
-                }*/
         ArrayList<Event> events = new ArrayList<Event>();
-            /*Event.buildEventsFromCursor(
-                    events, data, mContext, mFirstLoadedJulianDay, mLastLoadedJulianDay);*/
         events.add(new Event(1058, getResources().getColor(R.color.colorGreenPrimary), "Feb Session", "", true, "kavitamp19@googlemail.com", false
                 , 2458520, 2458520, 990, 1050, 1549348200000l, 1549326600000l, false, false));
 
@@ -385,17 +274,6 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
         events.add(new Event(1065, -5242874, "Sept Event 2", "", true, "kavitamp19@googlemail.com", false
                 , 2458745, 2458745, 990, 1050, 1565866800000l, 1565870400000l, false, false));
 
-
-         /*   events.add(new Event(1061, -5242874, "Single session 3", "", true, "kavitamp19@googlemail.com", false
-                    , 2458711, 2458711, 990, 1050, 1565866800000l, 1565870400000l, false, false, 0, 0.0f, 0.0f,
-                    0.0f, 0.0f, null, null, null, null, 0, 0));
-*/
-
-        Log.d("fkmwfew", "mFirstLoadedJulianDay->" + mFirstLoadedJulianDay);
-        Log.d("fkmwfew", "mLastLoadedJulianDay->" + mLastLoadedJulianDay);
-        Log.d("fkmwfew", "difference->" + (mLastLoadedJulianDay - mFirstLoadedJulianDay + 1));
-        Log.d("fkmwfew", "events->" + events.toString());
-
         ((MonthByWeekAdapter) mAdapter).setEvents(mFirstLoadedJulianDay,
                 mLastLoadedJulianDay - mFirstLoadedJulianDay + 1, events);
     }
@@ -406,9 +284,6 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
         mShowWeekNumber = Utils.getShowWeekNumber(mContext);
         boolean prevHideDeclined = mHideDeclined;
         mHideDeclined = Utils.getHideDeclinedEvents(mContext);
-        if (prevHideDeclined != mHideDeclined && mLoader != null) {
-            //mLoader.setSelection(updateWhere());
-        }
         mDaysPerWeek = Utils.getMDaysPerWeek(mContext);
         updateHeader();
         mAdapter.setSelectedDay(mSelectedDay);
@@ -495,12 +370,9 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
 
         if (scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
             mShouldLoad = false;
-            //stopLoader();
             mDesiredDay.setToNow();
         } else {
-            //mHandler.removeCallbacks(mUpdateLoader);
             mShouldLoad = true;
-            //mHandler.postDelayed(mUpdateLoader, LOADER_DELAY);
             loadingData();
         }
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
@@ -509,13 +381,4 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
 
         mScrollStateChangedRunnable.doScrollStateChange(view, scrollState);
     }
-
-    /*@Override
-    public boolean onTouch(View v, MotionEvent event) {
-        mDesiredDay.setToNow();
-        return false;
-        // TODO post a cleanup to push us back onto the grid if something went
-        // wrong in a scroll such as the user stopping the view but not
-        // scrolling
-    }*/
 }

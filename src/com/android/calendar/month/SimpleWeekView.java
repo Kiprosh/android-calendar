@@ -20,7 +20,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
@@ -33,6 +32,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 
+import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
 
 import java.security.InvalidParameterException;
@@ -172,13 +172,14 @@ public class SimpleWeekView extends View {
         super(context);
 
         Resources res = context.getResources();
-        mBGColor = Color.parseColor("#41c3b1");
-        mSelectedWeekBGColor = Color.parseColor("#f1922d");
-        mFocusMonthColor = Color.parseColor("#de7302");
-        mOtherMonthColor = Color.parseColor("#000000");
-        mDaySeparatorColor = Color.parseColor("#365db7");
-        mTodayOutlineColor = Color.parseColor("#b36f28");
-        mWeekNumColor = Color.parseColor("#3abe3f");
+        DynamicTheme theme = new DynamicTheme();
+        mBGColor = theme.getColor(context, "month_bgcolor");
+        mSelectedWeekBGColor = theme.getColor(context, "month_selected_week_bgcolor");
+        mFocusMonthColor = theme.getColor(context, "month_mini_day_number");
+        mOtherMonthColor = theme.getColor(context, "month_other_month_day_number");
+        mDaySeparatorColor = theme.getColor(context, "month_grid_lines");
+        mTodayOutlineColor = theme.getColor(context, "mini_month_today_outline_color");
+        mWeekNumColor = theme.getColor(context, "month_week_num_color");
         mSelectedDayLine = res.getDrawable(R.drawable.dayline_minical_holo_light);
 
         if (mScale == 0) {
