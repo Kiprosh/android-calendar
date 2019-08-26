@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ProgressBar;
 import android.widget.ViewSwitcher;
 import android.widget.ViewSwitcher.ViewFactory;
 
@@ -49,7 +48,6 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
      * focus when a view hierarchy is saved / restore
      */
     private static final int VIEW_ID = 1;
-    protected ProgressBar mProgressBar;
     protected ViewSwitcher mViewSwitcher;
     protected Animation mInAnimationForward;
     protected Animation mOutAnimationForward;
@@ -101,11 +99,12 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
 
     public View makeView() {
         //mTZUpdater.run();
-        DayView view = new DayView(getActivity(), CalendarController
+        final DayView view = new DayView(getActivity(), CalendarController
                 .getInstance(getActivity()), mViewSwitcher, mNumDays, new CalendarListeners() {
             @Override
             public void onEventClick(Time tapEvent, Event clickedEvent) {
                 Log.e("Selected Time", "Time " + tapEvent.hour + " ");
+
             }
 
             @Override
@@ -185,16 +184,6 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         // Stop events cross-fade animation
         view.stopEventsAnimation();
         ((DayView) mViewSwitcher.getNextView()).stopEventsAnimation();
-    }
-
-    void startProgressSpinner() {
-        // start the progress spinner
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    void stopProgressSpinner() {
-        // stop the progress spinner
-        mProgressBar.setVisibility(View.GONE);
     }
 
     private void goTo(Time goToTime, boolean ignoreTime, boolean animateToday) {
