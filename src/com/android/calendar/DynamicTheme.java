@@ -89,44 +89,6 @@ public class DynamicTheme {
         }
     }
 
-    public static int getColorId(String name) {
-        switch (name) {
-            case TEAL:
-                return R.color.colorPrimary;
-            case BLUE:
-                return R.color.colorBluePrimary;
-            case ORANGE:
-                return R.color.colorOrangePrimary;
-            case GREEN:
-                return R.color.colorGreenPrimary;
-            case RED:
-                return R.color.colorRedPrimary;
-            case PURPLE:
-                return R.color.colorPurplePrimary;
-            default:
-                throw new UnsupportedOperationException("Unknown color name : " + name);
-        }
-    }
-
-    public static String getColorName(int id) {
-        switch (id) {
-            case R.color.colorPrimary:
-                return TEAL;
-            case R.color.colorBluePrimary:
-                return BLUE;
-            case R.color.colorOrangePrimary:
-                return ORANGE;
-            case R.color.colorGreenPrimary:
-                return GREEN;
-            case R.color.colorRedPrimary:
-                return RED;
-            case R.color.colorPurplePrimary:
-                return PURPLE;
-            default:
-                throw new UnsupportedOperationException("Unknown color id : " + id);
-        }
-    }
-
     public static int getColor(Context context, String id) {
         String suffix = getSuffix(getTheme(context));
         Resources res = context.getResources();
