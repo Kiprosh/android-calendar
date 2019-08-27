@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 
+import com.android.calendar.CalendarMonthColor;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
 
@@ -167,6 +168,39 @@ public class SimpleWeekView extends View {
     protected int mTodayOutlineColor;
     protected int mWeekNumColor;
     Time mLastHoverTime = null;
+
+    public void setColor(@CalendarMonthColor.Type int type, int colorId) {
+
+        int color = getContext().getResources().getColor(colorId);
+
+        switch (color) {
+            case CalendarMonthColor.BGCOLOR:
+                mBGColor = color;
+                break;
+            case CalendarMonthColor.SELECTED_WEEK_BG_COLOR:
+                mSelectedWeekBGColor = color;
+                break;
+            case CalendarMonthColor.FOCUS_MONTH_COLOR:
+                mFocusMonthColor = color;
+                break;
+            case CalendarMonthColor.OTHER_MONTH_COLOR:
+                mOtherMonthColor = color;
+                break;
+            case CalendarMonthColor.DAY_SEPARATOR_COLOR:
+                mDaySeparatorColor = color;
+                break;
+            case CalendarMonthColor.TODAY_OUTLINE_COLOR:
+                mTodayOutlineColor = color;
+                break;
+            case CalendarMonthColor.WEEK_NUM_COLOR:
+                mWeekNumColor = color;
+                break;
+        }
+    }
+
+    public void callInvalidate() {
+        invalidate();
+    }
 
     public SimpleWeekView(Context context) {
         super(context);

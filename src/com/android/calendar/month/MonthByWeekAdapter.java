@@ -62,6 +62,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
     protected int mOrientation = Configuration.ORIENTATION_LANDSCAPE;
     protected ArrayList<ArrayList<Event>> mEventDayList = new ArrayList<ArrayList<Event>>();
     protected ArrayList<Event> mEvents = null;
+    CallbackForDayView callbackForDayView;
     MonthWeekEventsView mClickedView;
     MonthWeekEventsView mSingleTapUpView;
     MonthWeekEventsView mLongClickedView;
@@ -106,8 +107,9 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
     private long mAnimateTime = 0;
     private Handler mEventDialogHandler;
 
-    public MonthByWeekAdapter(Context context, HashMap<String, Integer> params, Handler handler) {
+    public MonthByWeekAdapter(CallbackForDayView callbackForDayView, Context context, HashMap<String, Integer> params, Handler handler) {
         super(context, params);
+        this.callbackForDayView = callbackForDayView;
         mEventDialogHandler = handler;
         if (params.containsKey(WEEK_PARAMS_IS_MINI)) {
             mIsMiniMonth = params.get(WEEK_PARAMS_IS_MINI) != 0;
@@ -319,11 +321,20 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                     CalendarController.ViewType.CURRENT, CalendarController.EXTRA_GOTO_DATE, null, null);
         } else {
             // Else , switch to the detailed view
+            if (callbackForDayView != null) {
+                callbackForDayView.callDayFragment(day);
+            }
+
             mController.sendEvent(mContext, CalendarController.EventType.GO_TO, day, day, -1,
                     CalendarController.ViewType.DETAIL,
                     CalendarController.EXTRA_GOTO_DATE
                             | CalendarController.EXTRA_GOTO_BACK_TO_PREVIOUS, null, null);
         }
+    }
+
+
+    public interface CallbackForDayView {
+        void callDayFragment(Time day);
     }
 
     private void setDayParameters(Time day) {

@@ -43,6 +43,7 @@ import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 
+import com.android.calendar.CalendarMonthColor;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.LunarUtils;
@@ -240,6 +241,78 @@ public class MonthWeekEventsView extends SimpleWeekView {
             mEvents = null;
             return;
         }
+    }
+
+    boolean loadnewcolor = false;
+
+    public void setInitializeFalse() {
+        mInitialized = false;
+    }
+
+    public void setColor(@CalendarMonthColor.Type int type, String colorId, boolean loadnewcolor) {
+        mInitialized = false;
+        this.loadnewcolor = loadnewcolor;
+        //int color = getContext().getResources().getColor(colorId);
+        int color = Color.parseColor(colorId);
+
+        switch (type) {
+            case CalendarMonthColor.MONTH_WEEK_NUM_COLOR:
+                mMonthWeekNumColor = color;
+                break;
+            case CalendarMonthColor.MONTH_NUM_COLOR:
+                mMonthNumColor = color;
+                break;
+            case CalendarMonthColor.MONTH_NUM_OTHER_COLOR:
+                mMonthNumOtherColor = color;
+                break;
+            case CalendarMonthColor.MONTH_NUM_TODAY_COLOR:
+                mMonthNumTodayColor = color;
+                break;
+            case CalendarMonthColor.MONTH_EVENT_COLOR:
+                mMonthEventColor = color;
+                break;
+            case CalendarMonthColor.MONTH_DECLINED_EVENT_COLOR:
+                mMonthDeclinedEventColor = color;
+                break;
+            case CalendarMonthColor.MONTH_DECLINED_EXTRAS_COLOR:
+                mMonthDeclinedExtrasColor = color;
+                break;
+            case CalendarMonthColor.MONTH_EVENT_EXTRA_COLOR:
+                mMonthEventExtraColor = color;
+                break;
+            case CalendarMonthColor.MONTH_EVENT_OTHER_COLOR:
+                mMonthEventOtherColor = color;
+                break;
+            case CalendarMonthColor.MONTH_EVENT_EXTRA_OTHER_COLOR:
+                mMonthEventExtraOtherColor = color;
+                break;
+            case CalendarMonthColor.MONTH_BG_TODAY_COLOR:
+                mMonthBGTodayColor = color;
+                break;
+            case CalendarMonthColor.MONTH_BG_FOCUS_MONTH_COLOR:
+                mMonthBGFocusMonthColor = color;
+                break;
+            case CalendarMonthColor.MONTH_BG_OTHER_COLOR:
+                mMonthBGOtherColor = color;
+                break;
+            case CalendarMonthColor.MONTH_BG_COLOR:
+                mMonthBGColor = color;
+                break;
+            case CalendarMonthColor.DAY_SEPARATOR_INNER_COLOR:
+                mDaySeparatorInnerColor = color;
+                break;
+            case CalendarMonthColor.TODAY_ANIMATE_COLOR:
+                mTodayAnimateColor = color;
+                break;
+            case CalendarMonthColor.MONTH_CLICK_DAY_COLOR:
+                mClickedDayColor = color;
+                break;
+        }
+
+    }
+
+    public void callInvalidate() {
+        invalidate();
     }
 
     protected void loadColors(Context context) {

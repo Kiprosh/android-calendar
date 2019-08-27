@@ -17,7 +17,9 @@
 package com.android.calendar.month;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.res.Resources;
@@ -37,6 +39,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 
 import com.android.calendar.CalendarController;
+import com.android.calendar.DayFragment;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.Utils;
@@ -48,7 +51,7 @@ import java.util.List;
 
 import ws.xsoh.etar.R;
 
-public class MonthByWeekFragment extends SimpleDayPickerFragment implements CalendarController.EventHandler {
+public class MonthByWeekFragment extends SimpleDayPickerFragment implements CalendarController.EventHandler, MonthByWeekAdapter.CallbackForDayView {
     private static final String TAG = "MonthFragment";
     private static final String TAG_EVENT_DIALOG = "event_dialog";
     // Selection and selection args for adding event queries
@@ -194,7 +197,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
                 Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff));
         weekParams.put(SimpleWeeksAdapter.WEEK_PARAMS_DAYS_PER_WEEK, mDaysPerWeek);
         if (mAdapter == null) {
-            mAdapter = new MonthByWeekAdapter(getActivity(), weekParams, mEventDialogHandler);
+            mAdapter = new MonthByWeekAdapter(this, getActivity(), weekParams, mEventDialogHandler);
             mAdapter.registerDataSetObserver(mObserver);
         } else {
             mAdapter.updateParams(weekParams);
@@ -219,6 +222,10 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
             mListView.setBackgroundColor(new DynamicTheme().getColor(getActivity(), "month_bgcolor"));
         }
         mAdapter.setListView(mListView);
+    }
+
+    public void setMonthBackgroundColor(int colorId) {
+        mListView.setBackgroundColor(getResources().getColor(colorId));
     }
 
     @Override
@@ -380,5 +387,14 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
         }
 
         mScrollStateChangedRunnable.doScrollStateChange(view, scrollState);
+    }
+
+    @Override
+    public void callDayFragment(Time day) {
+        Fragment fragment2 = new DayFragment(day.toMillis(false), 1);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_pane, fragment2);
+        fragmentTransaction.commit();
     }
 }

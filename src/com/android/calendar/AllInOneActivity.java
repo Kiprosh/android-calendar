@@ -26,7 +26,6 @@ import android.app.FragmentTransaction;
 import android.content.AsyncQueryHandler;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -40,7 +39,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.provider.CalendarContract;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Events;
 import android.support.design.widget.FloatingActionButton;
@@ -87,7 +85,7 @@ import static android.provider.CalendarContract.EXTRA_EVENT_ALL_DAY;
 import static android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME;
 import static android.provider.CalendarContract.EXTRA_EVENT_END_TIME;
 
-public class AllInOneActivity extends AppCompatActivity implements EventHandler,
+public class AllInOneActivity extends AppCompatActivity implements
         OnSharedPreferenceChangeListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener, NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "AllInOneActivity";
     private static final boolean DEBUG = false;
@@ -124,7 +122,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
 
         @Override
         public void onChange(boolean selfChange) {
-            eventsChanged();
+            //eventsChanged();
         }
     };
     private boolean mOnSaveInstanceStateCalled = false;
@@ -150,7 +148,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
         }
 
         @Override
-        public void onAnimationEnd(android.animation.Animator animation) {
+        public void onAnimationEnd(Animator animation) {
             int visibility = mShowSideViews ? View.VISIBLE : View.GONE;
             mMiniMonth.setVisibility(visibility);
             mCalendarsList.setVisibility(visibility);
@@ -158,11 +156,11 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
         }
 
         @Override
-        public void onAnimationRepeat(android.animation.Animator animation) {
+        public void onAnimationRepeat(Animator animation) {
         }
 
         @Override
-        public void onAnimationStart(android.animation.Animator animation) {
+        public void onAnimationStart(Animator animation) {
         }
     };
     private FloatingActionButton mFab;
@@ -355,7 +353,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
         mHomeTime = (TextView) findViewById(R.id.home_time);
         mMiniMonth = findViewById(R.id.mini_month);
         if (mIsTabletConfig && mOrientation == Configuration.ORIENTATION_PORTRAIT) {
-            mMiniMonth.setLayoutParams(new RelativeLayout.LayoutParams(mControlsAnimateWidth,
+            mMiniMonth.setLayoutParams(new LayoutParams(mControlsAnimateWidth,
                     mControlsAnimateHeight));
         }
         mCalendarsList = findViewById(R.id.calendar_list);
@@ -365,7 +363,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
         // Must register as the first activity because this activity can modify
         // the list of event handlers in it's handle method. This affects who
         // the rest of the handlers the controller dispatches to are.
-        mController.registerFirstEventHandler(HANDLER_KEY, this);
+        //mController.registerFirstEventHandler(HANDLER_KEY, this);
 
         initFragments(timeMillis, viewType, icicle);
 
@@ -556,7 +554,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
         // Must register as the first activity because this activity can modify
         // the list of event handlers in it's handle method. This affects who
         // the rest of the handlers the controller dispatches to are.
-        mController.registerFirstEventHandler(HANDLER_KEY, this);
+        //mController.registerFirstEventHandler(HANDLER_KEY, this);
         mOnSaveInstanceStateCalled = false;
 
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
@@ -567,7 +565,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
             return;
         }
 
-        mContentResolver.registerContentObserver(CalendarContract.Events.CONTENT_URI,
+        mContentResolver.registerContentObserver(Events.CONTENT_URI,
                 true, mObserver);
         if (mUpdateOnResume) {
             initFragments(mController.getTime(), mController.getViewType(), null);
@@ -765,7 +763,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
             mPreviousView = viewType;
         }
 
-        setMainPane(ft, R.id.main_pane, viewType, timeMillis, true);
+        setMainPane(ft, R.id.main_pane, 4, timeMillis, true);
         ft.commit(); // this needs to be after setMainPane()
 
         Time t = new Time(mTimeZone);
@@ -925,21 +923,35 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         final int itemId = item.getItemId();
-        if (itemId == R.id.day_menu_item && mCurrentView != ViewType.DAY) {
-            mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.DAY);
-        } else if (itemId == R.id.week_menu_item && mCurrentView != ViewType.WEEK) {
-            mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.WEEK);
-        } else if (itemId == R.id.month_menu_item && mCurrentView != ViewType.MONTH) {
-            mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.MONTH);
-        } else if (itemId == R.id.agenda_menu_item && mCurrentView != ViewType.AGENDA) {
-            mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.AGENDA);
-        } else if (itemId == R.id.action_select_visible_calendars) {
-            mController.sendEvent(this, EventType.LAUNCH_SELECT_VISIBLE_CALENDARS, null, null,
-                    0, 0);
-        } else if (itemId == R.id.action_settings) {
-            mController.sendEvent(this, EventType.LAUNCH_SETTINGS, null, null, 0, 0);
+        switch (itemId) {
+            case R.id.day_menu_item:
+                if (mCurrentView != ViewType.DAY) {
+                    mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.DAY);
+                }
+                break;
+            case R.id.week_menu_item:
+                if (mCurrentView != ViewType.WEEK) {
+                    mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.WEEK);
+                }
+                break;
+            case R.id.month_menu_item:
+                if (mCurrentView != ViewType.MONTH) {
+                    mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.MONTH);
+                }
+                break;
+            case R.id.agenda_menu_item:
+                if (mCurrentView != ViewType.AGENDA) {
+                    mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.AGENDA);
+                }
+                break;
+            case R.id.action_select_visible_calendars:
+                mController.sendEvent(this, EventType.LAUNCH_SELECT_VISIBLE_CALENDARS, null, null,
+                        0, 0);
+                break;
+            case R.id.action_settings:
+                mController.sendEvent(this, EventType.LAUNCH_SETTINGS, null, null, 0, 0);
+                break;
         }
-
         mDrawerLayout.closeDrawers();
         return false;
     }
@@ -1206,7 +1218,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
         }
     }
 
-    @Override
+    /*@Override
     public long getSupportedEventTypes() {
         return EventType.GO_TO | EventType.VIEW_EVENT | EventType.UPDATE_TITLE;
     }
@@ -1318,13 +1330,13 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
                     intent.putExtra(EXTRA_EVENT_END_TIME, event.endTime.toMillis(false));
                     intent.putExtra(ATTENDEE_STATUS, response);
                     startActivity(intent);
-                } /*else {
+                } *//*else {
                     // start event info as a dialog
                     EventInfoFragment fragment = new EventInfoFragment(this,
                             event.id, event.startTime.toMillis(false),
                             event.endTime.toMillis(false), response, true,
                             EventInfoFragment.DIALOG_WINDOW_STYLE,
-                            null *//* No reminders to explicitly pass in. *//*);
+                            null *//**//* No reminders to explicitly pass in. *//**//*);
                     fragment.setDialogParams(event.x, event.y, mActionBar.getHeight());
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
@@ -1335,7 +1347,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
                     }
                     ft.add(fragment, EVENT_INFO_FRAGMENT_TAG);
                     ft.commit();
-                }*/
+                }*//*
             }
             displayTime = event.startTime.toMillis(true);
         } else if (event.eventType == EventType.UPDATE_TITLE) {
@@ -1345,7 +1357,7 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
             }
         }
         updateSecondaryTitleFields(displayTime);
-    }
+    }*/
 
     // Needs to be in proguard whitelist
     // Specified as listener via android:onClick in a layout xml
@@ -1354,11 +1366,11 @@ public class AllInOneActivity extends AppCompatActivity implements EventHandler,
                 CalendarController.EXTRA_GOTO_TIME, null,
                 null);
     }
-
+/*
     @Override
     public void eventsChanged() {
         mController.sendEvent(this, EventType.EVENTS_CHANGED, null, null, -1, ViewType.CURRENT);
-    }
+    }*/
 
     @Override
     public boolean onQueryTextChange(String newText) {
