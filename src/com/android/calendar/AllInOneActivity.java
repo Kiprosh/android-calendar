@@ -71,7 +71,6 @@ import com.android.calendar.CalendarController.EventHandler;
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
-import com.android.calendar.month.MonthByWeekFragment;
 
 import java.io.File;
 import java.util.List;
@@ -922,7 +921,7 @@ public class AllInOneActivity extends AppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        final int itemId = item.getItemId();
+        /*final int itemId = item.getItemId();
         switch (itemId) {
             case R.id.day_menu_item:
                 if (mCurrentView != ViewType.DAY) {
@@ -952,7 +951,7 @@ public class AllInOneActivity extends AppCompatActivity implements
                 mController.sendEvent(this, EventType.LAUNCH_SETTINGS, null, null, 0, 0);
                 break;
         }
-        mDrawerLayout.closeDrawers();
+        mDrawerLayout.closeDrawers();*/
         return false;
     }
 
@@ -1035,14 +1034,14 @@ public class AllInOneActivity extends AppCompatActivity implements
                 break;
             case ViewType.DAY:
                 mNavigationView.getMenu().findItem(R.id.day_menu_item).setChecked(true);
-                frag = new DayFragment(timeMillis, 1);
+                //frag = new DayFragment(timeMillis, 1);
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.day_view);
                 }
                 break;
             case ViewType.MONTH:
                 mNavigationView.getMenu().findItem(R.id.month_menu_item).setChecked(true);
-                frag = new MonthByWeekFragment(timeMillis, false);
+                //frag = new MonthByWeekFragment(timeMillis, false);
                 /*if (mShowAgendaWithMonth) {
                     secFrag = new AgendaFragment(timeMillis, false);
                 }*/
@@ -1053,7 +1052,7 @@ public class AllInOneActivity extends AppCompatActivity implements
             case ViewType.WEEK:
             default:
                 mNavigationView.getMenu().findItem(R.id.week_menu_item).setChecked(true);
-                frag = new DayFragment(timeMillis, Utils.getDaysPerWeek(this));
+                //frag = new DayFragment(timeMillis, Utils.getDaysPerWeek(this));
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.week_view);
                 }

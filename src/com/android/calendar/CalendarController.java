@@ -94,7 +94,9 @@ public class CalendarController {
     private long mEventId = -1;
     private long mDateFlags = 0;
 
-    private CalendarController(Context context) {
+    public static long savedTime;
+
+    public CalendarController(Context context) {
         mContext = context;
         mUpdateTimezone.run();
         mTime.setToNow();

@@ -43,7 +43,6 @@ import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 
-import com.android.calendar.CalendarMonthColor;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.LunarUtils;
@@ -74,9 +73,10 @@ public class MonthWeekEventsView extends SimpleWeekView {
     protected static Formatter mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
     /* NOTE: these are not constants, and may be multiplied by a scale factor */
     private static int mTextSizeMonthNumber = 14;
+    private static int mRadiusOfTodayCircle = 14;
     private static int mTextSizeLunar = 10;
     private static int mTextSizeEvent = 12;
-    private static int mTextSizeEventTitle = 14;
+    private static int mTextSizeEventTitle = 10;
     private static int mTextSizeMoreEvents = 12;
     private static int mTextSizeMonthName = 14;
     private static int mTextSizeWeekNum = 9;
@@ -104,7 +104,7 @@ public class MonthWeekEventsView extends SimpleWeekView {
     private static int mEventYOffsetPortrait = 2;
     private static int mEventSquareWidth = 3;
     private static int mEventSquareHeight = 10;
-    private static int mEventSquareBorder = 0;
+    private static int mEventSquareBorder = 0;// sets the padding inside the highlighted event
     private static int mEventLinePadding = 2;
     private static int mEventRightPadding = 4;
     private static int mEventBottomPadding = 1;
@@ -174,12 +174,14 @@ public class MonthWeekEventsView extends SimpleWeekView {
     private int mAnimateTodayAlpha = 0;
     private ObjectAnimator mTodayAnimator = null;
     private int[] mDayXs;
+    public MonthFieldColors monthFieldColors;
 
     /**
      * Shows up as an error if we don't include this.
      */
-    public MonthWeekEventsView(Context context) {
-        super(context);
+    public MonthWeekEventsView(MonthFieldColors monthFieldColors, Context context) {
+        super(monthFieldColors, context);
+        this.monthFieldColors = monthFieldColors;
     }
 
     // Sets the list of events for this week. Takes a sorted list of arrays
@@ -243,99 +245,80 @@ public class MonthWeekEventsView extends SimpleWeekView {
         }
     }
 
-    boolean loadnewcolor = false;
-
-    public void setInitializeFalse() {
-        mInitialized = false;
-    }
-
-    public void setColor(@CalendarMonthColor.Type int type, String colorId, boolean loadnewcolor) {
-        mInitialized = false;
-        this.loadnewcolor = loadnewcolor;
-        //int color = getContext().getResources().getColor(colorId);
-        int color = Color.parseColor(colorId);
-
-        switch (type) {
-            case CalendarMonthColor.MONTH_WEEK_NUM_COLOR:
-                mMonthWeekNumColor = color;
-                break;
-            case CalendarMonthColor.MONTH_NUM_COLOR:
-                mMonthNumColor = color;
-                break;
-            case CalendarMonthColor.MONTH_NUM_OTHER_COLOR:
-                mMonthNumOtherColor = color;
-                break;
-            case CalendarMonthColor.MONTH_NUM_TODAY_COLOR:
-                mMonthNumTodayColor = color;
-                break;
-            case CalendarMonthColor.MONTH_EVENT_COLOR:
-                mMonthEventColor = color;
-                break;
-            case CalendarMonthColor.MONTH_DECLINED_EVENT_COLOR:
-                mMonthDeclinedEventColor = color;
-                break;
-            case CalendarMonthColor.MONTH_DECLINED_EXTRAS_COLOR:
-                mMonthDeclinedExtrasColor = color;
-                break;
-            case CalendarMonthColor.MONTH_EVENT_EXTRA_COLOR:
-                mMonthEventExtraColor = color;
-                break;
-            case CalendarMonthColor.MONTH_EVENT_OTHER_COLOR:
-                mMonthEventOtherColor = color;
-                break;
-            case CalendarMonthColor.MONTH_EVENT_EXTRA_OTHER_COLOR:
-                mMonthEventExtraOtherColor = color;
-                break;
-            case CalendarMonthColor.MONTH_BG_TODAY_COLOR:
-                mMonthBGTodayColor = color;
-                break;
-            case CalendarMonthColor.MONTH_BG_FOCUS_MONTH_COLOR:
-                mMonthBGFocusMonthColor = color;
-                break;
-            case CalendarMonthColor.MONTH_BG_OTHER_COLOR:
-                mMonthBGOtherColor = color;
-                break;
-            case CalendarMonthColor.MONTH_BG_COLOR:
-                mMonthBGColor = color;
-                break;
-            case CalendarMonthColor.DAY_SEPARATOR_INNER_COLOR:
-                mDaySeparatorInnerColor = color;
-                break;
-            case CalendarMonthColor.TODAY_ANIMATE_COLOR:
-                mTodayAnimateColor = color;
-                break;
-            case CalendarMonthColor.MONTH_CLICK_DAY_COLOR:
-                mClickedDayColor = color;
-                break;
-        }
-
-    }
-
-    public void callInvalidate() {
-        invalidate();
-    }
-
     protected void loadColors(Context context) {
         Resources res = context.getResources();
         DynamicTheme dynamicTheme = new DynamicTheme();
 
-        mMonthWeekNumColor = dynamicTheme.getColor(context, "month_week_num_color");
-        mMonthNumColor = dynamicTheme.getColor(context, "month_day_number");
-        mMonthNumOtherColor = dynamicTheme.getColor(context, "month_day_number_other");
-        mMonthNumTodayColor = dynamicTheme.getColor(context, "month_today_number");
-        mMonthEventColor = dynamicTheme.getColor(context, "month_event_color");
-        mMonthDeclinedEventColor = dynamicTheme.getColor(context, "agenda_item_declined_color");
-        mMonthDeclinedExtrasColor = dynamicTheme.getColor(context, "agenda_item_where_declined_text_color");
-        mMonthEventExtraColor = dynamicTheme.getColor(context, "month_event_extra_color");
-        mMonthEventOtherColor = dynamicTheme.getColor(context, "month_event_other_color");
-        mMonthEventExtraOtherColor = dynamicTheme.getColor(context, "month_event_extra_other_color");
-        mMonthBGTodayColor = dynamicTheme.getColor(context, "month_today_bgcolor");
-        mMonthBGFocusMonthColor = dynamicTheme.getColor(context, "month_focus_month_bgcolor");
-        mMonthBGOtherColor = dynamicTheme.getColor(context, "month_other_bgcolor");
-        mMonthBGColor = dynamicTheme.getColor(context, "month_bgcolor");
-        mDaySeparatorInnerColor = dynamicTheme.getColor(context, "month_grid_lines");
-        mTodayAnimateColor = dynamicTheme.getColor(context, "today_highlight_color");
-        mClickedDayColor = dynamicTheme.getColor(context, "day_clicked_background_color");
+        mMonthNumColor = 0;
+        mMonthNumOtherColor = 0;
+        mMonthNumTodayColor = 0;
+        mMonthEventColor = 0;
+        mMonthDeclinedEventColor = 0;
+        mMonthDeclinedExtrasColor = 0;
+        mMonthEventExtraColor = 0;
+        mMonthEventOtherColor = 0;
+        mMonthEventExtraOtherColor = 0;
+        mMonthBGTodayColor = 0;
+        mMonthBGFocusMonthColor = 0;
+        mMonthBGOtherColor = 0;
+        mMonthBGColor = 0;
+        mDaySeparatorInnerColor = 0;
+        mTodayAnimateColor = 0;
+        mClickedDayColor = 0;
+        if (super.monthFieldColors != null) {
+            mMonthWeekNumColor = super.monthFieldColors.getMonthWeekNumColor() != 0 ? super.monthFieldColors.getMonthWeekNumColor() :
+                    dynamicTheme.getColor(context, "month_week_num_color");
+            mMonthNumColor = super.monthFieldColors.getMonthNumColor() != 0 ? super.monthFieldColors.getMonthNumColor()
+                    : dynamicTheme.getColor(context, "month_day_number");
+            mMonthNumOtherColor = super.monthFieldColors.getMonthNumOtherColor() != 0 ? super.monthFieldColors.getMonthNumOtherColor()
+                    : dynamicTheme.getColor(context, "month_day_number_other");
+            mMonthNumTodayColor = super.monthFieldColors.getMonthNumTodayColor() != 0 ? super.monthFieldColors.getMonthNumTodayColor()
+                    : dynamicTheme.getColor(context, "month_today_number");
+            mMonthEventColor = super.monthFieldColors.getMonthEventColor() != 0 ? super.monthFieldColors.getMonthEventColor()
+                    : dynamicTheme.getColor(context, "month_event_color");
+            mMonthDeclinedEventColor = super.monthFieldColors.getMonthDeclinedEventColor() != 0 ? super.monthFieldColors.getMonthDeclinedEventColor()
+                    : dynamicTheme.getColor(context, "agenda_item_declined_color");
+            mMonthDeclinedExtrasColor = super.monthFieldColors.getMonthDeclinedExtrasColor() != 0 ? super.monthFieldColors.getMonthDeclinedExtrasColor()
+                    : dynamicTheme.getColor(context, "agenda_item_where_declined_text_color");
+            mMonthEventExtraColor = super.monthFieldColors.getMonthEventExtraColor() != 0 ? super.monthFieldColors.getMonthEventExtraColor()
+                    : dynamicTheme.getColor(context, "month_event_extra_color");
+            mMonthEventOtherColor = super.monthFieldColors.getMonthEventOtherColor() != 0 ? super.monthFieldColors.getMonthEventOtherColor()
+                    : dynamicTheme.getColor(context, "month_event_other_color");
+            mMonthEventExtraOtherColor = super.monthFieldColors.getMonthEventExtraOtherColor() != 0 ? super.monthFieldColors.getMonthEventExtraOtherColor()
+                    : dynamicTheme.getColor(context, "month_event_extra_other_color");
+            mMonthBGTodayColor = super.monthFieldColors.getMonthBGTodayColor() != 0 ? super.monthFieldColors.getMonthBGTodayColor()
+                    : dynamicTheme.getColor(context, "month_today_bgcolor");
+            mMonthBGFocusMonthColor = super.monthFieldColors.getMonthBGFocusMonthColor() != 0 ? super.monthFieldColors.getMonthBGFocusMonthColor()
+                    : dynamicTheme.getColor(context, "month_focus_month_bgcolor");
+            mMonthBGOtherColor = super.monthFieldColors.getMonthBGOtherColor() != 0 ? super.monthFieldColors.getMonthBGOtherColor()
+                    : dynamicTheme.getColor(context, "month_other_bgcolor");
+            mMonthBGColor = super.monthFieldColors.getMonthBGColor() != 0 ? super.monthFieldColors.getMonthBGColor()
+                    : dynamicTheme.getColor(context, "month_bgcolor");
+            mDaySeparatorInnerColor = super.monthFieldColors.getDaySeparatorInnerColor() != 0 ? super.monthFieldColors.getDaySeparatorInnerColor()
+                    : dynamicTheme.getColor(context, "month_grid_lines");
+            mTodayAnimateColor = super.monthFieldColors.getTodayAnimateColor() != 0 ? super.monthFieldColors.getTodayAnimateColor()
+                    : dynamicTheme.getColor(context, "today_highlight_color");
+            mClickedDayColor = super.monthFieldColors.getClickedDayColor() != 0 ? super.monthFieldColors.getClickedDayColor()
+                    : dynamicTheme.getColor(context, "day_clicked_background_color");
+        } else {
+            mMonthWeekNumColor = dynamicTheme.getColor(context, "month_week_num_color");
+            mMonthNumColor = dynamicTheme.getColor(context, "month_day_number");
+            mMonthNumOtherColor = dynamicTheme.getColor(context, "month_day_number_other");
+            mMonthNumTodayColor = dynamicTheme.getColor(context, "month_today_number");
+            mMonthEventColor = dynamicTheme.getColor(context, "month_event_color");
+            mMonthDeclinedEventColor = dynamicTheme.getColor(context, "agenda_item_declined_color");
+            mMonthDeclinedExtrasColor = dynamicTheme.getColor(context, "agenda_item_where_declined_text_color");
+            mMonthEventExtraColor = dynamicTheme.getColor(context, "month_event_extra_color");
+            mMonthEventOtherColor = dynamicTheme.getColor(context, "month_event_other_color");
+            mMonthEventExtraOtherColor = dynamicTheme.getColor(context, "month_event_extra_other_color");
+            mMonthBGTodayColor = dynamicTheme.getColor(context, "month_today_bgcolor");
+            mMonthBGFocusMonthColor = dynamicTheme.getColor(context, "month_focus_month_bgcolor");
+            mMonthBGOtherColor = dynamicTheme.getColor(context, "month_other_bgcolor");
+            mMonthBGColor = dynamicTheme.getColor(context, "month_bgcolor");
+            mDaySeparatorInnerColor = dynamicTheme.getColor(context, "month_grid_lines");
+            mTodayAnimateColor = dynamicTheme.getColor(context, "today_highlight_color");
+            mClickedDayColor = dynamicTheme.getColor(context, "day_clicked_background_color");
+        }
         mTodayDrawable = res.getDrawable(R.drawable.today_blue_week_holo_light);
     }
 
@@ -350,11 +333,9 @@ public class MonthWeekEventsView extends SimpleWeekView {
         if (!mInitialized) {
             Resources resources = getContext().getResources();
             mShowDetailsInMonth = true;
-            mTextSizeEventTitle = 10;
-            mTextSizeMonthNumber = 14;
             mSidePaddingMonthNumber = 4;
             mConflictColor = resources.getColor(R.color.colorPrimary);
-            mEventTextColor = resources.getColor(R.color.colorOrangePrimaryDark);
+            mEventTextColor = resources.getColor(R.color.calendar_event_text_color);
             if (mScale != 1) {
                 mTopPaddingMonthNumber *= mScale;
                 mTopPaddingWeekNumber *= mScale;
@@ -662,8 +643,9 @@ public class MonthWeekEventsView extends SimpleWeekView {
             r.left = computeDayLeftPosition(mTodayIndex);
             r.right = computeDayLeftPosition(mTodayIndex + 1);
             //canvas.drawRect(r, p);
-            int radius = 30;
-            canvas.drawCircle((r.right) - (radius + mTopPaddingWeekNumber / 2), radius + mTopPaddingWeekNumber / 2, radius, p);
+            int radius = (int) (mTextSizeMonthNumber * 0.67);
+            canvas.drawCircle((r.right) - (radius + mTopPaddingMonthNumber),
+                    (radius + 2), radius, p);
         }
     }
 
@@ -1303,7 +1285,9 @@ public class MonthWeekEventsView extends SimpleWeekView {
         }
 
         protected BoundariesSetter getBoundariesSetter(Event event) {
-            if (event.drawAsAllday()) {
+            //if (event.drawAsAllday()) {
+            // Here keeping this condition true as we always want rectangular tag with stroke = filled
+            if (true) {
                 return mFullDayBoundaries;
             }
             return mRegularBoundaries;
@@ -1342,7 +1326,8 @@ public class MonthWeekEventsView extends SimpleWeekView {
                     continue;
                 }
                 EventFormat lastFormat = getFormatByEvent(event, day - 1);
-                if ((lastFormat != null) && (event.drawAsAllday())) {
+                //if ((lastFormat != null) && (event.drawAsAllday())) {
+                if ((lastFormat != null)) {
                     lastFormat.extendDaySpan(day);
                     formattedDayEvents.add(makeFormattedEvent(event, lastFormat));
                 } else if (lastFormat == null) {
@@ -1954,13 +1939,16 @@ public class MonthWeekEventsView extends SimpleWeekView {
         }
 
         protected Paint getTextPaint() {
-            if (!isAtendeeStatusInvited() && mEvent.drawAsAllday()) {
+            //if (!isAtendeeStatusInvited() && mEvent.drawAsAllday()) {
+            // here removing mEvent.drawAsAllday() as we want to keep white color of event text
+            if (!isAtendeeStatusInvited()) {
                 // Text color needs to contrast with solid background.
                 return mSolidBackgroundEventPaint;
             } else if (isDeclined()) {
                 // Use "declined event" color.
                 return mDeclinedEventPaint;
-            } else if (mEvent.drawAsAllday()) {
+                //} else if (mEvent.drawAsAllday()) {
+            } else if (true) {
                 // Text inside frame is same color as frame.
                 mFramedEventPaint.setColor(getRectangleColor());
                 return mFramedEventPaint;

@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.calendar;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +30,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ViewSwitcher;
 import android.widget.ViewSwitcher.ViewFactory;
 
@@ -34,6 +39,10 @@ import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import ws.xsoh.etar.R;
 
@@ -49,14 +58,15 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
      */
     private static final int VIEW_ID = 1;
     protected ViewSwitcher mViewSwitcher;
+    protected RelativeLayout rlDateDisplayDayView;
+    LinearLayout llDividerVertical, llDateView;
+    AppCompatTextView tvCurrentDate, tvCurrentDay;
     protected Animation mInAnimationForward;
     protected Animation mOutAnimationForward;
     protected Animation mInAnimationBackward;
     protected Animation mOutAnimationBackward;
-
-
     Time mSelectedDay = new Time();
-
+    Time currentTime = new Time();
     private final Runnable mTZUpdater = new Runnable() {
         @Override
         public void run() {
@@ -65,18 +75,24 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
             }
             String tz = Utils.getTimeZone(getActivity(), mTZUpdater);
             mSelectedDay.timezone = tz;
+            currentTime.timezone = tz;
             mSelectedDay.normalize(true);
         }
     };
-
+    CalendarController mController;
     private int mNumDays;
-
+    long savedTime = 0;
+    ArrayList<Event> eventList;
     public DayFragment() {
-        mSelectedDay.setToNow();
     }
 
-    public DayFragment(long timeMillis, int numOfDays) {
+    private DayView dayView;
+
+    public DayFragment(ArrayList<Event> eventList, long timeMillis, int numOfDays) {
         mNumDays = numOfDays;
+        savedTime = timeMillis;
+        this.eventList = eventList;
+        currentTime.set(Calendar.getInstance().getTimeInMillis());
         if (timeMillis == 0) {
             mSelectedDay.setToNow();
         } else {
@@ -87,64 +103,191 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        if (icicle != null) {
+            mNumDays = icicle.getInt("mNumDays");
+            eventList = icicle.getParcelableArrayList("eventList");
+            savedTime = icicle.getLong("savedTime");
+        }
+
         Context context = getActivity();
         mInAnimationForward = AnimationUtils.loadAnimation(context, R.anim.slide_left_in);
         mOutAnimationForward = AnimationUtils.loadAnimation(context, R.anim.slide_left_out);
         mInAnimationBackward = AnimationUtils.loadAnimation(context, R.anim.slide_right_in);
         mOutAnimationBackward = AnimationUtils.loadAnimation(context, R.anim.slide_right_out);
 
-        // mEventLoader = new EventLoader(context);
     }
 
-
+    @Override
     public View makeView() {
-        //mTZUpdater.run();
-        final DayView view = new DayView(getActivity(), CalendarController
-                .getInstance(getActivity()), mViewSwitcher, mNumDays, new CalendarListeners() {
+        mTZUpdater.run();
+        mController = CalendarController.getInstance(getActivity());
+
+        //set time to handle the orientation change
+        if (savedTime > 0) {
+            mSelectedDay.set(savedTime);
+        }
+
+
+        dayView = new DayView(savedTime, eventList, getActivity(), mController, mViewSwitcher, mNumDays,
+                new CalendarListeners() {
             @Override
             public void onEventClick(Time tapEvent, Event clickedEvent) {
-                Log.e("Selected Time", "Time " + tapEvent.hour + " ");
-
+                CalendarListeners listener = getParentFragmentObject();
+                if (listener != null) {
+                    listener.onEventClick(tapEvent, clickedEvent);
+                }
             }
 
             @Override
-            public void onDayChange(Time selectedDay) {
-                Log.e(selectedDay.monthDay + " ", selectedDay.hour + " ");
+            public void onDayChange(Time selectedDay, Time selectedEndDay, boolean isDayView) {
+                CalendarListeners calendarListeners = getParentFragmentObject();
+                if (calendarListeners != null) {
+                    calendarListeners.onDayChange(selectedDay, selectedEndDay, isDayView);
+                }
 
+                if (isDayView) {
+                    updateDateOnDayView(selectedDay);
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) llDividerVertical.getLayoutParams();
+                    params.width = (int) DayView.GRID_LINE_INNER_WIDTH;
+                    params.setMargins((int) DayView.GRID_LINE_LEFT_MARGIN, 0, 0, 0);
+                    llDividerVertical.setLayoutParams(params);
+
+                    params = (RelativeLayout.LayoutParams) llDateView.getLayoutParams();
+                    params.width = (int) DayView.GRID_LINE_LEFT_MARGIN;
+                    llDateView.setLayoutParams(params);
+                    rlDateDisplayDayView.setVisibility(View.VISIBLE);
+                } else {
+                    rlDateDisplayDayView.setVisibility(View.GONE);
+                }
+            }
+
+                    @Override
+                    public void onWeekViewHeaderDayClick(Time selectedDay) {
+                        CalendarListeners weekDayListener = getParentFragmentObject();
+                        if (weekDayListener != null) {
+                            weekDayListener.onWeekViewHeaderDayClick(selectedDay);
+                        }
+                    }
+
+                    @Override
+                    public void callOtherCalendarViews(Time time) {
+
+                    }
+
+                    @Override
+                    public void updateToolbarTitleOnScroll(long dateInMilliseconds) {
+
+                    }
+
+                    @Override
+                    public void callAPIForEvents(long updatedTimeInMillis) {
+
+                    }
+                });
+        dayView.setmIs24HourFormat(false);
+        dayView.setEmptyCellClickEnable(false);
+        dayView.setLongClickEnable(false);
+        dayView.setId(VIEW_ID);
+        dayView.setLayoutParams(new ViewSwitcher.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        mSelectedDay.switchTimezone("US/Mountain");
+        dayView.setSelected(mSelectedDay, true, false);
+        return dayView;
+    }
+
+    Time setCurrentDayTime(Time currentTime) {
+        currentTime.hour = 0;
+        currentTime.minute = 0;
+        currentTime.second = 0;
+        return currentTime;
+    }
+
+    public void updateDateOnDayView(Time selectedTime) {
+        Time currentTimeToCompare = setCurrentDayTime(currentTime);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(selectedTime.toMillis(false));
+        tvCurrentDate.setText("" + selectedTime.monthDay);
+
+        selectedTime = setCurrentDayTime(selectedTime);
+
+        if (currentTimeToCompare.toMillis(false) == selectedTime.toMillis(false)) {
+            tvCurrentDate.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_current_date));
+            tvCurrentDate.setTextColor(getResources().getColor(R.color.titleTextColor));
+        } else {
+            tvCurrentDate.setBackgroundDrawable(null);
+            tvCurrentDate.setTextColor(getResources().getColor(R.color.calendar_hour_label));
+        }
+        tvCurrentDay.setText("" + dayView.mDayStrs[calendar.get(Calendar.DAY_OF_WEEK) - 1]);
+
+    }
+
+    private CalendarListeners getParentFragmentObject() {
+        CalendarListeners parentFragment = null;
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager == null) {
+            return null;
+        } else {
+            for (Fragment fragment : fragmentManager.getFragments()) {
+                if (fragment instanceof CalendarListeners) {
+                    parentFragment = (CalendarListeners) fragment;
+                    break;
+                }
+            }
+        }
+        return parentFragment;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.e("View Created", mNumDays + " ");
+    }
+
+    public void setEvents(ArrayList<Event> eventLists, long selectedTimeTS) {
+        eventList = eventLists;
+        Collections.sort(eventLists, new Comparator<Event>() {
+            @Override
+            public int compare(Event previousEvent, Event currentEvent) {
+                return Integer.compare(previousEvent.startDay, currentEvent.startDay);
             }
         });
-        view.setmIs24HourFormat(false);
-        view.setEmptyCellClickEnable(false);
-        view.setLongClickEnable(false);
-        view.setId(VIEW_ID);
-        view.setLayoutParams(new ViewSwitcher.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        view.setSelected(mSelectedDay, false, false);
-        ArrayList<Event> eventList = new ArrayList<>();
-        eventList.add(new Event(1059, -5242874, "Single session 1", "", true, "kavitamp19@googlemail.com", false
-                , 2458711, 2458711, 990, 1050, 1565866800000l, 1565870400000l, false, false, 0, 0.0f, 0.0f,
-                0.0f, 0.0f, null, null, null, null, 0, 0));
+        List<Event> events = dayView.getEvents();
+        events.clear();
+        events.addAll(eventLists);
+        ((DayView) mViewSwitcher.getCurrentView()).setmEvents(eventLists);
 
-        eventList.add(new Event(1059, -5242874, "Single session 2", "", true, "kavitamp19@googlemail.com", false
-                , 2458716, 2458716, 990, 1050, 1565866800000l, 1565870400000l, false, false, 0, 0.0f, 0.0f,
-                0.0f, 0.0f, null, null, null, null, 0, 0));
+        eventsChanged();
+        savedTime = selectedTimeTS;
 
-
-        eventList.add(new Event(1059, -5242874, "Single session 3", "", true, "kavitamp19@googlemail.com", false
-                , 2458716, 2458716, 990, 1050, 1565866800000l, 1565870400000l, false, false, 0, 0.0f, 0.0f,
-                0.0f, 0.0f, null, null, null, null, 0, 0));
-        view.setmEvents(eventList);
-        return view;
+        if (selectedTimeTS > 0) {
+            Time time = new Time();
+            time.set(selectedTimeTS);
+            ((DayView) mViewSwitcher.getCurrentView()).savedTime = savedTime;
+            ((DayView) mViewSwitcher.getCurrentView()).setSelected(time, false, false);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.day_activity, null);
+        rlDateDisplayDayView = v.findViewById(R.id.rl_date_display_day_view);
+        tvCurrentDay = v.findViewById(R.id.tv_current_day);
+        tvCurrentDate = v.findViewById(R.id.tv_current_date);
+        llDividerVertical = v.findViewById(R.id.ll_divider_vertical);
+        llDateView = v.findViewById(R.id.ll_date_view);
+        //llDividerHorizontal = v.findViewById(R.id.ll_divider_horizontal);
         mViewSwitcher = v.findViewById(R.id.switcher);
         mViewSwitcher.setFactory(this);
         mViewSwitcher.getCurrentView().requestFocus();
-        ((DayView) mViewSwitcher.getCurrentView()).updateTitle();
+        //((DayView) mViewSwitcher.getCurrentView()).updateTitle();
+        int visibility = mNumDays == 1 ? View.VISIBLE : View.GONE;
+        rlDateDisplayDayView.setVisibility(visibility);
+        Time time = new Time();
+        time.timezone = Utils.getTimeZone(getActivity(), mTZUpdater);
+        time.set(CalendarController.savedTime);
+        updateDateOnDayView(time);
         return v;
     }
 
@@ -156,17 +299,22 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         DayView view = (DayView) mViewSwitcher.getCurrentView();
         view.handleOnResume();
         view.restartCurrentTimeUpdates();
-
         view = (DayView) mViewSwitcher.getNextView();
         view.handleOnResume();
         view.restartCurrentTimeUpdates();
+
+        if (eventList != null) {
+            setEvents(eventList, CalendarController.savedTime);
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         long time = getSelectedTimeInMillis();
+        outState.putInt("mNumDays", mNumDays);
+        outState.putParcelableArrayList("eventList", eventList);
+        outState.putLong("savedTime", mSelectedDay.toMillis(false));
         if (time != -1) {
             outState.putLong(BUNDLE_KEY_RESTORE_TIME, time);
         }
@@ -180,7 +328,6 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         view = (DayView) mViewSwitcher.getNextView();
         view.cleanup();
         //mEventLoader.stopBackgroundThread();
-
         // Stop events cross-fade animation
         view.stopEventsAnimation();
         ((DayView) mViewSwitcher.getNextView()).stopEventsAnimation();
@@ -192,12 +339,9 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
             mSelectedDay.set(goToTime);
             return;
         }
-
         DayView currentView = (DayView) mViewSwitcher.getCurrentView();
-
         // How does goTo time compared to what's already displaying?
         int diff = currentView.compareToVisibleTimeRange(goToTime);
-
         if (diff == 0) {
             // In visible range. No need to switch view
             currentView.setSelected(goToTime, ignoreTime, animateToday);
@@ -210,12 +354,10 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
                 mViewSwitcher.setInAnimation(mInAnimationBackward);
                 mViewSwitcher.setOutAnimation(mOutAnimationBackward);
             }
-
             DayView next = (DayView) mViewSwitcher.getNextView();
             if (ignoreTime) {
                 next.setFirstVisibleHour(currentView.getFirstVisibleHour());
             }
-
             next.setSelected(goToTime, ignoreTime, animateToday);
             next.reloadEvents();
             mViewSwitcher.showNext();
@@ -250,7 +392,6 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         DayView view = (DayView) mViewSwitcher.getCurrentView();
         view.clearCachedEvents();
         view.reloadEvents();
-
         view = (DayView) mViewSwitcher.getNextView();
         view.clearCachedEvents();
     }

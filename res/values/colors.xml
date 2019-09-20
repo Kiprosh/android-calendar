@@ -18,6 +18,39 @@
 -->
 <resources>
 
+
+    <color name="calendar_number_text">@color/dark_gray</color>
+    <color name="calendar_toolbar_text">@color/dark_gray</color>
+    <color name="calendar_day_text">@color/light_slate_gray</color>
+    <color name="calendar_other_number_text">@color/light_slate_gray</color>
+    <color name="calendar_selected_text">@color/white</color>
+    <color name="calendar_selected_background">@color/blue</color>
+    <color name="calendar_background">@color/white</color>
+
+    <color name="blue">#FF2290F9</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_with_80_transparency">#CCFFFFFF</color>
+    <color name="light_blue">#FF00C5FE</color>
+    <color name="blue_primary_light">#FF62B2FF</color>
+    <color name="orange">#FFFFB23A</color>
+    <color name="light_orange">#FFFABE61</color>
+    <color name="black">#000000</color>
+    <color name="light_black">#FF121A2D</color>
+    <color name="primary_blue">#FF077DB2</color>
+
+    <color name="darkest_gray">#37434F</color>
+    <color name="dark_gray">#FF4A505F</color>
+    <color name="light_slate_gray">#868992</color>
+    <color name="gray">#C1C4CA</color>
+    <color name="light_gray">#FFD9DCE3</color>
+    <color name="gainsboro">#0F121A2D</color>
+    <color name="lightest_gray">#D1FFFFFF</color>
+
+
+    <color name="blue_primary_dark">#FF0093E9</color>
+    <color name="trasparent">#00000000</color>
+    <color name="light_red">#FF808B</color>
+    <color name="light_green">#8CCF93</color>
     <color name="colorPrimary">#41c3b1</color>
     <color name="colorPrimaryDark">#388d7f</color>
     <color name="colorAccent">#1dc1ab</color>
@@ -55,12 +88,12 @@
     <color name="calendar_date_range_color">#80000000</color>
 
 
-    <color name="week_today">#802979ff</color>
+    <color name="week_today">#FF2290F9</color>
     <color name="week_saturday">#80333333</color>
     <color name="week_sunday">#80333333</color>
     <color name="calendar_future_bg_color">#ffffffff</color>
-    <color name="calendar_hour_label">#ff666666</color>
-    <color name="calendar_hour_background">#ffEEEEEE</color>
+    <color name="calendar_hour_label">#868992</color>
+    <color name="calendar_hour_background">#FFFFFF</color>
 
     <color name="calendar_date_banner_background">#eeeeee</color>
 
@@ -148,7 +181,7 @@
     <!-- background color for for clicked days in month view-->
     <color name="day_clicked_background_color">#FF33B5E5</color>
     <!-- background color for the past -->
-    <color name="day_past_background_color">#22DDDDDD</color>
+    <color name="day_past_background_color">#FFFFFF</color>
 
     <!-- Event info colors -->
     <color name="event_info_headline_color">#FFFFFFFF</color>

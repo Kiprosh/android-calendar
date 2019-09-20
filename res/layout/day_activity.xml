@@ -13,15 +13,69 @@
      limitations under the License.
 -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:foregroundGravity="fill_horizontal|top"
     android:layout_height="match_parent"
     android:background="@color/day_past_background_color"
-    android:foregroundGravity="fill_horizontal|top"
-    android:paddingTop="1dip">
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_date_display_day_view"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/ll_date_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_current_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/calendar_hour_label"
+                android:textSize="12sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_current_date"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/bg_current_date"
+                android:gravity="center"
+                android:textColor="@color/titleTextColor"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_divider_vertical"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/calendar_grid_line_inner_horizontal_color"
+            android:orientation="horizontal" />
+
+        <!--
+                <LinearLayout
+                    android:layout_alignParentBottom="true"
+                    android:id="@+id/ll_divider_horizontal"
+                    android:background="@color/calendar_grid_line_inner_horizontal_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:orientation="horizontal" />
+        -->
+
+    </RelativeLayout>
 
     <ViewSwitcher
         android:id="@+id/switcher"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</FrameLayout>
+</LinearLayout>

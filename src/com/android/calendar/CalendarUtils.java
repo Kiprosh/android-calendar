@@ -202,7 +202,7 @@ public class CalendarUtils {
                     mHandler.cancelOperation(mToken);
                 }
 
-                mHandler = new AsyncTZHandler(context.getContentResolver());
+                //mHandler = new AsyncTZHandler(context.getContentResolver());
 
                 // skip 0 so query can use it
                 if (++mToken == 0) {
@@ -212,15 +212,15 @@ public class CalendarUtils {
                 // Write the use home tz setting
                 values.put(CalendarCache.VALUE, mUseHomeTZ ? CalendarCache.TIMEZONE_TYPE_HOME
                         : CalendarCache.TIMEZONE_TYPE_AUTO);
-                mHandler.startUpdate(mToken, null, CalendarCache.URI, values, "key=?",
-                        TIMEZONE_TYPE_ARGS);
+               /* mHandler.startUpdate(mToken, null, CalendarCache.URI, values, "key=?",
+                        TIMEZONE_TYPE_ARGS);*/
 
                 // If using a home tz write it to the db
                 if (mUseHomeTZ) {
                     ContentValues values2 = new ContentValues();
                     values2.put(CalendarCache.VALUE, mHomeTZ);
-                    mHandler.startUpdate(mToken, null, CalendarCache.URI, values2,
-                            "key=?", TIMEZONE_INSTANCES_ARGS);
+                    /*mHandler.startUpdate(mToken, null, CalendarCache.URI, values2,
+                            "key=?", TIMEZONE_INSTANCES_ARGS);*/
                 }
             }
         }
@@ -249,15 +249,6 @@ public class CalendarUtils {
                     mUseHomeTZ = prefs.getBoolean(KEY_HOME_TZ_ENABLED, false);
                     mHomeTZ = prefs.getString(KEY_HOME_TZ, Time.getCurrentTimezone());
 
-                    // When the async query returns it should synchronize on
-                    // mTZCallbacks, update mUseHomeTZ, mHomeTZ, and the
-                    // preferences, set mTZQueryInProgress to false, and call all
-                    // the runnables in mTZCallbacks.
-                    if (mHandler == null) {
-                        mHandler = new AsyncTZHandler(context.getContentResolver());
-                    }
-                    mHandler.startQuery(0, context, CalendarCache.URI, CALENDAR_CACHE_POJECTION,
-                            null, null, null);
                 }
                 if (mTZQueryInProgress) {
                     mTZCallbacks.add(callback);

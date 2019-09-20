@@ -18,7 +18,6 @@ package com.android.calendar.month;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Handler;
 import android.os.Message;
 import android.text.format.Time;
 import android.util.Log;
@@ -105,12 +104,12 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
     long mClickTime;                        // Used to calculate minimum click animation time
     private boolean mAnimateToday = false;
     private long mAnimateTime = 0;
-    private Handler mEventDialogHandler;
+    MonthFieldColors monthFieldColors;
 
-    public MonthByWeekAdapter(CallbackForDayView callbackForDayView, Context context, HashMap<String, Integer> params, Handler handler) {
-        super(context, params);
+    public MonthByWeekAdapter(MonthFieldColors monthFieldColors, CallbackForDayView callbackForDayView, Context context, HashMap<String, Integer> params) {
+        super(monthFieldColors, context, params);
+        this.monthFieldColors = monthFieldColors;
         this.callbackForDayView = callbackForDayView;
-        mEventDialogHandler = handler;
         if (params.containsKey(WEEK_PARAMS_IS_MINI)) {
             mIsMiniMonth = params.get(WEEK_PARAMS_IS_MINI) != 0;
         }
@@ -238,13 +237,13 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                     isAnimatingToday = true;
                     // There is a bug that causes invalidates to not work some
                     // of the time unless we recreate the view.
-                    v = new MonthWeekEventsView(mContext);
+                    v = new MonthWeekEventsView(monthFieldColors, mContext);
                 }
             } else {
                 drawingParams = (HashMap<String, Integer>) v.getTag();
             }
         } else {
-            v = new MonthWeekEventsView(mContext);
+            v = new MonthWeekEventsView(monthFieldColors, mContext);
         }
         if (drawingParams == null) {
             drawingParams = new HashMap<String, Integer>();
@@ -313,6 +312,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
 
     @Override
     protected void onDayTapped(Time day) {
+
         setDayParameters(day);
         if (mShowAgendaWithMonth || mIsMiniMonth) {
             // If agenda view is visible with month view , refresh the views
@@ -420,7 +420,6 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                     mLongClickedView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     Message message = new Message();
                     message.obj = day;
-                    mEventDialogHandler.sendMessage(message);
                 }
                 mLongClickedView.clearClickedDay();
                 mLongClickedView = null;

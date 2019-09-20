@@ -17,11 +17,12 @@
 package com.android.calendar.month;
 
 import android.app.Activity;
-import android.app.ListFragment;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.format.Time;
@@ -145,10 +146,12 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
             }
         }
     };
+    MonthFieldColors monthFieldColors;
 
-    public SimpleDayPickerFragment(long initialTime) {
+    public SimpleDayPickerFragment(MonthFieldColors monthFieldColors, long initialTime) {
         goTo(initialTime, false, true, true);
         mHandler = new Handler();
+        this.monthFieldColors = monthFieldColors;
     }
 
     @Override
@@ -170,9 +173,13 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
 
         Context c = getActivity();
         DynamicTheme theme = new DynamicTheme();
-        mSaturdayColor = theme.getColor(c, "month_saturday");
-        mSundayColor = theme.getColor(c, "month_sunday");
-        mDayNameColor = theme.getColor(c, "month_day_names_color");
+
+        if (monthFieldColors != null) {
+            mSaturdayColor = Color.parseColor("#000000");
+            mSundayColor = Color.parseColor("#000000");
+            mDayNameColor = Color.parseColor("#000000");
+
+        }
 
         // Adjust sizes for screen density
         if (mScale == 0) {
@@ -199,7 +206,7 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
         weekParams.put(SimpleWeeksAdapter.WEEK_PARAMS_JULIAN_DAY,
                 Time.getJulianDay(mSelectedDay.toMillis(false), mSelectedDay.gmtoff));
         if (mAdapter == null) {
-            mAdapter = new SimpleWeeksAdapter(getActivity(), weekParams);
+            mAdapter = new SimpleWeeksAdapter(monthFieldColors, getActivity(), weekParams);
             mAdapter.registerDataSetObserver(mObserver);
         } else {
             mAdapter.updateParams(weekParams);
@@ -211,6 +218,10 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            monthFieldColors = savedInstanceState.getParcelable("monthFieldColors");
+        }
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_CURRENT_TIME)) {
             goTo(savedInstanceState.getLong(KEY_CURRENT_TIME), false, true, true);
         }
@@ -285,6 +296,7 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putLong(KEY_CURRENT_TIME, mSelectedDay.toMillis(true));
+        outState.putParcelable("monthFieldColors", monthFieldColors);
     }
 
     /**
@@ -298,7 +310,7 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
 
         mShowWeekNumber = false;
 
-        updateHeader();
+        //updateHeader();
         goTo(mSelectedDay.toMillis(true), false, false, false);
         mAdapter.setSelectedDay(mSelectedDay);
         mTodayUpdater.run();
@@ -335,6 +347,9 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            monthFieldColors = savedInstanceState.getParcelable("monthFieldColors");
+        }
         View v = inflater.inflate(R.layout.full_month_by_week,
                 container, false);
         mDayNamesHeader = (ViewGroup) v.findViewById(R.id.day_names);

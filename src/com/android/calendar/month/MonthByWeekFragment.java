@@ -17,19 +17,17 @@
 package com.android.calendar.month;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.res.Resources;
 import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Instances;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.view.LayoutInflater;
@@ -39,13 +37,15 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 
 import com.android.calendar.CalendarController;
-import com.android.calendar.DayFragment;
+import com.android.calendar.CalendarListeners;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,24 +66,10 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
     // The minimum time between requeries of the data if the db is
     // changing
     private static final int LOADER_THROTTLE_DELAY = 500;
+    private static final int HANDLER_KEY = 0;
     protected static boolean mShowDetailsInMonth = false;
     private final Time mDesiredDay = new Time();
-    private final Runnable mTZUpdater = new Runnable() {
-        @Override
-        public void run() {
-            String tz = "Asia/Calcutta";
-            mSelectedDay.timezone = tz;
-            mSelectedDay.normalize(true);
-            mTempTime.timezone = tz;
-            mFirstDayOfMonth.timezone = tz;
-            mFirstDayOfMonth.normalize(true);
-            mFirstVisibleDay.timezone = tz;
-            mFirstVisibleDay.normalize(true);
-            if (mAdapter != null) {
-                mAdapter.refresh();
-            }
-        }
-    };
+    static MonthFieldColors monthFieldColors;
     protected float mMinimumTwoMonthFlingVelocity;
     protected boolean mIsMiniMonth;
     protected boolean mHideDeclined;
@@ -96,22 +82,40 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
     private int mEventsLoadingDelay;
     private boolean mShowCalendarControls;
     private boolean mIsDetached;
-    private Handler mEventDialogHandler = new Handler() {
-
+    static ArrayList<Event> events;
+    static long initialTime;
+    private final Runnable mTZUpdater = new Runnable() {
         @Override
-        public void handleMessage(Message msg) {
-            final FragmentManager manager = getFragmentManager();
+        public void run() {
+            String tz = Utils.getTimeZone(mContext, mTZUpdater);
+            mSelectedDay.timezone = tz;
+            mSelectedDay.normalize(true);
+            mTempTime.timezone = tz;
+            mFirstDayOfMonth.timezone = tz;
+            mFirstDayOfMonth.normalize(true);
+            mFirstVisibleDay.timezone = tz;
+            mFirstVisibleDay.normalize(true);
+            if (mAdapter != null) {
+                mAdapter.refresh();
+            }
         }
     };
-
+    private final String DATE_FORMAT_FOR_DAY_VIEW = "EEEE, dd MMMM yyyy";
+    CalendarController controller;
+    boolean isTitleUpdated = false;
+    boolean isCalledAfterScroll;
+    long updatedTimeInMilliseconds;
 
     public MonthByWeekFragment() {
-        this(System.currentTimeMillis(), true);
+        super(null, System.currentTimeMillis());
     }
 
-    public MonthByWeekFragment(long initialTime, boolean isMiniMonth) {
-        super(initialTime);
+    public MonthByWeekFragment(ArrayList<Event> eventList, MonthFieldColors monthFieldColors, long initialTime, boolean isMiniMonth) {
+        super(monthFieldColors, initialTime);
+        this.events = eventList;
+        this.initialTime = initialTime;
         mIsMiniMonth = isMiniMonth;
+        this.monthFieldColors = monthFieldColors;
     }
 
     /**
@@ -184,6 +188,14 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("eventListMonthFragment", events);
+        outState.putParcelable("monthFieldColors", monthFieldColors);
+
+    }
+
+    @Override
     protected void setUpAdapter() {
         mFirstDayOfWeek = Utils.getFirstDayOfWeek(mContext);
         mShowWeekNumber = Utils.getShowWeekNumber(mContext);
@@ -197,7 +209,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
                 Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff));
         weekParams.put(SimpleWeeksAdapter.WEEK_PARAMS_DAYS_PER_WEEK, mDaysPerWeek);
         if (mAdapter == null) {
-            mAdapter = new MonthByWeekAdapter(this, getActivity(), weekParams, mEventDialogHandler);
+            mAdapter = new MonthByWeekAdapter(monthFieldColors, this, getActivity(), weekParams);
             mAdapter.registerDataSetObserver(mObserver);
         } else {
             mAdapter.updateParams(weekParams);
@@ -205,10 +217,22 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
         mAdapter.notifyDataSetChanged();
     }
 
+    String getFormattedDate(long timeMili) {
+        Date date = new Date();
+        date.setTime(timeMili);
+        return new SimpleDateFormat(DATE_FORMAT_FOR_DAY_VIEW).format(date);
+    }
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v;
+        isCalledAfterScroll = true;
+        if (savedInstanceState != null) {
+            events = savedInstanceState.getParcelableArrayList("eventListMonthFragment");
+            monthFieldColors = savedInstanceState.getParcelable("monthFieldColors");
+        }
+
         v = inflater.inflate(R.layout.full_month_by_week, container, false);
         mDayNamesHeader = (ViewGroup) v.findViewById(R.id.day_names);
         return v;
@@ -219,13 +243,16 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
         super.onActivityCreated(savedInstanceState);
         mListView.setSelector(new StateListDrawable());
         if (!mIsMiniMonth) {
-            mListView.setBackgroundColor(new DynamicTheme().getColor(getActivity(), "month_bgcolor"));
+            int backgroundColor;
+            if (monthFieldColors != null) {
+                backgroundColor = monthFieldColors.getMonthBGOtherColor() != 0 ? monthFieldColors.getMonthBGOtherColor()
+                        : new DynamicTheme().getColor(getActivity(), "month_bgcolor");
+            } else {
+                backgroundColor = new DynamicTheme().getColor(getActivity(), "month_bgcolor");
+            }
+            mListView.setBackgroundColor(backgroundColor);
         }
         mAdapter.setListView(mListView);
-    }
-
-    public void setMonthBackgroundColor(int colorId) {
-        mListView.setBackgroundColor(getResources().getColor(colorId));
     }
 
     @Override
@@ -238,48 +265,20 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
         mDayLabels = new String[7];
         for (int i = Calendar.SUNDAY; i <= Calendar.SATURDAY; i++) {
             mDayLabels[i - Calendar.SUNDAY] = DateUtils.getDayOfWeekString(i,
-                    DateUtils.LENGTH_MEDIUM).toUpperCase();
+                    DateUtils.LENGTH_MEDIUM);
         }
     }
 
 
-    void loadingData() {
+    public void loadData(ArrayList<Event> events) {
+        this.events = events;
+
         mFirstLoadedJulianDay =
                 Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff)
                         - (mNumWeeks * 7 / 2);
         mEventUri = updateUri();
-
-        ArrayList<Event> events = new ArrayList<Event>();
-        events.add(new Event(1058, getResources().getColor(R.color.colorGreenPrimary), "Feb Session", "", true, "kavitamp19@googlemail.com", false
-                , 2458520, 2458520, 990, 1050, 1549348200000l, 1549326600000l, false, false));
-
-        events.add(new Event(1078, -9522247, "Multi session", "", true, "kavitamp19@googlemail.com", false
-                , 2458709, 2458717, 0, 1440, 1565654400000l, 1566432000000l, false, false));
-        events.add(new Event(1059, -5242874, "Single session 1", "", true, "kavitamp19@googlemail.com", false
-                , 2458711, 2458711, 990, 1050, 1565866800000l, 1565870400000l, false, false));
-
-        events.add(new Event(1060, -5242874, "Single session 2", "", true, "kavitamp19@googlemail.com", false
-                , 2458711, 2458711, 990, 1050, 1565866800000l, 1565870400000l, false, false));
-
-
-        events.add(new Event(1061, -5242874, "Single session 3", "", true, "kavitamp19@googlemail.com", false
-                , 2458711, 2458711, 990, 1050, 1565866800000l, 1565870400000l, false, false));
-
-
-        events.add(new Event(1062, -5242874, "Single session 4", "", true, "kavitamp19@googlemail.com", false
-                , 2458711, 2458711, 990, 1050, 1565866800000l, 1565870400000l, false, false));
-
-        events.add(new Event(1063, -5242874, "Single session 5", "", true, "kavitamp19@googlemail.com", false
-                , 2458711, 2458711, 990, 1050, 1565866800000l, 1565870400000l, false, false));
-
-        events.add(new Event(1064, getResources().getColor(R.color.colorGreenPrimary), "Sept Event", "", true, "kavitamp19@googlemail.com", false
-                , 2458739, 2458739, 990, 1050, 1565866800000l, 1565870400000l, false, false));
-
-        events.add(new Event(1065, getResources().getColor(R.color.colorOrangeAccent), "Sept Event 2", "", true, "kavitamp19@googlemail.com", false
-                , 2458739, 2458739, 990, 1050, 1565866800000l, 1565870400000l, false, false));
-
-        events.add(new Event(1065, -5242874, "Sept Event 2", "", true, "kavitamp19@googlemail.com", false
-                , 2458745, 2458745, 990, 1050, 1565866800000l, 1565870400000l, false, false));
+        /*events.add(new Event(1058, getResources().getColor(R.color.colorGreenPrimary), "Feb Session", "", true, "kavitamp19@googlemail.com", false
+                , 2458520, 2458520, 990, 1050, 1549348200000l, 1549326600000l, false, false));*/
 
         ((MonthByWeekAdapter) mAdapter).setEvents(mFirstLoadedJulianDay,
                 mLastLoadedJulianDay - mFirstLoadedJulianDay + 1, events);
@@ -292,7 +291,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
         boolean prevHideDeclined = mHideDeclined;
         mHideDeclined = Utils.getHideDeclinedEvents(mContext);
         mDaysPerWeek = Utils.getMDaysPerWeek(mContext);
-        updateHeader();
+        //updateHeader();
         mAdapter.setSelectedDay(mSelectedDay);
         mTZUpdater.run();
         mTodayUpdater.run();
@@ -309,7 +308,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
 
     @Override
     public long getSupportedEventTypes() {
-        return CalendarController.EventType.GO_TO | CalendarController.EventType.EVENTS_CHANGED;
+        return CalendarController.EventType.GO_TO | CalendarController.EventType.EVENTS_CHANGED | CalendarController.EventType.UPDATE_TITLE;
     }
 
     @Override
@@ -337,8 +336,13 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
                     }
                 }, delayAnimation ? GOTO_SCROLL_DURATION : 0);
             }
-        } else if (event.eventType == CalendarController.EventType.EVENTS_CHANGED) {
-            // eventsChanged();
+        } else if (event.eventType == CalendarController.EventType.UPDATE_TITLE) {
+            updatedTimeInMilliseconds = controller.getTime();
+            isTitleUpdated = true;
+            CalendarListeners listener = getParentFragmentObject();
+            if (listener != null) {
+                listener.updateToolbarTitleOnScroll(updatedTimeInMilliseconds);
+            }
         }
     }
 
@@ -355,7 +359,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
                 mSelectedDay.set(time);
                 mAdapter.setSelectedDay(time);
             }
-            CalendarController controller = CalendarController.getInstance(mContext);
+            controller = CalendarController.getInstance(mContext);
             if (mSelectedDay.minute >= 30) {
                 mSelectedDay.minute = 30;
             } else {
@@ -366,35 +370,75 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements Cale
                 long offset = useSelected ? 0 : DateUtils.WEEK_IN_MILLIS * mNumWeeks / 3;
                 controller.setTime(newTime + offset);
             }
+            long offsetMonthName = useSelected ? 0 : DateUtils.WEEK_IN_MILLIS * mNumWeeks / 3;
+            long timeVal = newTime + offsetMonthName;
+
+            controller.deregisterEventHandler(HANDLER_KEY);
+            controller.registerFirstEventHandler(HANDLER_KEY, this);
             controller.sendEvent(this, CalendarController.EventType.UPDATE_TITLE, time, time, time, -1,
                     CalendarController.ViewType.CURRENT, DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NO_MONTH_DAY
                             | DateUtils.FORMAT_SHOW_YEAR, null, null);
         }
     }
 
+    public void updateMonth(ArrayList<Event> eventArrayList, Calendar calendar, Context context) {
+        this.mContext = context;
+        this.events = eventArrayList;
+        initialTime = calendar.getTimeInMillis();
+        controller = CalendarController.getInstance(mContext);
+        String tz = Utils.getTimeZone(mContext, mTZUpdater);
+
+        mSelectedDay.set(calendar.getTimeInMillis());
+        long extras = CalendarController.EXTRA_GOTO_TIME | CalendarController.EXTRA_GOTO_DATE;
+        controller.sendEvent(this, CalendarController.EventType.GO_TO, mSelectedDay,
+                null, mSelectedDay, -1, CalendarController.ViewType.CURRENT, extras, null, null);
+    }
+
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
         if (scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
             mShouldLoad = false;
             mDesiredDay.setToNow();
         } else {
             mShouldLoad = true;
-            loadingData();
+            loadData(events);
+            if (isTitleUpdated && !isCalledAfterScroll) {
+                // call API loading
+                CalendarListeners listener = getParentFragmentObject();
+                if (listener != null) {
+                    listener.callAPIForEvents(updatedTimeInMilliseconds);
+                }
+            }
+            isCalledAfterScroll = false;
+            isTitleUpdated = false;
         }
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
             mUserScrolled = true;
         }
-
         mScrollStateChangedRunnable.doScrollStateChange(view, scrollState);
     }
 
+    private CalendarListeners getParentFragmentObject() {
+        CalendarListeners parentFragment = null;
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager == null) {
+            return null;
+        } else {
+            for (Fragment fragment : fragmentManager.getFragments()) {
+                if (fragment instanceof CalendarListeners) {
+                    parentFragment = (CalendarListeners) fragment;
+                    break;
+                }
+            }
+        }
+        return parentFragment;
+    }
     @Override
     public void callDayFragment(Time day) {
-        Fragment fragment2 = new DayFragment(day.toMillis(false), 1);
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_pane, fragment2);
-        fragmentTransaction.commit();
+        CalendarListeners listener = getParentFragmentObject();
+        if (listener != null) {
+            listener.callOtherCalendarViews(day);
+        }
     }
 }

@@ -16,35 +16,27 @@
 
 package com.android.calendar;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.app.Service;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Calendars;
-import android.provider.CalendarContract.Events;
-import android.support.v4.content.ContextCompat;
 import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
@@ -78,9 +70,11 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -117,7 +111,6 @@ public class DayView extends View implements
     };
     private static final int CALENDARS_INDEX_ACCESS_LEVEL = 1;
     private static final int CALENDARS_INDEX_OWNER_ACCOUNT = 2;
-    private static final String CALENDARS_WHERE = Calendars._ID + "=%d";
     private static final int FROM_NONE = 0;
     private static final int FROM_ABOVE = 1;
     private static final int FROM_BELOW = 2;
@@ -130,7 +123,7 @@ public class DayView extends View implements
     private static final int UPDATE_CURRENT_TIME_DELAY = 300000;
     // The number of milliseconds to show the popup window
     private static final int POPUP_DISMISS_DELAY = 3000;
-    private static final float GRID_LINE_INNER_WIDTH = 1;
+    public static final float GRID_LINE_INNER_WIDTH = 1;
     private static final int DAY_GAP = 1;
     private static final int HOUR_GAP = 1;
     // More events text will transition between invisible and this alpha
@@ -166,7 +159,7 @@ public class DayView extends View implements
     // TODO recreate formatter when locale changes
     protected static Formatter mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
     private static String TAG = "DayView";
-    private static boolean DEBUG = false;
+    public static float GRID_LINE_LEFT_MARGIN = 0;
     private static boolean DEBUG_SCALING = false;
     private static float mScale = 0; // Used for supporting different screen densities
     private static int DEFAULT_CELL_HEIGHT = 64;
@@ -174,7 +167,7 @@ public class DayView extends View implements
     private static int MIN_Y_SPAN = 100;
     private static int mHorizontalSnapBackThreshold = 128;
     private static int mOnDownDelay;
-    private static float GRID_LINE_LEFT_MARGIN = 0;
+    private static boolean DEBUG = true;
     // This is the standard height of an allday event with no restrictions
     private static int SINGLE_ALLDAY_HEIGHT = 34;
     /**
@@ -199,8 +192,8 @@ public class DayView extends View implements
     // The largest a single allDay event will become.
     private static int MAX_HEIGHT_OF_ONE_ALLDAY_EVENT = 34;
     private static int HOURS_TOP_MARGIN = 2;
-    private static int HOURS_LEFT_MARGIN = 2;
-    private static int HOURS_RIGHT_MARGIN = 4;
+    private static int HOURS_LEFT_MARGIN = 30;
+    private static int HOURS_RIGHT_MARGIN = 30;
     private static int HOURS_MARGIN = HOURS_LEFT_MARGIN + HOURS_RIGHT_MARGIN;
     private static int NEW_EVENT_MARGIN = 4;
     private static int NEW_EVENT_WIDTH = 2;
@@ -217,7 +210,7 @@ public class DayView extends View implements
     private static float NORMAL_FONT_SIZE = 12;
     private static float EVENT_TEXT_FONT_SIZE = 12;
     private static float HOURS_TEXT_SIZE = 12;
-    private static int MIN_HOURS_WIDTH = 96;
+    private static int MIN_HOURS_WIDTH = 112;
     private static int MIN_CELL_WIDTH_FOR_TEXT = 20;
     // smallest height to draw an event with
     private static float MIN_EVENT_HEIGHT = 24.0F; // in pixels
@@ -269,21 +262,20 @@ public class DayView extends View implements
      * Whether to use the expand or collapse icon.
      */
     private static boolean mUseExpandIcon = true;
-    /**
-     * The height of the day names/numbers
-     */
-    private static int DAY_HEADER_HEIGHT = 45;
-    /**
-     * The height of the day names/numbers for multi-day views
-     */
-    private static int MULTI_DAY_HEADER_HEIGHT = DAY_HEADER_HEIGHT;
-    /**
-     * The height of the day names/numbers when viewing a single day
-     */
-    private static int ONE_DAY_HEADER_HEIGHT = DAY_HEADER_HEIGHT;
-    /**
-     * Whether or not to expand the allDay area to fill the screen
-     */
+    private final String DATE_FORMAT_FOR_DAY_VIEW = "EEEE, dd MMMM yyyy";
+    private final Runnable mTZUpdater = new Runnable() {
+        @Override
+        public void run() {
+            String tz = Utils.getTimeZone(mContext, this);
+            mBaseDate.timezone = tz;
+            mBaseDate.normalize(true);
+            mBaseDate.switchTimezone(tz);
+            mCurrentTime.switchTimezone(tz);
+            invalidate();
+        }
+    };
+    public int mTodayJulianDay;
+    public int mFirstJulianDay;
     private static boolean mShowAllAllDayEvents = false;
     private static int sCounter = 0;
     protected final EventGeometry mEventGeometry;
@@ -322,6 +314,7 @@ public class DayView extends View implements
     private final ScrollInterpolator mHScrollInterpolator;
     private final String mCreateNewEventString;
     private final String mNewEventHintString;
+    public boolean isToday = false;
     private final Pattern drawTextSanitizerFilter = Pattern.compile("[\t\n],");
     protected boolean mPaused = true;
     protected Context mContext;
@@ -355,22 +348,17 @@ public class DayView extends View implements
      */
     private long mLastPopupEventID;
     private Time mCurrentTime;
-    private final Runnable mTZUpdater = new Runnable() {
-        @Override
-        public void run() {
-            String tz = Utils.getTimeZone(mContext, this);
-            mBaseDate.timezone = tz;
-            mBaseDate.normalize(true);
-            mCurrentTime.switchTimezone(tz);
-            invalidate();
-        }
-    };
-    private int mTodayJulianDay;
-    private int mFirstJulianDay;
+    public String[] mDayStrs;
+    ArrayList<Event> tempEventList = new ArrayList<>();
+    long savedTime;
     private int mLoadedFirstJulianDay = -1;
     private int mLastJulianDay;
     private int mMonthLength;
     private int mFirstVisibleDate;
+    /**
+     * The height of the day names/numbers
+     */
+    private int DAY_HEADER_HEIGHT = 45;
     private int mFirstVisibleDayOfWeek;
     private int[] mEarliestStartHour;    // indexed by the week day offset
     private boolean[] mHasAllDayEvent;   // indexed by the week day offset
@@ -512,7 +500,10 @@ public class DayView extends View implements
      */
     private int mFirstHourOffset;
     private String[] mHourStrs;
-    private String[] mDayStrs;
+    /**
+     * The height of the day names/numbers for multi-day views
+     */
+    private int MULTI_DAY_HEADER_HEIGHT = DAY_HEADER_HEIGHT;
     private String[] mDayStrs2Letter;
     private boolean mIs24HourFormat;
     private boolean mComputeSelectedEvents;
@@ -554,11 +545,22 @@ public class DayView extends View implements
     private AccessibilityManager mAccessibilityMgr = null;
     private boolean mIsAccessibilityEnabled = false;
     private boolean mTouchExplorationEnabled = false;
+    /**
+     * Whether or not to expand the allDay area to fill the screen
+     */
+    private EventHelper eventHelper = new EventHelper();
+    /**
+     * The height of the day names/numbers when viewing a single day
+     */
+    private int ONE_DAY_HEADER_HEIGHT = DAY_HEADER_HEIGHT;
+    private String timeZone;
 
-    public DayView(Context context, CalendarController controller,
+    public DayView(long savedTime, ArrayList<Event> eventList, Context context, CalendarController controller,
                    ViewSwitcher viewSwitcher, int numDays, CalendarListeners calendarListeners) {
         super(context);
+        //this.savedTime = savedTime;
         mContext = context;
+        timeZone = Utils.getTimeZone(context, null);
         initAccessibilityVariables();
 
         mResources = context.getResources();
@@ -599,7 +601,6 @@ public class DayView extends View implements
         EVENT_ALL_DAY_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
 
         if (mScale == 0) {
-
             mScale = mResources.getDisplayMetrics().density;
             if (mScale != 1) {
                 SINGLE_ALLDAY_HEIGHT *= mScale;
@@ -645,6 +646,7 @@ public class DayView extends View implements
         }
 
         mCurrentTimeLine = mResources.getDrawable(R.drawable.timeline_indicator_holo_light);
+        mCurrentTimeLine.setColorFilter(mContext.getColor(R.color.blue), PorterDuff.Mode.SRC_IN);
         mCurrentTimeAnimateLine = mResources
                 .getDrawable(R.drawable.timeline_indicator_activated_holo_light);
         mTodayHeaderDrawable = mResources.getDrawable(R.drawable.today_blue_week_holo_light);
@@ -654,7 +656,6 @@ public class DayView extends View implements
         mAcceptedOrTentativeEventBoxDrawable = mResources
                 .getDrawable(R.drawable.panel_month_event_holo_light);
 
-        //mEventLoader = eventLoader;
         mEventGeometry = new EventGeometry();
         mEventGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
         mEventGeometry.setHourGap(HOUR_GAP);
@@ -698,66 +699,6 @@ public class DayView extends View implements
         return event;
     }
 
-    private static int getEventAccessLevel(Context context, Event e) {
-        ContentResolver cr = context.getContentResolver();
-
-        int accessLevel = Calendars.CAL_ACCESS_NONE;
-
-        // Get the calendar id for this event
-        Cursor cursor = cr.query(ContentUris.withAppendedId(Events.CONTENT_URI, e.id),
-                new String[]{Events.CALENDAR_ID},
-                null /* selection */,
-                null /* selectionArgs */,
-                null /* sort */);
-
-        if (cursor == null) {
-            return ACCESS_LEVEL_NONE;
-        }
-
-        if (cursor.getCount() == 0) {
-            cursor.close();
-            return ACCESS_LEVEL_NONE;
-        }
-
-        cursor.moveToFirst();
-        long calId = cursor.getLong(0);
-        cursor.close();
-
-        Uri uri = Calendars.CONTENT_URI;
-        String where = String.format(CALENDARS_WHERE, calId);
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(context,
-                Manifest.permission.READ_CALENDAR)
-                != PackageManager.PERMISSION_GRANTED) {
-            //If permission is not granted than just return.
-            Log.d(TAG, "Manifest.permission.READ_CALENDAR is not granted");
-            return 0;
-        }
-        cursor = cr.query(uri, CALENDARS_PROJECTION, where, null, null);
-
-        String calendarOwnerAccount = null;
-        if (cursor != null) {
-            cursor.moveToFirst();
-            accessLevel = cursor.getInt(CALENDARS_INDEX_ACCESS_LEVEL);
-            calendarOwnerAccount = cursor.getString(CALENDARS_INDEX_OWNER_ACCOUNT);
-            cursor.close();
-        }
-
-        if (accessLevel < Calendars.CAL_ACCESS_CONTRIBUTOR) {
-            return ACCESS_LEVEL_NONE;
-        }
-
-        if (e.guestsCanModify) {
-            return ACCESS_LEVEL_EDIT;
-        }
-
-        if (!TextUtils.isEmpty(calendarOwnerAccount)
-                && calendarOwnerAccount.equalsIgnoreCase(e.organizer)) {
-            return ACCESS_LEVEL_EDIT;
-        }
-
-        return ACCESS_LEVEL_DELETE;
-    }
-
     public void setLongClickEnable(boolean longClickEnable) {
         isLongClickEnable = longClickEnable;
     }
@@ -772,129 +713,6 @@ public class DayView extends View implements
             mHandler = getHandler();
             mHandler.post(mUpdateCurrentTime);
         }
-    }
-
-    private void init(Context context) {
-        setFocusable(true);
-
-        // Allow focus in touch mode so that we can do keyboard shortcuts
-        // even after we've entered touch mode.
-        setFocusableInTouchMode(true);
-        setClickable(true);
-
-
-        mFirstDayOfWeek = Utils.getFirstDayOfWeek(context);
-
-        mCurrentTime = new Time(Utils.getTimeZone(context, mTZUpdater));
-        long currentTime = System.currentTimeMillis();
-        mCurrentTime.set(currentTime);
-        mTodayJulianDay = Time.getJulianDay(currentTime, mCurrentTime.gmtoff);
-
-        DynamicTheme dynTheme = new DynamicTheme();
-        mWeek_todayColor = dynTheme.getColor(mContext, "week_today");
-        mWeek_saturdayColor = dynTheme.getColor(mContext, "week_saturday");
-        mWeek_sundayColor = dynTheme.getColor(mContext, "week_sunday");
-        mCalendarDateBannerTextColor = dynTheme.getColor(mContext, "calendar_date_banner_text_color");
-        mFutureBgColorRes = dynTheme.getColor(mContext, "calendar_future_bg_color");
-        mBgColor = dynTheme.getColor(mContext, "calendar_hour_background");
-        mCalendarHourLabelColor = dynTheme.getColor(mContext, "calendar_hour_label");
-        mCalendarGridAreaSelected = dynTheme.getColor(mContext, "calendar_grid_area_selected");
-        mCalendarGridLineInnerHorizontalColor = dynTheme.getColor(mContext, "calendar_grid_line_inner_horizontal_color");
-        mCalendarGridLineInnerVerticalColor = dynTheme.getColor(mContext, "calendar_grid_line_inner_vertical_color");
-        mPressedColor = dynTheme.getColor(mContext, "pressed");
-        mClickedColor = dynTheme.getColor(mContext, "day_event_clicked_background_color");
-        mEventTextColor = dynTheme.getColor(mContext, "calendar_event_text_color");
-        mMoreEventsTextColor = dynTheme.getColor(mContext, "month_event_other_color");
-
-        mEventTextPaint.setTextSize(EVENT_TEXT_FONT_SIZE);
-        mEventTextPaint.setTextAlign(Paint.Align.LEFT);
-        mEventTextPaint.setAntiAlias(true);
-
-        int gridLineColor = mResources.getColor(R.color.calendar_grid_line_highlight_color);
-        Paint p = mSelectionPaint;
-        p.setColor(gridLineColor);
-        p.setStyle(Style.FILL);
-        p.setAntiAlias(false);
-
-        p = mPaint;
-        p.setAntiAlias(true);
-
-        // Allocate space for 2 weeks worth of weekday names so that we can
-        // easily start the week display at any week day.
-        mDayStrs = new String[14];
-
-        // Also create an array of 2-letter abbreviations.
-        mDayStrs2Letter = new String[14];
-
-        for (int i = Calendar.SUNDAY; i <= Calendar.SATURDAY; i++) {
-            int index = i - Calendar.SUNDAY;
-            // e.g. Tue for Tuesday
-            mDayStrs[index] = DateUtils.getDayOfWeekString(i, DateUtils.LENGTH_MEDIUM);
-            mDayStrs[index + 7] = mDayStrs[index];
-            // e.g. Tu for Tuesday
-            mDayStrs2Letter[index] = DateUtils.getDayOfWeekString(i, DateUtils.LENGTH_SHORT);
-
-            // If we don't have 2-letter day strings, fall back to 1-letter.
-            if (mDayStrs2Letter[index].equals(mDayStrs[index])) {
-                mDayStrs2Letter[index] = DateUtils.getDayOfWeekString(i, DateUtils.LENGTH_SHORTEST);
-            }
-
-            mDayStrs2Letter[index + 7] = mDayStrs2Letter[index];
-        }
-
-        // Figure out how much space we need for the 3-letter abbrev names
-        // in the worst case.
-        p.setTextSize(DATE_HEADER_FONT_SIZE);
-        p.setTypeface(mBold);
-        String[] dateStrs = {" 28", " 30"};
-        mDateStrWidth = computeMaxStringWidth(0, dateStrs, p);
-        p.setTextSize(DAY_HEADER_FONT_SIZE);
-        mDateStrWidth += computeMaxStringWidth(0, mDayStrs, p);
-
-        p.setTextSize(HOURS_TEXT_SIZE);
-        p.setTypeface(null);
-        handleOnResume();
-
-        String[] timeStrs = {"12 AM", "12 PM", "22:00"};
-        p.setTextSize(HOURS_TEXT_SIZE);
-        mHoursWidth = HOURS_MARGIN + computeMaxStringWidth(mHoursWidth, timeStrs, p);
-
-        GRID_LINE_LEFT_MARGIN = mHoursWidth;
-
-        LayoutInflater inflater;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mPopupView = inflater.inflate(R.layout.bubble_event, null);
-        mPopupView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-        mPopup = new PopupWindow(context);
-        mPopup.setContentView(mPopupView);
-        Resources.Theme dialogTheme = getResources().newTheme();
-        dialogTheme.applyStyle(android.R.style.Theme_Dialog, true);
-        TypedArray ta = dialogTheme.obtainStyledAttributes(new int[]{
-                android.R.attr.windowBackground});
-        mPopup.setBackgroundDrawable(ta.getDrawable(0));
-        ta.recycle();
-
-        // Enable touching the popup window
-        mPopupView.setOnClickListener(this);
-        // Catch long clicks for creating a new event
-        setOnLongClickListener(this);
-
-        mBaseDate = new Time(Utils.getTimeZone(context, mTZUpdater));
-        long millis = System.currentTimeMillis();
-        mBaseDate.set(millis);
-
-        mEarliestStartHour = new int[mNumDays];
-        mHasAllDayEvent = new boolean[mNumDays];
-
-        // mLines is the array of points used with Canvas.drawLines() in
-        // drawGridBackground() and drawAllDayEvents().  It's size depends
-        // on the max number of lines that can ever be drawn by any single
-        // drawLines() call in either of those methods.
-        final int maxGridLines = (24 + 1)  // max horizontal lines we might draw
-                + (mNumDays + 1); // max vertical lines we might draw
-        mLines = new float[maxGridLines * 4];
     }
 
     /**
@@ -989,90 +807,136 @@ public class DayView extends View implements
         mFirstHourOffset = 0;
     }
 
+    private void init(Context context) {
+        setFocusable(true);
 
-    /**
-     * method used to set date time, which is passed through parameter
-     */
-    public void setSelected(Time time, boolean ignoreTime, boolean animateToday) {
-        mBaseDate.set(time);
-        setSelectedHour(mBaseDate.hour);
-        setSelectedEvent(null);
-        mPrevSelectedEvent = null;
-        long millis = mBaseDate.toMillis(false /* use isDst */);
-        setSelectedDay(Time.getJulianDay(millis, mBaseDate.gmtoff));
-        mSelectedEvents.clear();
-        mComputeSelectedEvents = true;
+        // Allow focus in touch mode so that we can do keyboard shortcuts
+        // even after we've entered touch mode.
+        setFocusableInTouchMode(true);
+        setClickable(true);
 
-        int gotoY = Integer.MIN_VALUE;
 
-        if (!ignoreTime && mGridAreaHeight != -1) {
-            int lastHour = 0;
+        mFirstDayOfWeek = Utils.getFirstDayOfWeek(context);
 
-            if (mBaseDate.hour < mFirstHour) {
-                // Above visible region
-                gotoY = mBaseDate.hour * (mCellHeight + HOUR_GAP);
-            } else {
-                lastHour = (mGridAreaHeight - mFirstHourOffset) / (mCellHeight + HOUR_GAP)
-                        + mFirstHour;
+        mCurrentTime = new Time(timeZone);
+        long currentTime = System.currentTimeMillis();
+        mCurrentTime.set(currentTime);
+        mTodayJulianDay = Time.getJulianDay(currentTime, mCurrentTime.gmtoff);
 
-                if (mBaseDate.hour >= lastHour) {
-                    // Below visible region
+        DynamicTheme dynTheme = new DynamicTheme();
+        mWeek_todayColor = dynTheme.getColor(mContext, "week_today");
+        mWeek_saturdayColor = dynTheme.getColor(mContext, "week_saturday");
+        mWeek_sundayColor = dynTheme.getColor(mContext, "week_sunday");
+        mCalendarDateBannerTextColor = dynTheme.getColor(mContext, "calendar_date_banner_text_color");
+        mFutureBgColorRes = dynTheme.getColor(mContext, "calendar_future_bg_color");
+        mBgColor = dynTheme.getColor(mContext, "calendar_hour_background");
+        mCalendarHourLabelColor = dynTheme.getColor(mContext, "calendar_hour_label");
+        mCalendarGridAreaSelected = dynTheme.getColor(mContext, "calendar_grid_area_selected");
+        mCalendarGridLineInnerHorizontalColor = dynTheme.getColor(mContext, "calendar_grid_line_inner_horizontal_color");
+        mCalendarGridLineInnerVerticalColor = dynTheme.getColor(mContext, "calendar_grid_line_inner_vertical_color");
+        mPressedColor = dynTheme.getColor(mContext, "pressed");
+        mClickedColor = dynTheme.getColor(mContext, "day_event_clicked_background_color");
+        mEventTextColor = dynTheme.getColor(mContext, "calendar_event_text_color");
+        mMoreEventsTextColor = dynTheme.getColor(mContext, "month_event_other_color");
 
-                    // target hour + 1 (to give it room to see the event) -
-                    // grid height (to get the y of the top of the visible
-                    // region)
-                    gotoY = (int) ((mBaseDate.hour + 1 + mBaseDate.minute / 60.0f)
-                            * (mCellHeight + HOUR_GAP) - mGridAreaHeight);
-                }
+        mEventTextPaint.setTextSize(EVENT_TEXT_FONT_SIZE);
+        mEventTextPaint.setTextAlign(Align.LEFT);
+        mEventTextPaint.setAntiAlias(true);
+
+        int gridLineColor = mResources.getColor(R.color.calendar_grid_line_highlight_color);
+        Paint p = mSelectionPaint;
+        p.setColor(gridLineColor);
+        p.setStyle(Style.FILL);
+        p.setAntiAlias(false);
+
+        p = mPaint;
+        p.setAntiAlias(true);
+
+        // Allocate space for 2 weeks worth of weekday names so that we can
+        // easily start the week display at any week day.
+        mDayStrs = new String[14];
+
+        // Also create an array of 2-letter abbreviations.
+        mDayStrs2Letter = new String[14];
+
+        for (int i = Calendar.SUNDAY; i <= Calendar.SATURDAY; i++) {
+            int index = i - Calendar.SUNDAY;
+            // e.g. Tue for Tuesday
+            mDayStrs[index] = DateUtils.getDayOfWeekString(i, DateUtils.LENGTH_MEDIUM);
+            mDayStrs[index + 7] = mDayStrs[index];
+            // e.g. Tu for Tuesday
+            mDayStrs2Letter[index] = DateUtils.getDayOfWeekString(i, DateUtils.LENGTH_SHORT);
+
+            // If we don't have 2-letter day strings, fall back to 1-letter.
+            if (mDayStrs2Letter[index].equals(mDayStrs[index])) {
+                mDayStrs2Letter[index] = DateUtils.getDayOfWeekString(i, DateUtils.LENGTH_SHORTEST);
             }
 
-            if (DEBUG) {
-                Log.e(TAG, "Go " + gotoY + " 1st " + mFirstHour + ":" + mFirstHourOffset + "CH "
-                        + (mCellHeight + HOUR_GAP) + " lh " + lastHour + " gh " + mGridAreaHeight
-                        + " ymax " + mMaxViewStartY);
-            }
-
-            if (gotoY > mMaxViewStartY) {
-                gotoY = mMaxViewStartY;
-            } else if (gotoY < 0 && gotoY != Integer.MIN_VALUE) {
-                gotoY = 0;
-            }
+            mDayStrs2Letter[index + 7] = mDayStrs2Letter[index];
         }
 
-        recalc();
+        // Figure out how much space we need for the 3-letter abbrev names
+        // in the worst case.
+        p.setTextSize(DATE_HEADER_FONT_SIZE);
+        p.setTypeface(mBold);
+        String[] dateStrs = {" 28", " 30"};
+        mDateStrWidth = computeMaxStringWidth(0, dateStrs, p);
+        p.setTextSize(DAY_HEADER_FONT_SIZE);
+        mDateStrWidth += computeMaxStringWidth(0, mDayStrs, p);
 
-        mRemeasure = true;
-        invalidate();
+        p.setTextSize(HOURS_TEXT_SIZE);
+        p.setTypeface(null);
+        handleOnResume();
 
-        boolean delayAnimateToday = false;
-        if (gotoY != Integer.MIN_VALUE) {
-            ValueAnimator scrollAnim = ObjectAnimator.ofInt(this, "viewStartY", mViewStartY, gotoY);
-            scrollAnim.setDuration(GOTO_SCROLL_DURATION);
-            scrollAnim.setInterpolator(new AccelerateDecelerateInterpolator());
-            scrollAnim.addListener(mAnimatorListener);
-            scrollAnim.start();
-            delayAnimateToday = true;
+        String[] timeStrs = {"12 AM", "12 PM", "22:00"};
+        p.setTextSize(HOURS_TEXT_SIZE);
+        mHoursWidth = HOURS_MARGIN + computeMaxStringWidth(mHoursWidth, timeStrs, p);
+
+        GRID_LINE_LEFT_MARGIN = mHoursWidth;
+
+        LayoutInflater inflater;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mPopupView = inflater.inflate(R.layout.bubble_event, null);
+        mPopupView.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        mPopup = new PopupWindow(context);
+        mPopup.setContentView(mPopupView);
+        Resources.Theme dialogTheme = getResources().newTheme();
+        dialogTheme.applyStyle(android.R.style.Theme_Dialog, true);
+        TypedArray ta = dialogTheme.obtainStyledAttributes(new int[]{
+                android.R.attr.windowBackground});
+        mPopup.setBackgroundDrawable(ta.getDrawable(0));
+        ta.recycle();
+
+        // Enable touching the popup window
+        mPopupView.setOnClickListener(this);
+        // Catch long clicks for creating a new event
+        setOnLongClickListener(this);
+
+        mBaseDate = new Time(timeZone);
+
+        long millis = CalendarController.savedTime;  //System.currentTimeMillis();
+        mBaseDate.set(millis);
+
+       /* mBaseDate = new Time(Utils.getTimeZone(context, mTZUpdater));
+        long millis = System.currentTimeMillis();
+        if(savedTime > 0) {
+            mBaseDate.set(savedTime);
+        } else {
+            mBaseDate.set(millis);
         }
-        if (animateToday) {
-            synchronized (mTodayAnimatorListener) {
-                if (mTodayAnimator != null) {
-                    mTodayAnimator.removeAllListeners();
-                    mTodayAnimator.cancel();
-                }
-                mTodayAnimator = ObjectAnimator.ofInt(this, "animateTodayAlpha",
-                        mAnimateTodayAlpha, 255);
-                mAnimateToday = true;
-                mTodayAnimatorListener.setFadingIn(true);
-                mTodayAnimatorListener.setAnimator(mTodayAnimator);
-                mTodayAnimator.addListener(mTodayAnimatorListener);
-                mTodayAnimator.setDuration(150);
-                if (delayAnimateToday) {
-                    mTodayAnimator.setStartDelay(GOTO_SCROLL_DURATION);
-                }
-                mTodayAnimator.start();
-            }
-        }
-        sendAccessibilityEventAsNeeded(false);
+*/
+        mEarliestStartHour = new int[mNumDays];
+        mHasAllDayEvent = new boolean[mNumDays];
+
+        // mLines is the array of points used with Canvas.drawLines() in
+        // drawGridBackground() and drawAllDayEvents().  It's size depends
+        // on the max number of lines that can ever be drawn by any single
+        // drawLines() call in either of those methods.
+        final int maxGridLines = (24 + 1)  // max horizontal lines we might draw
+                + (mNumDays + 1); // max vertical lines we might draw
+        mLines = new float[maxGridLines * 4];
     }
 
     // Called from animation framework via reflection. Do not remove
@@ -1082,7 +946,6 @@ public class DayView extends View implements
         }
 
         mViewStartY = viewStartY;
-
         computeFirstHour();
         invalidate();
     }
@@ -1110,8 +973,12 @@ public class DayView extends View implements
     }
 
     public void updateTitle() {
+        //mBaseDate.set(CalendarController.CURRENT_SELECTED_TIME);
         Time start = new Time(mBaseDate);
-        start.normalize(true);
+        start.set(CalendarController.savedTime);
+        start.normalize(false);
+
+        //start.set(CalendarController.CURRENT_SELECTED_TIME);
         Time end = new Time(start);
         end.monthDay += mNumDays - 1;
         // Move it forward one minute so the formatter doesn't loose a day
@@ -1128,11 +995,6 @@ public class DayView extends View implements
                 formatFlags |= DateUtils.FORMAT_ABBREV_MONTH;
             }
         }
-
-        mEventClickListener.onDayChange(start);
-
-        // mController.sendEvent(this, EventType.UPDATE_TITLE, start, end, null, -1, ViewType.CURRENT,
-        //         formatFlags, null, null);
     }
 
     /**
@@ -1244,6 +1106,9 @@ public class DayView extends View implements
      * loading new events.  This can change if there are all-day events.
      */
     private void remeasure(int width, int height) {
+
+        Log.e("Dates", mFirstJulianDay + "  " + mLastJulianDay);
+
         // Shrink to fit available space but make sure we can display at least two events
         MAX_UNEXPANDED_ALLDAY_HEIGHT = (int) (MIN_UNEXPANDED_ALLDAY_EVENT_HEIGHT * 4);
         MAX_UNEXPANDED_ALLDAY_HEIGHT = Math.min(MAX_UNEXPANDED_ALLDAY_HEIGHT, height / 6);
@@ -1321,7 +1186,7 @@ public class DayView extends View implements
 
         final long minimumDurationMillis = (long)
                 (MIN_EVENT_HEIGHT * DateUtils.MINUTE_IN_MILLIS / (mCellHeight / 60.0f));
-        EventHelper.computePositions(mEvents, minimumDurationMillis);
+        eventHelper.computePositions(mEvents, minimumDurationMillis);
 
         // Compute the top of our reachable view
         mMaxViewStartY = HOUR_GAP + 24 * (mCellHeight + HOUR_GAP) - mGridAreaHeight;
@@ -1760,103 +1625,89 @@ public class DayView extends View implements
     }
 
     /**
-     * @param b
-     * @param calEvent
+     * method used to set date time, which is passed through parameter
      */
-    /*private void appendEventAccessibilityString(StringBuilder b, Event calEvent) {
-        b.append(calEvent.getTitleAndLocation());
-        b.append(PERIOD_SPACE);
-        String when;
-        int flags = DateUtils.FORMAT_SHOW_DATE;
-        if (calEvent.allDay) {
-            flags |= DateUtils.FORMAT_UTC | DateUtils.FORMAT_SHOW_WEEKDAY;
-        } else {
-            flags |= DateUtils.FORMAT_SHOW_TIME;
-            if (DateFormat.is24HourFormat(mContext)) {
-                flags |= DateUtils.FORMAT_24HOUR;
+    public void setSelected(Time time, boolean ignoreTime, boolean animateToday) {
+        mBaseDate.set(time);
+        mController.setTime(time.toMillis(false));
+        setSelectedHour(mBaseDate.hour);
+        setSelectedEvent(null);
+        mPrevSelectedEvent = null;
+        long millis = mBaseDate.toMillis(false /* use isDst */);
+        setSelectedDay(Time.getJulianDay(millis, mBaseDate.gmtoff));
+        mSelectedEvents.clear();
+        mComputeSelectedEvents = true;
+
+        int gotoY = Integer.MIN_VALUE;
+
+        if (!ignoreTime && mGridAreaHeight != -1) {
+            int lastHour = 0;
+
+            if (mBaseDate.hour < mFirstHour) {
+                // Above visible region
+                gotoY = mBaseDate.hour * (mCellHeight + HOUR_GAP);
+            } else {
+                lastHour = (mGridAreaHeight - mFirstHourOffset) / (mCellHeight + HOUR_GAP)
+                        + mFirstHour;
+
+                if (mBaseDate.hour >= lastHour) {
+                    // Below visible region
+
+                    // target hour + 1 (to give it room to see the event) -
+                    // grid height (to get the y of the top of the visible
+                    // region)
+                    gotoY = (int) ((mBaseDate.hour + 1 + mBaseDate.minute / 60.0f)
+                            * (mCellHeight + HOUR_GAP) - mGridAreaHeight);
+                }
+            }
+
+            if (DEBUG) {
+                Log.e(TAG, "Go " + gotoY + " 1st " + mFirstHour + ":" + mFirstHourOffset + "CH "
+                        + (mCellHeight + HOUR_GAP) + " lh " + lastHour + " gh " + mGridAreaHeight
+                        + " ymax " + mMaxViewStartY);
+            }
+
+            if (gotoY > mMaxViewStartY) {
+                gotoY = mMaxViewStartY;
+            } else if (gotoY < 0 && gotoY != Integer.MIN_VALUE) {
+                gotoY = 0;
             }
         }
-        when = Utils.formatDateRange(mContext, calEvent.startMillis, calEvent.endMillis, flags);
-        b.append(when);
-        b.append(PERIOD_SPACE);
-    }*/
-    private View switchViews(boolean forward, float xOffSet, float width, float velocity) {
-        mAnimationDistance = width - xOffSet;
-        if (DEBUG) {
-            Log.d(TAG, "switchViews(" + forward + ") O:" + xOffSet + " Dist:" + mAnimationDistance);
+
+        recalc();
+
+        mRemeasure = true;
+        invalidate();
+
+        boolean delayAnimateToday = false;
+        if (gotoY != Integer.MIN_VALUE) {
+            ValueAnimator scrollAnim = ObjectAnimator.ofInt(this, "viewStartY", mViewStartY, gotoY);
+            scrollAnim.setDuration(GOTO_SCROLL_DURATION);
+            scrollAnim.setInterpolator(new AccelerateDecelerateInterpolator());
+            scrollAnim.addListener(mAnimatorListener);
+            scrollAnim.start();
+            delayAnimateToday = true;
         }
-
-        float progress = Math.abs(xOffSet) / width;
-        if (progress > 1.0f) {
-            progress = 1.0f;
+        if (animateToday) {
+            synchronized (mTodayAnimatorListener) {
+                if (mTodayAnimator != null) {
+                    mTodayAnimator.removeAllListeners();
+                    mTodayAnimator.cancel();
+                }
+                mTodayAnimator = ObjectAnimator.ofInt(this, "animateTodayAlpha",
+                        mAnimateTodayAlpha, 255);
+                mAnimateToday = true;
+                mTodayAnimatorListener.setFadingIn(true);
+                mTodayAnimatorListener.setAnimator(mTodayAnimator);
+                mTodayAnimator.addListener(mTodayAnimatorListener);
+                mTodayAnimator.setDuration(150);
+                if (delayAnimateToday) {
+                    mTodayAnimator.setStartDelay(GOTO_SCROLL_DURATION);
+                }
+                mTodayAnimator.start();
+            }
         }
-
-        float inFromXValue, inToXValue;
-        float outFromXValue, outToXValue;
-        if (forward) {
-            inFromXValue = 1.0f - progress;
-            inToXValue = 0.0f;
-            outFromXValue = -progress;
-            outToXValue = -1.0f;
-        } else {
-            inFromXValue = progress - 1.0f;
-            inToXValue = 0.0f;
-            outFromXValue = progress;
-            outToXValue = 1.0f;
-        }
-
-        final Time start = new Time(mBaseDate.timezone);
-        start.set(mController.getTime());
-        if (forward) {
-            start.monthDay += mNumDays;
-        } else {
-            start.monthDay -= mNumDays;
-        }
-        mController.setTime(start.normalize(true));
-
-        Time newSelected = start;
-
-        if (mNumDays == 7) {
-            newSelected = new Time(start);
-            adjustToBeginningOfWeek(start);
-        }
-
-        final Time end = new Time(start);
-        end.monthDay += mNumDays - 1;
-
-        // We have to allocate these animation objects each time we switch views
-        // because that is the only way to set the animation parameters.
-        TranslateAnimation inAnimation = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, inFromXValue,
-                Animation.RELATIVE_TO_SELF, inToXValue,
-                Animation.ABSOLUTE, 0.0f,
-                Animation.ABSOLUTE, 0.0f);
-
-        TranslateAnimation outAnimation = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, outFromXValue,
-                Animation.RELATIVE_TO_SELF, outToXValue,
-                Animation.ABSOLUTE, 0.0f,
-                Animation.ABSOLUTE, 0.0f);
-
-        long duration = calculateDuration(width - Math.abs(xOffSet), width, velocity);
-        inAnimation.setDuration(duration);
-        inAnimation.setInterpolator(mHScrollInterpolator);
-        outAnimation.setInterpolator(mHScrollInterpolator);
-        outAnimation.setDuration(duration);
-        outAnimation.setAnimationListener(new GotoBroadcaster(start, end));
-        mViewSwitcher.setInAnimation(inAnimation);
-        mViewSwitcher.setOutAnimation(outAnimation);
-
-        DayView view = (DayView) mViewSwitcher.getCurrentView();
-        view.cleanup();
-        mViewSwitcher.showNext();
-        view = (DayView) mViewSwitcher.getCurrentView();
-        view.setSelected(newSelected, true, false);
-        view.requestFocus();
-        view.reloadEvents();
-        view.updateTitle();
-        view.restartCurrentTimeUpdates();
-        return view;
+        sendAccessibilityEventAsNeeded(false);
     }
 
     // This is called after scrolling stops to move the selected hour
@@ -1956,9 +1807,120 @@ public class DayView extends View implements
         mLastReloadMillis = 0;
     }
 
+    /**
+     * @param b
+     * @param calEvent
+     */
+    /*private void appendEventAccessibilityString(StringBuilder b, Event calEvent) {
+        b.append(calEvent.getTitleAndLocation());
+        b.append(PERIOD_SPACE);
+        String when;
+        int flags = DateUtils.FORMAT_SHOW_DATE;
+        if (calEvent.allDay) {
+            flags |= DateUtils.FORMAT_UTC | DateUtils.FORMAT_SHOW_WEEKDAY;
+        } else {
+            flags |= DateUtils.FORMAT_SHOW_TIME;
+            if (DateFormat.is24HourFormat(mContext)) {
+                flags |= DateUtils.FORMAT_24HOUR;
+            }
+        }
+        when = Utils.formatDateRange(mContext, calEvent.startMillis, calEvent.endMillis, flags);
+        b.append(when);
+        b.append(PERIOD_SPACE);
+    }*/
 
-    public void setmEvents(ArrayList<Event> mEvents) {
-        this.mEvents = mEvents;
+    private View switchViews(boolean forward, float xOffSet, float width, float velocity) {
+        Log.e("Item", mEvents.size() + " ");
+
+        mAnimationDistance = width - xOffSet;
+        if (DEBUG) {
+            Log.d(TAG, "switchViews(" + forward + ") O:" + xOffSet + " Dist:" + mAnimationDistance);
+        }
+
+        float progress = Math.abs(xOffSet) / width;
+        if (progress > 1.0f) {
+            progress = 1.0f;
+        }
+
+        float inFromXValue, inToXValue;
+        float outFromXValue, outToXValue;
+        if (forward) {
+            inFromXValue = 1.0f - progress;
+            inToXValue = 0.0f;
+            outFromXValue = -progress;
+            outToXValue = -1.0f;
+        } else {
+            inFromXValue = progress - 1.0f;
+            inToXValue = 0.0f;
+            outFromXValue = progress;
+            outToXValue = 1.0f;
+        }
+
+        final Time start = new Time(mBaseDate.timezone);
+        start.set(mController.getTime());
+        if (forward) {
+            start.monthDay += mNumDays;
+        } else {
+            start.monthDay -= mNumDays;
+        }
+        mController.setTime(start.normalize(true));
+
+        Time newSelected = start;
+
+        if (mNumDays == 7) {
+            newSelected = new Time(start);
+            adjustToBeginningOfWeek(start);
+        }
+
+        final Time end = new Time(start);
+        end.monthDay += mNumDays - 1;
+
+        // We have to allocate these animation objects each time we switch views
+        // because that is the only way to set the animation parameters.
+        TranslateAnimation inAnimation = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, inFromXValue,
+                Animation.RELATIVE_TO_SELF, inToXValue,
+                Animation.ABSOLUTE, 0.0f,
+                Animation.ABSOLUTE, 0.0f);
+
+        TranslateAnimation outAnimation = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, outFromXValue,
+                Animation.RELATIVE_TO_SELF, outToXValue,
+                Animation.ABSOLUTE, 0.0f,
+                Animation.ABSOLUTE, 0.0f);
+
+        long duration = calculateDuration(width - Math.abs(xOffSet), width, velocity);
+        inAnimation.setDuration(duration);
+        inAnimation.setInterpolator(mHScrollInterpolator);
+        outAnimation.setInterpolator(mHScrollInterpolator);
+        outAnimation.setDuration(duration);
+        outAnimation.setAnimationListener(new GotoBroadcaster(start, end));
+        mViewSwitcher.setInAnimation(inAnimation);
+        mViewSwitcher.setOutAnimation(outAnimation);
+
+        DayView view = (DayView) mViewSwitcher.getCurrentView();
+        view.cleanup();
+        mViewSwitcher.showNext();
+        view = (DayView) mViewSwitcher.getCurrentView();
+        view.setSelected(newSelected, true, false);
+        view.requestFocus();
+        view.reloadEvents();
+        view.updateTitle();
+        view.restartCurrentTimeUpdates();
+        mEventClickListener.onDayChange(start, end, mNumDays == 1);
+        return view;
+    }
+
+    public void setmEvents(ArrayList<Event> eventLists) {
+        this.mEvents = eventLists;
+    }
+
+    public ArrayList<Event> getEvents() {
+        return this.mEvents;
+    }
+
+    public void setEventTemp(ArrayList<Event> tempEventList) {
+        this.tempEventList = tempEventList;
     }
 
     void reloadEvents() {
@@ -1970,7 +1932,7 @@ public class DayView extends View implements
         mSelectedEvents.clear();
 
         // The start date is the beginning of the week at 12am
-        Time weekStart = new Time(Utils.getTimeZone(mContext, mTZUpdater));
+        Time weekStart = new Time(timeZone);//Utils.getTimeZone(mContext, mTZUpdater));
         weekStart.set(mBaseDate);
         weekStart.hour = 0;
         weekStart.minute = 0;
@@ -1984,10 +1946,13 @@ public class DayView extends View implements
         mLastReloadMillis = millis;
 
         // load events in the background
-//        mContext.startProgressSpinner();
+        // mContext.startProgressSpinner();
         // mEventLoader.loadEventsInBackground(mNumDays, events, mFirstJulianDay, new Runnable() {
 
         // public void run() {
+        //addEvent();
+        //mEvents = this.tempEventList;
+
         boolean fadeinEvents = mFirstJulianDay != mLoadedFirstJulianDay;
         mLoadedFirstJulianDay = mFirstJulianDay;
         if (mAllDayEvents == null) {
@@ -2031,8 +1996,9 @@ public class DayView extends View implements
             }
             mEventsCrossFadeAnimation.start();
         } else {
-            invalidate();
+            ///invalidate();
         }
+        invalidate();
         // }
         //}, mCancelCallback);
     }
@@ -2247,7 +2213,8 @@ public class DayView extends View implements
     // Computes the x position for the left side of the given day (base 0)
     private int computeDayLeftPosition(int day) {
         int effectiveWidth = mViewWidth - mHoursWidth;
-        return day * effectiveWidth / mNumDays + mHoursWidth;
+        int value = day * effectiveWidth / mNumDays + mHoursWidth;
+        return value;
     }
 
     private void drawAllDayHighlights(Rect r, Canvas canvas, Paint p) {
@@ -2303,25 +2270,25 @@ public class DayView extends View implements
     }
 
     private void drawDayHeaderLoop(Rect r, Canvas canvas, Paint p) {
-        // Draw the horizontal day background banner
-        // p.setColor(mCalendarDateBannerBackground);
-        // r.top = 0;
-        // r.bottom = DAY_HEADER_HEIGHT;
-        // r.left = 0;
-        // r.right = mHoursWidth + mNumDays * (mCellWidth + DAY_GAP);
-        // canvas.drawRect(r, p);
-        //
-        // Fill the extra space on the right side with the default background
-        // r.left = r.right;
-        // r.right = mViewWidth;
-        // p.setColor(mCalendarGridAreaBackground);
-        // canvas.drawRect(r, p);
-        if (mNumDays == 1 && ONE_DAY_HEADER_HEIGHT == 0) {
+        //Draw the horizontal day background banner
+         /*p.setColor(Color.parseColor("#000000"));
+         r.top = 0;
+         r.bottom = DAY_HEADER_HEIGHT;
+         r.left = 0;
+         r.right = mHoursWidth + mNumDays * (mCellWidth + DAY_GAP);
+         canvas.drawRect(r, p);
+
+         //Fill the extra space on the right side with the default background
+         r.left = r.right;
+         r.right = mViewWidth;
+         p.setColor(Color.parseColor("#000000"));
+         canvas.drawRect(r, p);*/
+        /*if (mNumDays == 1 && ONE_DAY_HEADER_HEIGHT == 0) {
             return;
-        }
+        }*/
 
         p.setTypeface(mBold);
-        p.setTextAlign(Paint.Align.RIGHT);
+        p.setTextAlign(Align.RIGHT);
         int cell = mFirstJulianDay;
 
         String[] dayNames = mDayStrs;
@@ -2404,7 +2371,6 @@ public class DayView extends View implements
         }
         p.setAntiAlias(true);
         p.setAlpha(alpha);
-
         drawSelectedRect(r, canvas, p);
     }
 
@@ -2442,9 +2408,9 @@ public class DayView extends View implements
                         midY, p);
                 canvas.drawLine(midX, r.top + verticalPadding, midX, r.bottom - verticalPadding, p);
             } else {
-                p.setStyle(Paint.Style.FILL);
+                p.setStyle(Style.FILL);
                 p.setTextSize(NEW_EVENT_HINT_FONT_SIZE);
-                p.setTextAlign(Paint.Align.LEFT);
+                p.setTextAlign(Align.LEFT);
                 p.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 canvas.drawText(mNewEventHintString, r.left + EVENT_TEXT_LEFT_MARGIN,
                         r.top + Math.abs(p.getFontMetrics().ascent) + EVENT_TEXT_TOP_MARGIN, p);
@@ -2497,7 +2463,7 @@ public class DayView extends View implements
             x = computeDayLeftPosition(day) + DAY_HEADER_RIGHT_MARGIN;
             p.setTextAlign(Align.LEFT);
             p.setTextSize(DATE_HEADER_FONT_SIZE);
-
+            isToday = todayIndex == day;
             p.setTypeface(todayIndex == day ? mBold : Typeface.DEFAULT);
             p.setColor(todayIndex == day ? mWeek_todayColor : color);
             canvas.drawText(dateNumStr, x, y, p);
@@ -2535,20 +2501,30 @@ public class DayView extends View implements
 
             // Draw day of the week
             x = computeDayLeftPosition(day) + DAY_HEADER_ONE_DAY_LEFT_MARGIN;
-            p.setTextSize(DAY_HEADER_FONT_SIZE);
+            /*p.setTextSize(DAY_HEADER_FONT_SIZE);
+            p.setColor(todayIndex == day ? Color.parseColor("#FF2290F9")
+                    : Color.parseColor("#868992"));
             p.setTypeface(Typeface.DEFAULT);
-            canvas.drawText(dayStr, x, y, p);
+            canvas.drawText(dayStr, x, y, p);*/
 
             // Draw day of the month
-            x += p.measureText(dayStr) + DAY_HEADER_ONE_DAY_RIGHT_MARGIN;
-            p.setTextSize(DATE_HEADER_FONT_SIZE);
-            p.setTypeface(todayIndex == day ? mBold : Typeface.DEFAULT);
-            canvas.drawText(dateNumStr, x, y, p);
+            //x += p.measureText(dayStr) + DAY_HEADER_ONE_DAY_RIGHT_MARGIN;
+            p.setTextSize(DAY_HEADER_FONT_SIZE);
+            p.setColor(todayIndex == day ? mWeek_todayColor : color);
+            p.setTypeface(Typeface.DEFAULT);
+            //canvas.drawText(dateNumStr + "/ " + mBaseDate.month + "/ " + mBaseDate.year, x, y, p);
+            canvas.drawText(getFormattedDate(), x, y, p);
         }
     }
 
+    String getFormattedDate() {
+        Date date = new Date();
+        date.setTime(mBaseDate.toMillis(true));
+        return new SimpleDateFormat(DATE_FORMAT_FOR_DAY_VIEW).format(date);
+    }
+
     private void drawGridBackground(Rect r, Canvas canvas, Paint p) {
-        Paint.Style savedStyle = p.getStyle();
+        Style savedStyle = p.getStyle();
 
         final float stopX = computeDayLeftPosition(mNumDays);
         float y = 0;
@@ -2765,7 +2741,7 @@ public class DayView extends View implements
             if (event.title != null) {
                 // MAX - 1 since we add a space
                 bob.append(drawTextSanitizer(event.title.toString(), MAX_EVENT_TEXT_LEN - 1));
-                bob.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
+                bob.setSpan(new StyleSpan(Typeface.BOLD), 0,
                         bob.length(), 0);
                 bob.append(' ');
             }
@@ -2803,7 +2779,7 @@ public class DayView extends View implements
     private void drawAllDayEvents(int firstDay, int numDays, Canvas canvas, Paint p) {
 
         p.setTextSize(NORMAL_FONT_SIZE);
-        p.setTextAlign(Paint.Align.LEFT);
+        p.setTextAlign(Align.LEFT);
         Paint eventTextPaint = mEventTextPaint;
 
         final float startY = DAY_HEADER_HEIGHT;
@@ -3260,7 +3236,7 @@ public class DayView extends View implements
                 int neighborRight = (int) neighbor.right;
                 if (neighbor.endTime <= startTime) {
                     // This neighbor is entirely above me.
-                    // If we overlap the same column, than compute the distance.
+                    // If we overlap the same column, then compute the distance.
                     if (neighborLeft < right && neighborRight > left) {
                         int distance = startTime - neighbor.endTime;
                         if (distance < upDistanceMin) {
@@ -3291,7 +3267,7 @@ public class DayView extends View implements
                     }
                 } else if (neighbor.startTime >= endTime) {
                     // This neighbor is entirely below me.
-                    // If we overlap the same column, than compute the distance.
+                    // If we overlap the same column, then compute the distance.
                     if (neighborLeft < right && neighborRight > left) {
                         int distance = neighbor.startTime - endTime;
                         if (distance < downDistanceMin) {
@@ -3431,7 +3407,7 @@ public class DayView extends View implements
         p.setAlpha(alpha);
         p.setStyle(Style.FILL);
 
-        // If this event is selected, than use the selection color
+        // If this event is selected, then use the selection color
         if (mSelectedEvent == event && mClickedEvent != null) {
             boolean paintIt = false;
             color = 0;
@@ -3645,7 +3621,7 @@ public class DayView extends View implements
                     && oldSelectionDay == mSelectionDay && oldSelectionHour == mSelectionHour;
             if (!pressedSelected && mSelectedEvent != null) {
                 mSavedClickedEvent = mSelectedEvent;
-                mDownTouchTime = System.currentTimeMillis();
+                mDownTouchTime = CalendarController.savedTime;//System.currentTimeMillis();
                 postDelayed(mSetClick, mOnDownDelay);
             } else {
                 eventClickCleanup();
@@ -3823,9 +3799,8 @@ public class DayView extends View implements
                 Time selectedTime = new Time(mBaseDate);
                 selectedTime.setJulianDay(mSelectionDay);
                 selectedTime.hour = mSelectionHour;
-                selectedTime.normalize(true /* ignore isDst */);
-                //mController.sendEvent(this, EventType.GO_TO, null, null, selectedTime, -1,
-                //        ViewType.DAY, CalendarController.EXTRA_GOTO_DATE, null, null);
+                selectedTime.normalize(false);
+                mEventClickListener.onWeekViewHeaderDayClick(selectedTime);
             }
             return;
         }
@@ -3866,7 +3841,8 @@ public class DayView extends View implements
             }
             mClickedYLocation = yLocation;
             long clearDelay = (CLICK_DISPLAY_DURATION + mOnDownDelay) -
-                    (System.currentTimeMillis() - mDownTouchTime);
+                    //(System.currentTimeMillis() - mDownTouchTime);
+                    (CalendarController.savedTime - mDownTouchTime);
             if (clearDelay > 0) {
                 this.postDelayed(mClearClick, clearDelay);
             } else {
@@ -4136,7 +4112,6 @@ public class DayView extends View implements
                     + "\tViewStartHour: " + ViewStartHour + "\tmViewStartY:" + mViewStartY
                     + "\tmCellHeight:" + mCellHeight + " SpanY:" + detector.getCurrentSpanY());
         }
-
         return true;
     }
 
@@ -4691,6 +4666,11 @@ public class DayView extends View implements
         invalidate();
     }
 
+    public void setmIs24HourFormat(boolean mIs24HourFormat) {
+        this.mIs24HourFormat = mIs24HourFormat;
+        invalidate();
+    }
+
     class TodayAnimatorListener extends AnimatorListenerAdapter {
         private volatile Animator mAnimator = null;
         private volatile boolean mFadingIn = false;
@@ -4903,10 +4883,5 @@ public class DayView extends View implements
 
             return t;
         }
-    }
-
-    public void setmIs24HourFormat(boolean mIs24HourFormat) {
-        this.mIs24HourFormat = mIs24HourFormat;
-        invalidate();
     }
 }

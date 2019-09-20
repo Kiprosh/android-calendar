@@ -19,20 +19,66 @@ public class EventHelper {
      * @param minimumDurationMillis minimum duration acceptable as cell height of each event
      *                              rectangle in millisecond. Should be 0 when it is not determined.
      */
+    private long startDay;
+    private long endDay;
+
+    private static long removeAlldayActiveEvents(Event event, Iterator<Event> iter, long colMask) {
+        // Remove the inactive allday events. An event on the active list
+        // becomes inactive when the end day is less than the current event's
+        // start day.
+        while (iter.hasNext()) {
+            final Event active = iter.next();
+            if (active.endDay < event.startDay) {
+                colMask &= ~(1L << active.getColumn());
+                iter.remove();
+            }
+        }
+        return colMask;
+    }
+
+    private static long removeNonAlldayActiveEvents(
+            Event event, Iterator<Event> iter, long minDurationMillis, long colMask) {
+        long start = event.getStartMillis();
+        // Remove the inactive events. An event on the active list
+        // becomes inactive when its end time is less than or equal to
+        // the current event's start time.
+        while (iter.hasNext()) {
+            final Event active = iter.next();
+
+            final long duration = Math.max(
+                    active.getEndMillis() - active.getStartMillis(), minDurationMillis);
+            if ((active.getStartMillis() + duration) <= start) {
+                colMask &= ~(1L << active.getColumn());
+                iter.remove();
+            }
+        }
+        return colMask;
+    }
+
+    int findFirstZeroBit(long val) {
+        for (int ii = 0; ii < 64; ++ii) {
+            if ((val & (1L << ii)) == 0)
+                return ii;
+        }
+        return 64;
+    }
+
     /* package */
-    static void computePositions(ArrayList<Event> eventsList,
-                                 long minimumDurationMillis) {
+    void computePositions(ArrayList<Event> eventsList,
+                          long minimumDurationMillis) {
+        this.startDay = startDay;
+        this.endDay = endDay;
         if (eventsList == null) {
             return;
         }
 
         // Compute the column positions separately for the all-day events
         doComputePositions(eventsList, minimumDurationMillis, false);
-        doComputePositions(eventsList, minimumDurationMillis, true);
+        //doComputePositions(eventsList, minimumDurationMillis, true);
     }
 
-    private static void doComputePositions(ArrayList<Event> eventsList,
-                                           long minimumDurationMillis, boolean doAlldayEvents) {
+    private void doComputePositions(ArrayList<Event> eventsList,
+                                    long minimumDurationMillis, boolean doAlldayEvents) {
         final ArrayList<Event> activeList = new ArrayList<>();
         final ArrayList<Event> groupList = new ArrayList<>();
 
@@ -54,7 +100,7 @@ public class EventHelper {
                 colMask = removeAlldayActiveEvents(event, activeList.iterator(), colMask);
             }
 
-            // If the active list is empty, than reset the max columns, clear
+            // If the active list is empty, then reset the max columns, clear
             // the column bit mask, and empty the groupList.
             if (activeList.isEmpty()) {
                 for (Event ev : groupList) {
@@ -81,47 +127,6 @@ public class EventHelper {
         for (Event ev : groupList) {
             ev.setMaxColumns(maxCols);
         }
-    }
-
-    public static int findFirstZeroBit(long val) {
-        for (int ii = 0; ii < 64; ++ii) {
-            if ((val & (1L << ii)) == 0)
-                return ii;
-        }
-        return 64;
-    }
-
-    private static long removeAlldayActiveEvents(Event event, Iterator<Event> iter, long colMask) {
-        // Remove the inactive allday events. An event on the active list
-        // becomes inactive when the end day is less than the current event's
-        // start day.
-        while (iter.hasNext()) {
-            final Event active = iter.next();
-            if (active.endDay < event.startDay) {
-                colMask &= ~(1L << active.getColumn());
-                iter.remove();
-            }
-        }
-        return colMask;
-    }
-
-    private static long removeNonAlldayActiveEvents(
-            Event event, Iterator<Event> iter, long minDurationMillis, long colMask) {
-        long start = event.getStartMillis();
-        // Remove the inactive events. An event on the active list
-        // becomes inactive when it's end time is less than or equal to
-        // the current event's start time.
-        while (iter.hasNext()) {
-            final Event active = iter.next();
-
-            final long duration = Math.max(
-                    active.getEndMillis() - active.getStartMillis(), minDurationMillis);
-            if ((active.getStartMillis() + duration) <= start) {
-                colMask &= ~(1L << active.getColumn());
-                iter.remove();
-            }
-        }
-        return colMask;
     }
 
     /**

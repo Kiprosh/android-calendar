@@ -16,10 +16,12 @@
 
 package com.android.calendar;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.CalendarContract.Attendees;
-import android.text.format.DateUtils;
+import android.support.annotation.NonNull;
 
-public class Event implements Cloneable {
+public class Event implements Cloneable, Parcelable, Comparable {
 
     private static final String TAG = "CalEvent";
     private static final boolean PROFILE = false;
@@ -34,38 +36,20 @@ public class Event implements Cloneable {
      * sorted correctly with respect to events that are >24 hours (and
      * therefore show up in the allday area).
      */
-    private static final String SORT_EVENTS_BY =
-            "begin ASC, end DESC, title ASC";
-    private static final String SORT_ALLDAY_BY =
-            "startDay ASC, endDay DESC, title ASC";
     private static final String DISPLAY_AS_ALLDAY = "dispAllday";
-    // The projection to use when querying instances to build a list of events
-   /* public static final String[] EVENT_PROJECTION = new String[]{
-            Instances.TITLE,                 // 0
-            Instances.EVENT_LOCATION,        // 1
-            Instances.ALL_DAY,               // 2
-            Instances.DISPLAY_COLOR,         // 3
-            Instances.EVENT_TIMEZONE,        // 4
-            Instances.EVENT_ID,              // 5
-            Instances.BEGIN,                 // 6
-            Instances.END,                   // 7
-            Instances._ID,                   // 8
-            Instances.START_DAY,             // 9
-            Instances.END_DAY,               // 10
-            Instances.START_MINUTE,          // 11
-            Instances.END_MINUTE,            // 12
-            Instances.HAS_ALARM,             // 13
-            Instances.RRULE,                 // 14
-            Instances.RDATE,                 // 15
-            Instances.SELF_ATTENDEE_STATUS,  // 16
-            Events.ORGANIZER,                // 17
-            Events.GUESTS_CAN_MODIFY,        // 18
-            Instances.ALL_DAY + "=1 OR (" + Instances.END + "-" + Instances.BEGIN + ")>="
-                    + DateUtils.DAY_IN_MILLIS + " AS " + DISPLAY_AS_ALLDAY, // 19
-    };*/
-    private static final String EVENTS_WHERE = DISPLAY_AS_ALLDAY + "=0";
-    private static final String ALLDAY_WHERE = DISPLAY_AS_ALLDAY + "=1";
 
+
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
     public long id;
     public int color;
     public CharSequence title;
@@ -95,12 +79,62 @@ public class Event implements Cloneable {
     public Event nextLeft;
     public Event nextUp;
     public Event nextDown;
-    private int mColumn;
-    private int mMaxColumns;
+    public String aggregateId;
+    public int mColumn;
+    public int mMaxColumns;
 
+    protected Event(Parcel in) {
+        aggregateId = in.readString();
+        id = in.readLong();
+        color = in.readInt();
+        allDay = in.readByte() != 0;
+        organizer = in.readString();
+        guestsCanModify = in.readByte() != 0;
+        startDay = in.readInt();
+        endDay = in.readInt();
+        startTime = in.readInt();
+        endTime = in.readInt();
+        startMillis = in.readLong();
+        endMillis = in.readLong();
+        hasAlarm = in.readByte() != 0;
+        isRepeating = in.readByte() != 0;
+        selfAttendeeStatus = in.readInt();
+        nextRight = in.readParcelable(Event.class.getClassLoader());
+        nextLeft = in.readParcelable(Event.class.getClassLoader());
+        nextUp = in.readParcelable(Event.class.getClassLoader());
+        nextDown = in.readParcelable(Event.class.getClassLoader());
+    }
+
+    public static final Event newInstance() {
+        Event e = new Event();
+        e.id = 0;
+        e.title = null;
+        e.color = 0;
+        e.location = null;
+        e.allDay = true;
+        e.startDay = 0;
+        e.endDay = 0;
+        e.startTime = 0;
+        e.endTime = 0;
+        e.startMillis = 0;
+        e.endMillis = 0;
+        e.hasAlarm = false;
+        e.isRepeating = false;
+        e.selfAttendeeStatus = Attendees.ATTENDEE_STATUS_NONE;
+        return e;
+    }
+
+    public String getAggregateId() {
+        return aggregateId;
+    }
 
     public Event() {
     }
+
+     /*eventList.add(new Event(1059, -5242874, "Single session 1", "", true, "kavitamp19@googlemail.com", false
+                                     , 2458729, 2458729, 990, 1050, 0, 0, false, false, 0, 0.0f, 0.0f,
+                                     0.0f, 0.0f, null, null, null, null, 0, 0));*/
+
 
     public Event(long id, int color, CharSequence title, CharSequence location, boolean allDay, String organizer, boolean guestsCanModify, int startDay, int endDay, int startTime, int endTime, long startMillis, long endMillis, boolean hasAlarm, boolean isRepeating) {
         this.id = id;
@@ -137,37 +171,23 @@ public class Event implements Cloneable {
         this.hasAlarm = hasAlarm;
         this.isRepeating = isRepeating;
         this.selfAttendeeStatus = selfAttendeeStatus;
-        this.left = left;
-        this.right = right;
-        this.top = top;
-        this.bottom = bottom;
         this.nextRight = nextRight;
         this.nextLeft = nextLeft;
         this.nextUp = nextUp;
         this.nextDown = nextDown;
-        this.mColumn = mColumn;
-        this.mMaxColumns = mMaxColumns;
     }
 
-    public static final Event newInstance() {
-        Event e = new Event();
-        e.id = 0;
-        e.title = null;
-        e.color = 0;
-        e.location = null;
-        e.allDay = false;
-        e.startDay = 0;
-        e.endDay = 0;
-        e.startTime = 0;
-        e.endTime = 0;
-        e.startMillis = 0;
-        e.endMillis = 0;
-        e.hasAlarm = false;
-        e.isRepeating = false;
-        e.selfAttendeeStatus = Attendees.ATTENDEE_STATUS_NONE;
-        return e;
+    public void setAggregateId(String aggregateId) {
+        this.aggregateId = aggregateId;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public CharSequence getTitle() {
         return title;
@@ -333,6 +353,76 @@ public class Event implements Cloneable {
 
     public boolean drawAsAllday() {
         // Use >= so we'll pick up Exchange allday events
-        return allDay || endMillis - startMillis >= DateUtils.DAY_IN_MILLIS;
+        return false;//|| endMillis - startMillis >= DateUtils.DAY_IN_MILLIS;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "aggregateId='" + aggregateId + '\'' +
+                ", id=" + id +
+                ", color=" + color +
+                ", title=" + title +
+                ", location=" + location +
+                ", allDay=" + allDay +
+                ", organizer='" + organizer + '\'' +
+                ", guestsCanModify=" + guestsCanModify +
+                ", startDay=" + startDay +
+                ", endDay=" + endDay +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", startMillis=" + startMillis +
+                ", endMillis=" + endMillis +
+                ", hasAlarm=" + hasAlarm +
+                ", isRepeating=" + isRepeating +
+                ", selfAttendeeStatus=" + selfAttendeeStatus +
+                ", left=" + left +
+                ", right=" + right +
+                ", top=" + top +
+                ", bottom=" + bottom +
+                ", nextRight=" + nextRight +
+                ", nextLeft=" + nextLeft +
+                ", nextUp=" + nextUp +
+                ", nextDown=" + nextDown +
+                ", mColumn=" + mColumn +
+                ", mMaxColumns=" + mMaxColumns +
+                '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(aggregateId);
+        parcel.writeLong(id);
+        parcel.writeInt(color);
+        parcel.writeByte((byte) (allDay ? 1 : 0));
+        parcel.writeString(organizer);
+        parcel.writeByte((byte) (guestsCanModify ? 1 : 0));
+        parcel.writeInt(startDay);
+        parcel.writeInt(endDay);
+        parcel.writeInt(startTime);
+        parcel.writeInt(endTime);
+        parcel.writeLong(startMillis);
+        parcel.writeLong(endMillis);
+        parcel.writeByte((byte) (hasAlarm ? 1 : 0));
+        parcel.writeByte((byte) (isRepeating ? 1 : 0));
+        parcel.writeInt(selfAttendeeStatus);
+        parcel.writeParcelable(nextRight, i);
+        parcel.writeParcelable(nextLeft, i);
+        parcel.writeParcelable(nextUp, i);
+        parcel.writeParcelable(nextDown, i);
+    }
+
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        if (this.getStartMillis() > ((Event) o).getStartMillis()) {
+            return 1;
+        }
+        return 0;
     }
 }

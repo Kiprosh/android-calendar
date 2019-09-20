@@ -133,7 +133,7 @@ public class ViewDetailsPreferences extends PreferenceFragment {
         }
 
         public Integer getMaxNumberOfLines(PreferenceKeys keys) {
-            return Integer.parseInt(mPrefs.getString(keys.KEY_MAX_NUMBER_OF_LINES, null));
+            return Integer.parseInt(mPrefs.getString(keys.KEY_MAX_NUMBER_OF_LINES, "7"));
         }
     }
 
