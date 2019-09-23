@@ -5,8 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 
-import ws.xsoh.etar.R;
-
+import com.kiprosh.calendar.R;
 /**
  * Created by Gitsaibot on 01.07.16.
  */

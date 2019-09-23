@@ -17,7 +17,7 @@
 */
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ws.xsoh.etar"
+    package="com.kiprosh.calendar"
     android:installLocation="auto"
     android:versionCode="19"
     android:versionName="1.0.17">
@@ -53,9 +53,8 @@
             android:launchMode="singleTask"
             android:theme="@style/CalendarTheme.WithoutActionBar"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.APP_CALENDAR" />
@@ -67,13 +66,13 @@
                 <data android:mimeType="time/epoch" />
                 <data android:host="com.android.calendar" />
                 <data android:scheme="content" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
 
         <activity-alias
             android:name="com.android.calendar.LaunchActivity"
             android:exported="true"
-            android:targetActivity="com.android.calendar.AllInOneActivity"></activity-alias>
+            android:targetActivity="com.android.calendar.AllInOneActivity" />
 
         <meta-data
             android:name="android.app.default_searchable"

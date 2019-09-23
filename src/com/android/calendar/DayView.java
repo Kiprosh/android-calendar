@@ -70,6 +70,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.kiprosh.calendar.R;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,8 +81,6 @@ import java.util.Formatter;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import ws.xsoh.etar.R;
 
 /**
  * View for multi-day view. So far only 1 and 7 day have been tested.

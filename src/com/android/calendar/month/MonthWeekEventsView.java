@@ -48,6 +48,7 @@ import com.android.calendar.Event;
 import com.android.calendar.LunarUtils;
 import com.android.calendar.Utils;
 import com.android.calendar.ViewDetailsPreferences;
+import com.kiprosh.calendar.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,8 +58,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
-
-import ws.xsoh.etar.R;
 
 
 public class MonthWeekEventsView extends SimpleWeekView {

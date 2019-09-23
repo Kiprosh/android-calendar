@@ -71,13 +71,12 @@ import com.android.calendar.CalendarController.EventHandler;
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
+import com.kiprosh.calendar.R;
 
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import ws.xsoh.etar.R;
 
 import static android.provider.CalendarContract.Attendees.ATTENDEE_STATUS;
 import static android.provider.CalendarContract.EXTRA_EVENT_ALL_DAY;

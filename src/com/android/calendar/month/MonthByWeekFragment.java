@@ -41,6 +41,7 @@ import com.android.calendar.CalendarListeners;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.Utils;
+import com.kiprosh.calendar.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,8 +49,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import ws.xsoh.etar.R;
 
 public class MonthByWeekFragment extends SimpleDayPickerFragment implements CalendarController.EventHandler, MonthByWeekAdapter.CallbackForDayView {
     private static final String TAG = "MonthFragment";

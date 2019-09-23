@@ -34,12 +34,11 @@ import android.view.accessibility.AccessibilityManager;
 
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
+import com.kiprosh.calendar.R;
 
 import java.security.InvalidParameterException;
 import java.text.NumberFormat;
 import java.util.HashMap;
-
-import ws.xsoh.etar.R;
 
 /**
  * <p>

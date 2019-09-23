@@ -10,10 +10,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
+import com.kiprosh.calendar.R;
+
 import java.util.Arrays;
-
-import ws.xsoh.etar.R;
-
 
 public class ViewDetailsPreferences extends PreferenceFragment {
     private final static String KEY_DISPLAY_TIME_V_PREF = "pref_display_time_vertical";

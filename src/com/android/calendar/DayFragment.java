@@ -37,14 +37,13 @@ import android.widget.ViewSwitcher.ViewFactory;
 
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
+import com.kiprosh.calendar.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import ws.xsoh.etar.R;
 
 /**
  * This is the base class for Day and Week Activities.

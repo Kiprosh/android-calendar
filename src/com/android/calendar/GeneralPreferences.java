@@ -49,8 +49,7 @@ import com.android.timezonepicker.TimeZoneInfo;
 import com.android.timezonepicker.TimeZonePickerDialog;
 import com.android.timezonepicker.TimeZonePickerDialog.OnTimeZoneSetListener;
 import com.android.timezonepicker.TimeZonePickerUtils;
-
-import ws.xsoh.etar.R;
+import com.kiprosh.calendar.R;
 
 public class GeneralPreferences extends PreferenceFragment implements
         OnSharedPreferenceChangeListener, OnPreferenceChangeListener, OnTimeZoneSetListener {

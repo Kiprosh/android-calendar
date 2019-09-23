@@ -39,12 +39,11 @@ import android.widget.TextView;
 
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
+import com.kiprosh.calendar.R;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
-
-import ws.xsoh.etar.R;
 
 /**
  * <p>
