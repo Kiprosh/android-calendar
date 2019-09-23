@@ -407,7 +407,7 @@ public class CalendarController {
         if (!handled) {
             // Launch Settings
             if (event.eventType == EventType.LAUNCH_SETTINGS) {
-                launchSettings();
+
                 return;
             }
 
@@ -552,20 +552,6 @@ public class CalendarController {
         return mPreviousViewType;
     }
 
-    private void launchSelectVisibleCalendars() {
-        /*Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setClass(mContext, SelectVisibleCalendarsActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        mContext.startActivity(intent);*/
-    }
-
-    private void launchSettings() {
-        /*Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setClass(mContext, CalendarSettingsActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        mContext.startActivity(intent);*/
-    }
-
     private void launchCreateEvent(long startMillis, long endMillis, boolean allDayEvent,
                                    String title, long calendarId) {
         Intent intent = generateCreateEventIntent(startMillis, endMillis, allDayEvent, title,
@@ -607,24 +593,6 @@ public class CalendarController {
         mEventId = eventId;
         mContext.startActivity(intent);
     }
-
-    /*private void launchDeleteEvent(long eventId, long startMillis, long endMillis) {
-        launchDeleteEventAndFinish(null, eventId, startMillis, endMillis, -1);
-    }*/
-
-   /* private void launchDeleteEventAndFinish(Activity parentActivity, long eventId, long startMillis,
-                                            long endMillis, int deleteWhich) {
-        DeleteEventHelper deleteEventHelper = new DeleteEventHelper(mContext, parentActivity,
-                parentActivity != null *//* exit when done *//*);
-        deleteEventHelper.delete(startMillis, endMillis, eventId, deleteWhich);
-    }*/
-
-//    private void launchAlerts() {
-//        Intent intent = new Intent();
-//        intent.setClass(mContext, AlertActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        mContext.startActivity(intent);
-//    }
 
     private void launchSearch(long eventId, String query, ComponentName componentName) {
         final SearchManager searchManager =

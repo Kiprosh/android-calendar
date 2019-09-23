@@ -272,33 +272,6 @@ public class GeneralPreferences extends PreferenceFragment implements
         migrateOldPreferences(sharedPreferences);
 
     }
-/*
-    private void showColorPickerDialog() {
-        final ColorPickerDialog colorPickerDialog = new ColorPickerDialog();
-        // Retrieve current color to show it as selected
-        String selectedColorName = Utils.getSharedPreference(getActivity(), KEY_COLOR_PREF, "teal");
-        int selectedColor = getResources().getColor(DynamicTheme.getColorId(selectedColorName));
-
-        colorPickerDialog.initialize(R.string.preferences_color_pick,
-                new int[]{
-                        getResources().getColor(R.color.colorPrimary),
-                        getResources().getColor(R.color.colorBluePrimary),
-                        getResources().getColor(R.color.colorPurplePrimary),
-                        getResources().getColor(R.color.colorRedPrimary),
-                        getResources().getColor(R.color.colorOrangePrimary),
-                        getResources().getColor(R.color.colorGreenPrimary)
-                }, selectedColor, 3, 2);
-
-        colorPickerDialog.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
-            @Override
-            public void onColorSelected(int colour) {
-                Utils.setSharedPreference(getActivity(), KEY_COLOR_PREF, DynamicTheme.getColorName(colorMap.get(colour)));
-            }
-        });
-
-        FragmentManager fm = this.getFragmentManager();
-        colorPickerDialog.show(fm, "colorpicker");
-    }*/
 
     private void initializeColorMap() {
         colorMap.put(getResources().getColor(R.color.colorPrimary), R.color.colorPrimary);
