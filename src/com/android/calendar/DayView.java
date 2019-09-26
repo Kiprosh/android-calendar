@@ -16,35 +16,27 @@
 
 package com.android.calendar;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.app.Service;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Calendars;
-import android.provider.CalendarContract.Events;
-import android.support.v4.content.ContextCompat;
 import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
@@ -55,13 +47,10 @@ import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.text.style.StyleSpan;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -81,24 +70,24 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.android.calendar.CalendarController.EventType;
-import com.android.calendar.CalendarController.ViewType;
+import com.kiprosh.calendar.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ws.xsoh.etar.R;
-
 /**
  * View for multi-day view. So far only 1 and 7 day have been tested.
  */
-public class DayView extends View implements View.OnCreateContextMenuListener,
+public class DayView extends View implements
         ScaleGestureDetector.OnScaleGestureListener, View.OnClickListener, View.OnLongClickListener {
+    public static final float GRID_LINE_INNER_WIDTH = 1;
     /* package */ static final int MINUTES_PER_HOUR = 60;
     /* package */ static final int MINUTES_PER_DAY = MINUTES_PER_HOUR * 24;
     /* package */ static final int MILLIS_PER_MINUTE = 60 * 1000;
@@ -116,12 +105,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private static final int EVENTS_CROSS_FADE_DURATION = 400;
     // duration to show the event clicked
     private static final int CLICK_DISPLAY_DURATION = 50;
-    private static final int MENU_AGENDA = 2;
-    private static final int MENU_DAY = 3;
-    private static final int MENU_EVENT_VIEW = 5;
-    private static final int MENU_EVENT_CREATE = 6;
-    private static final int MENU_EVENT_EDIT = 7;
-    private static final int MENU_EVENT_DELETE = 8;
     private static final String[] CALENDARS_PROJECTION = new String[]{
             Calendars._ID,          // 0
             Calendars.CALENDAR_ACCESS_LEVEL, // 1
@@ -129,7 +112,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     };
     private static final int CALENDARS_INDEX_ACCESS_LEVEL = 1;
     private static final int CALENDARS_INDEX_OWNER_ACCOUNT = 2;
-    private static final String CALENDARS_WHERE = Calendars._ID + "=%d";
     private static final int FROM_NONE = 0;
     private static final int FROM_ABOVE = 1;
     private static final int FROM_BELOW = 2;
@@ -142,7 +124,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private static final int UPDATE_CURRENT_TIME_DELAY = 300000;
     // The number of milliseconds to show the popup window
     private static final int POPUP_DISMISS_DELAY = 3000;
-    private static final float GRID_LINE_INNER_WIDTH = 1;
     private static final int DAY_GAP = 1;
     private static final int HOUR_GAP = 1;
     // More events text will transition between invisible and this alpha
@@ -174,11 +155,11 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private static final int SELECTION_LONGPRESS = 3;
     // The rest of this file was borrowed from Launcher2 - PagedView.java
     private static final int MINIMUM_SNAP_VELOCITY = 2200;
+    public static float GRID_LINE_LEFT_MARGIN = 0;
     protected static StringBuilder mStringBuilder = new StringBuilder(50);
     // TODO recreate formatter when locale changes
     protected static Formatter mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
     private static String TAG = "DayView";
-    private static boolean DEBUG = false;
     private static boolean DEBUG_SCALING = false;
     private static float mScale = 0; // Used for supporting different screen densities
     private static int DEFAULT_CELL_HEIGHT = 64;
@@ -186,7 +167,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private static int MIN_Y_SPAN = 100;
     private static int mHorizontalSnapBackThreshold = 128;
     private static int mOnDownDelay;
-    private static float GRID_LINE_LEFT_MARGIN = 0;
+    private static boolean DEBUG = true;
     // This is the standard height of an allday event with no restrictions
     private static int SINGLE_ALLDAY_HEIGHT = 34;
     /**
@@ -211,8 +192,8 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     // The largest a single allDay event will become.
     private static int MAX_HEIGHT_OF_ONE_ALLDAY_EVENT = 34;
     private static int HOURS_TOP_MARGIN = 2;
-    private static int HOURS_LEFT_MARGIN = 2;
-    private static int HOURS_RIGHT_MARGIN = 4;
+    private static int HOURS_LEFT_MARGIN = 30;
+    private static int HOURS_RIGHT_MARGIN = 30;
     private static int HOURS_MARGIN = HOURS_LEFT_MARGIN + HOURS_RIGHT_MARGIN;
     private static int NEW_EVENT_MARGIN = 4;
     private static int NEW_EVENT_WIDTH = 2;
@@ -229,7 +210,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private static float NORMAL_FONT_SIZE = 12;
     private static float EVENT_TEXT_FONT_SIZE = 12;
     private static float HOURS_TEXT_SIZE = 12;
-    private static int MIN_HOURS_WIDTH = 96;
+    private static int MIN_HOURS_WIDTH = 112;
     private static int MIN_CELL_WIDTH_FOR_TEXT = 20;
     // smallest height to draw an event with
     private static float MIN_EVENT_HEIGHT = 24.0F; // in pixels
@@ -271,34 +252,16 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private static int mNewEventHintColor;
     private static int mCalendarHourLabelColor;
     private static int mMoreAlldayEventsTextAlpha = MORE_EVENTS_MAX_ALPHA;
-
     // Actual cell height we're using (may be modified by all day
     // events), shared among all DayViews
     private static int mCellHeight = 0; // shared among all DayViews
-
     // Last cell height set by user gesture
     private static int mPreferredCellHeight = 0;
-
     private static int mScaledPagingTouchSlop = 0;
     /**
      * Whether to use the expand or collapse icon.
      */
     private static boolean mUseExpandIcon = true;
-    /**
-     * The height of the day names/numbers
-     */
-    private static int DAY_HEADER_HEIGHT = 45;
-    /**
-     * The height of the day names/numbers for multi-day views
-     */
-    private static int MULTI_DAY_HEADER_HEIGHT = DAY_HEADER_HEIGHT;
-    /**
-     * The height of the day names/numbers when viewing a single day
-     */
-    private static int ONE_DAY_HEADER_HEIGHT = DAY_HEADER_HEIGHT;
-    /**
-     * Whether or not to expand the allDay area to fill the screen
-     */
     private static boolean mShowAllAllDayEvents = false;
     private static int sCounter = 0;
     protected final EventGeometry mEventGeometry;
@@ -308,6 +271,9 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     protected final Drawable mTodayHeaderDrawable;
     protected final Drawable mExpandAlldayDrawable;
     protected final Drawable mCollapseAlldayDrawable;
+    private final String DATE_FORMAT_FOR_DAY_VIEW = "EEEE, dd MMMM yyyy";
+    //private final ContextMenuHandler mContextMenuHandler = new ContextMenuHandler();
+    private final CalendarController mController;
     private final ContinueScroll mContinueScroll = new ContinueScroll();
     private final UpdateCurrentTime mUpdateCurrentTime = new UpdateCurrentTime();
     private final Typeface mBold = Typeface.DEFAULT_BOLD;
@@ -324,12 +290,8 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private final Paint mEventTextPaint = new Paint();
     private final Paint mSelectionPaint = new Paint();
     private final DismissPopup mDismissPopup = new DismissPopup();
-    private final EventLoader mEventLoader;
-    private final ArrayList<Event> mSelectedEvents = new ArrayList<Event>();
+    private final ArrayList<Event> mSelectedEvents = new ArrayList<>();
     private final Rect mPrevBox = new Rect();
-    private final DeleteEventHelper mDeleteEventHelper;
-    private final ContextMenuHandler mContextMenuHandler = new ContextMenuHandler();
-    private final CalendarController mController;
     private final ViewSwitcher mViewSwitcher;
     private final GestureDetector mGestureDetector;
     private final OverScroller mScroller;
@@ -340,6 +302,30 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private final String mCreateNewEventString;
     private final String mNewEventHintString;
     private final Pattern drawTextSanitizerFilter = Pattern.compile("[\t\n],");
+    private final Runnable mTZUpdater = new Runnable() {
+        @Override
+        public void run() {
+            String tz = Utils.getTimeZone(mContext, this);
+            mBaseDate.timezone = tz;
+            mBaseDate.normalize(true);
+            mBaseDate.switchTimezone(tz);
+            mCurrentTime.switchTimezone(tz);
+            invalidate();
+        }
+    };
+    // Clears the "clicked" color from the clicked event and launch the event
+    private final Runnable mClearClick = new Runnable() {
+        @Override
+        public void run() {
+            if (mClickedEvent != null && mEventClickListener != null) {
+                mEventClickListener.onEventClick(mNumDays == 1, getSelectedTime(), mClickedEvent);
+            }
+            mClickedEvent = null;
+            DayView.this.invalidate();
+        }
+    };
+    public int mTodayJulianDay;
+    public int mFirstJulianDay;
     protected boolean mPaused = true;
     protected Context mContext;
     protected int mNumDays = 7;
@@ -356,6 +342,11 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     ObjectAnimator mMoreAlldayEventsAnimator;
     // Animates the current time marker when Today is pressed
     ObjectAnimator mTodayAnimator;
+    public boolean isToday = false;
+    public String[] mDayStrs;
+    private boolean isLongClickEnable;
+    //private final DeleteEventHelper mDeleteEventHelper;
+    private boolean isEmptyCellClickEnable;
     private boolean mOnFlingCalled;
     private boolean mStartingScroll = false;
     private Handler mHandler;
@@ -369,22 +360,15 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
      */
     private long mLastPopupEventID;
     private Time mCurrentTime;
-    private final Runnable mTZUpdater = new Runnable() {
-        @Override
-        public void run() {
-            String tz = Utils.getTimeZone(mContext, this);
-            mBaseDate.timezone = tz;
-            mBaseDate.normalize(true);
-            mCurrentTime.switchTimezone(tz);
-            invalidate();
-        }
-    };
-    private int mTodayJulianDay;
-    private int mFirstJulianDay;
+    ArrayList<Event> tempEventList = new ArrayList<>();
     private int mLoadedFirstJulianDay = -1;
     private int mLastJulianDay;
     private int mMonthLength;
     private int mFirstVisibleDate;
+    /**
+     * The height of the day names/numbers
+     */
+    private int DAY_HEADER_HEIGHT = 45;
     private int mFirstVisibleDayOfWeek;
     private int[] mEarliestStartHour;    // indexed by the week day offset
     private boolean[] mHasAllDayEvent;   // indexed by the week day offset
@@ -408,7 +392,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     /**
      * This variable helps to avoid unnecessarily reloading events by keeping
      * track of the start millis parameter used for the most recent loading
-     * of events.  If the next reload matches this, then the events are not
+     * of events.  If the next reload matches this, than the events are not
      * reloaded.  To force a reload, set this to zero (this is set to zero
      * in the method clearCachedEvents()).
      */
@@ -418,26 +402,14 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
             clearCachedEvents();
         }
     };
-    private ArrayList<Event> mEvents = new ArrayList<Event>();
-    private ArrayList<Event> mAllDayEvents = new ArrayList<Event>();
+    private ArrayList<Event> mEvents = new ArrayList<>();
+    private ArrayList<Event> mAllDayEvents = new ArrayList<>();
     private StaticLayout[] mLayouts = null;
     private StaticLayout[] mAllDayLayouts = null;
     private int mSelectionDay;        // Julian day
     private int mSelectionHour;
-    // Clears the "clicked" color from the clicked event and launch the event
-    private final Runnable mClearClick = new Runnable() {
-        @Override
-        public void run() {
-            if (mClickedEvent != null) {
-                mController.sendEventRelatedEvent(this, EventType.VIEW_EVENT, mClickedEvent.id,
-                        mClickedEvent.startMillis, mClickedEvent.endMillis,
-                        DayView.this.getWidth() / 2, mClickedYLocation,
-                        getSelectedTimeInMillis());
-            }
-            mClickedEvent = null;
-            DayView.this.invalidate();
-        }
-    };
+    private CalendarListeners mEventClickListener;
+    long savedTime;
     // Current selection info for accessibility
     private int mSelectionDayForAccessibility;        // Julian day
     private int mSelectionHourForAccessibility;
@@ -528,7 +500,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
      */
     private int mFirstHourOffset;
     private String[] mHourStrs;
-    private String[] mDayStrs;
+    /**
+     * The height of the day names/numbers for multi-day views
+     */
+    private int MULTI_DAY_HEADER_HEIGHT = DAY_HEADER_HEIGHT;
     private String[] mDayStrs2Letter;
     private boolean mIs24HourFormat;
     private boolean mComputeSelectedEvents;
@@ -570,17 +545,29 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private AccessibilityManager mAccessibilityMgr = null;
     private boolean mIsAccessibilityEnabled = false;
     private boolean mTouchExplorationEnabled = false;
+    /**
+     * Whether or not to expand the allDay area to fill the screen
+     */
+    private EventHelper eventHelper = new EventHelper();
+    /**
+     * The height of the day names/numbers when viewing a single day
+     */
+    private int ONE_DAY_HEADER_HEIGHT = DAY_HEADER_HEIGHT;
+    private String timeZone;
 
-    public DayView(Context context, CalendarController controller,
-                   ViewSwitcher viewSwitcher, EventLoader eventLoader, int numDays) {
+    public DayView(long savedTime, ArrayList<Event> eventList, Context context, CalendarController controller,
+                   ViewSwitcher viewSwitcher, int numDays, CalendarListeners calendarListeners) {
         super(context);
+        //this.savedTime = savedTime;
         mContext = context;
+        timeZone = Utils.getTimeZone(context, null);
         initAccessibilityVariables();
 
         mResources = context.getResources();
         mCreateNewEventString = mResources.getString(R.string.event_create);
         mNewEventHintString = mResources.getString(R.string.day_view_new_event_hint);
         mNumDays = numDays;
+        mEventClickListener = calendarListeners;
 
         DATE_HEADER_FONT_SIZE = (int) mResources.getDimension(R.dimen.date_header_text_size);
         DAY_HEADER_FONT_SIZE = (int) mResources.getDimension(R.dimen.day_label_text_size);
@@ -614,7 +601,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         EVENT_ALL_DAY_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
 
         if (mScale == 0) {
-
             mScale = mResources.getDisplayMetrics().density;
             if (mScale != 1) {
                 SINGLE_ALLDAY_HEIGHT *= mScale;
@@ -660,6 +646,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         }
 
         mCurrentTimeLine = mResources.getDrawable(R.drawable.timeline_indicator_holo_light);
+        mCurrentTimeLine.setColorFilter(mContext.getColor(R.color.blue), PorterDuff.Mode.SRC_IN);
         mCurrentTimeAnimateLine = mResources
                 .getDrawable(R.drawable.timeline_indicator_activated_holo_light);
         mTodayHeaderDrawable = mResources.getDrawable(R.drawable.today_blue_week_holo_light);
@@ -669,7 +656,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         mAcceptedOrTentativeEventBoxDrawable = mResources
                 .getDrawable(R.drawable.panel_month_event_holo_light);
 
-        mEventLoader = eventLoader;
         mEventGeometry = new EventGeometry();
         mEventGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
         mEventGeometry.setHourGap(HOUR_GAP);
@@ -678,7 +664,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                 mResources.getString(R.string.new_event_dialog_option)
         };
         mLongPressTitle = mResources.getString(R.string.new_event_dialog_label);
-        mDeleteEventHelper = new DeleteEventHelper(context, null, false /* don't exit when done */);
+        //mDeleteEventHelper = new DeleteEventHelper(context, null, false /* don't exit when done */);
         mLastPopupEventID = INVALID_EVENT_ID;
         mController = controller;
         mViewSwitcher = viewSwitcher;
@@ -713,64 +699,12 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         return event;
     }
 
-    private static int getEventAccessLevel(Context context, Event e) {
-        ContentResolver cr = context.getContentResolver();
+    public void setLongClickEnable(boolean longClickEnable) {
+        isLongClickEnable = longClickEnable;
+    }
 
-        int accessLevel = Calendars.CAL_ACCESS_NONE;
-
-        // Get the calendar id for this event
-        Cursor cursor = cr.query(ContentUris.withAppendedId(Events.CONTENT_URI, e.id),
-                new String[]{Events.CALENDAR_ID},
-                null /* selection */,
-                null /* selectionArgs */,
-                null /* sort */);
-
-        if (cursor == null) {
-            return ACCESS_LEVEL_NONE;
-        }
-
-        if (cursor.getCount() == 0) {
-            cursor.close();
-            return ACCESS_LEVEL_NONE;
-        }
-
-        cursor.moveToFirst();
-        long calId = cursor.getLong(0);
-        cursor.close();
-
-        Uri uri = Calendars.CONTENT_URI;
-        String where = String.format(CALENDARS_WHERE, calId);
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(context,
-                Manifest.permission.READ_CALENDAR)
-                != PackageManager.PERMISSION_GRANTED) {
-            //If permission is not granted then just return.
-            Log.d(TAG, "Manifest.permission.READ_CALENDAR is not granted");
-            return 0;
-        }
-        cursor = cr.query(uri, CALENDARS_PROJECTION, where, null, null);
-
-        String calendarOwnerAccount = null;
-        if (cursor != null) {
-            cursor.moveToFirst();
-            accessLevel = cursor.getInt(CALENDARS_INDEX_ACCESS_LEVEL);
-            calendarOwnerAccount = cursor.getString(CALENDARS_INDEX_OWNER_ACCOUNT);
-            cursor.close();
-        }
-
-        if (accessLevel < Calendars.CAL_ACCESS_CONTRIBUTOR) {
-            return ACCESS_LEVEL_NONE;
-        }
-
-        if (e.guestsCanModify) {
-            return ACCESS_LEVEL_EDIT;
-        }
-
-        if (!TextUtils.isEmpty(calendarOwnerAccount)
-                && calendarOwnerAccount.equalsIgnoreCase(e.organizer)) {
-            return ACCESS_LEVEL_EDIT;
-        }
-
-        return ACCESS_LEVEL_DELETE;
+    public void setEmptyCellClickEnable(boolean emptyCellClickEnable) {
+        isEmptyCellClickEnable = emptyCellClickEnable;
     }
 
     @Override
@@ -781,6 +715,98 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         }
     }
 
+    /**
+     * This is called when the popup window is pressed.
+     */
+    public void onClick(View v) {
+        if (v == mPopupView) {
+            // Pretend it was a trackball click because that will always
+            // jump to the "View event" screen.
+            switchViews(true /* trackball */);
+        }
+    }
+
+    public void handleOnResume() {
+        initAccessibilityVariables();
+        if (Utils.getSharedPreference(mContext, OtherPreferences.KEY_OTHER_1, false)) {
+            mFutureBgColor = 0;
+        } else {
+            mFutureBgColor = mFutureBgColorRes;
+        }
+        mIs24HourFormat = DateFormat.is24HourFormat(mContext);
+        mHourStrs = mIs24HourFormat ? CalendarData.s24Hours : CalendarData.s12Hours;
+        mFirstDayOfWeek = Utils.getFirstDayOfWeek(mContext);
+        mLastSelectionDayForAccessibility = 0;
+        mLastSelectionHourForAccessibility = 0;
+        mLastSelectedEventForAccessibility = null;
+        mSelectionMode = SELECTION_HIDDEN;
+    }
+
+    private void initAccessibilityVariables() {
+        mAccessibilityMgr = (AccessibilityManager) mContext
+                .getSystemService(Service.ACCESSIBILITY_SERVICE);
+        mIsAccessibilityEnabled = mAccessibilityMgr != null && mAccessibilityMgr.isEnabled();
+        mTouchExplorationEnabled = isTouchExplorationEnabled();
+    }
+
+    /**
+     * Returns the start of the selected time in milliseconds since the epoch.
+     *
+     * @return selected time in UTC milliseconds since the epoch.
+     */
+    long getSelectedTimeInMillis() {
+        Time time = new Time(mBaseDate);
+        time.setJulianDay(mSelectionDay);
+        time.hour = mSelectionHour;
+
+        // We ignore the "isDst" field because we want normalize() to figure
+        // out the correct DST value and not adjust the selected time based
+        // on the current setting of DST.
+        return time.normalize(true /* ignore isDst */);
+    }
+
+    Time getSelectedTime() {
+        Time time = new Time(mBaseDate);
+        time.setJulianDay(mSelectionDay);
+        time.hour = mSelectionHour;
+
+        // We ignore the "oisDst" field because we want normalize() to figure
+        // out the correct DST value and not adjust the selected time based
+        // on the current setting of DST.
+        time.normalize(true /* ignore isDst */);
+        return time;
+    }
+
+    Time getSelectedTimeForAccessibility() {
+        Time time = new Time(mBaseDate);
+        time.setJulianDay(mSelectionDayForAccessibility);
+        time.hour = mSelectionHourForAccessibility;
+
+        // We ignore the "isDst" field because we want normalize() to figure
+        // out the correct DST value and not adjust the selected time based
+        // on the current setting of DST.
+        time.normalize(true /* ignore isDst */);
+        return time;
+    }
+
+    /**
+     * Returns the start of the selected time in minutes since midnight,
+     * local time.  The derived class must ensure that this is consistent
+     * with the return value from getSelectedTimeInMillis().
+     */
+    int getSelectedMinutesSinceMidnight() {
+        return mSelectionHour * MINUTES_PER_HOUR;
+    }
+
+    int getFirstVisibleHour() {
+        return mFirstHour;
+    }
+
+    void setFirstVisibleHour(int firstHour) {
+        mFirstHour = firstHour;
+        mFirstHourOffset = 0;
+    }
+
     private void init(Context context) {
         setFocusable(true);
 
@@ -788,11 +814,11 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         // even after we've entered touch mode.
         setFocusableInTouchMode(true);
         setClickable(true);
-        setOnCreateContextMenuListener(this);
+
 
         mFirstDayOfWeek = Utils.getFirstDayOfWeek(context);
 
-        mCurrentTime = new Time(Utils.getTimeZone(context, mTZUpdater));
+        mCurrentTime = new Time(timeZone);
         long currentTime = System.currentTimeMillis();
         mCurrentTime.set(currentTime);
         mTodayJulianDay = Time.getJulianDay(currentTime, mCurrentTime.gmtoff);
@@ -814,7 +840,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         mMoreEventsTextColor = dynTheme.getColor(mContext, "month_event_other_color");
 
         mEventTextPaint.setTextSize(EVENT_TEXT_FONT_SIZE);
-        mEventTextPaint.setTextAlign(Paint.Align.LEFT);
+        mEventTextPaint.setTextAlign(Align.LEFT);
         mEventTextPaint.setAntiAlias(true);
 
         int gridLineColor = mResources.getColor(R.color.calendar_grid_line_highlight_color);
@@ -888,194 +914,29 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         // Catch long clicks for creating a new event
         setOnLongClickListener(this);
 
-        mBaseDate = new Time(Utils.getTimeZone(context, mTZUpdater));
-        long millis = System.currentTimeMillis();
+        mBaseDate = new Time(timeZone);
+
+        long millis = CalendarController.savedTime;  //System.currentTimeMillis();
         mBaseDate.set(millis);
 
+       /* mBaseDate = new Time(Utils.getTimeZone(context, mTZUpdater));
+        long millis = System.currentTimeMillis();
+        if(savedTime > 0) {
+            mBaseDate.set(savedTime);
+        } else {
+            mBaseDate.set(millis);
+        }
+*/
         mEarliestStartHour = new int[mNumDays];
         mHasAllDayEvent = new boolean[mNumDays];
 
         // mLines is the array of points used with Canvas.drawLines() in
-        // drawGridBackground() and drawAllDayEvents().  Its size depends
+        // drawGridBackground() and drawAllDayEvents().  It's size depends
         // on the max number of lines that can ever be drawn by any single
         // drawLines() call in either of those methods.
         final int maxGridLines = (24 + 1)  // max horizontal lines we might draw
                 + (mNumDays + 1); // max vertical lines we might draw
         mLines = new float[maxGridLines * 4];
-    }
-
-    /**
-     * This is called when the popup window is pressed.
-     */
-    public void onClick(View v) {
-        if (v == mPopupView) {
-            // Pretend it was a trackball click because that will always
-            // jump to the "View event" screen.
-            switchViews(true /* trackball */);
-        }
-    }
-
-    public void handleOnResume() {
-        initAccessibilityVariables();
-        if (Utils.getSharedPreference(mContext, OtherPreferences.KEY_OTHER_1, false)) {
-            mFutureBgColor = 0;
-        } else {
-            mFutureBgColor = mFutureBgColorRes;
-        }
-        mIs24HourFormat = DateFormat.is24HourFormat(mContext);
-        mHourStrs = mIs24HourFormat ? CalendarData.s24Hours : CalendarData.s12Hours;
-        mFirstDayOfWeek = Utils.getFirstDayOfWeek(mContext);
-        mLastSelectionDayForAccessibility = 0;
-        mLastSelectionHourForAccessibility = 0;
-        mLastSelectedEventForAccessibility = null;
-        mSelectionMode = SELECTION_HIDDEN;
-    }
-
-    private void initAccessibilityVariables() {
-        mAccessibilityMgr = (AccessibilityManager) mContext
-                .getSystemService(Service.ACCESSIBILITY_SERVICE);
-        mIsAccessibilityEnabled = mAccessibilityMgr != null && mAccessibilityMgr.isEnabled();
-        mTouchExplorationEnabled = isTouchExplorationEnabled();
-    }
-
-    /**
-     * Returns the start of the selected time in milliseconds since the epoch.
-     *
-     * @return selected time in UTC milliseconds since the epoch.
-     */
-    long getSelectedTimeInMillis() {
-        Time time = new Time(mBaseDate);
-        time.setJulianDay(mSelectionDay);
-        time.hour = mSelectionHour;
-
-        // We ignore the "isDst" field because we want normalize() to figure
-        // out the correct DST value and not adjust the selected time based
-        // on the current setting of DST.
-        return time.normalize(true /* ignore isDst */);
-    }
-
-    Time getSelectedTime() {
-        Time time = new Time(mBaseDate);
-        time.setJulianDay(mSelectionDay);
-        time.hour = mSelectionHour;
-
-        // We ignore the "isDst" field because we want normalize() to figure
-        // out the correct DST value and not adjust the selected time based
-        // on the current setting of DST.
-        time.normalize(true /* ignore isDst */);
-        return time;
-    }
-
-    Time getSelectedTimeForAccessibility() {
-        Time time = new Time(mBaseDate);
-        time.setJulianDay(mSelectionDayForAccessibility);
-        time.hour = mSelectionHourForAccessibility;
-
-        // We ignore the "isDst" field because we want normalize() to figure
-        // out the correct DST value and not adjust the selected time based
-        // on the current setting of DST.
-        time.normalize(true /* ignore isDst */);
-        return time;
-    }
-
-    /**
-     * Returns the start of the selected time in minutes since midnight,
-     * local time.  The derived class must ensure that this is consistent
-     * with the return value from getSelectedTimeInMillis().
-     */
-    int getSelectedMinutesSinceMidnight() {
-        return mSelectionHour * MINUTES_PER_HOUR;
-    }
-
-    int getFirstVisibleHour() {
-        return mFirstHour;
-    }
-
-    void setFirstVisibleHour(int firstHour) {
-        mFirstHour = firstHour;
-        mFirstHourOffset = 0;
-    }
-
-    public void setSelected(Time time, boolean ignoreTime, boolean animateToday) {
-        mBaseDate.set(time);
-        setSelectedHour(mBaseDate.hour);
-        setSelectedEvent(null);
-        mPrevSelectedEvent = null;
-        long millis = mBaseDate.toMillis(false /* use isDst */);
-        setSelectedDay(Time.getJulianDay(millis, mBaseDate.gmtoff));
-        mSelectedEvents.clear();
-        mComputeSelectedEvents = true;
-
-        int gotoY = Integer.MIN_VALUE;
-
-        if (!ignoreTime && mGridAreaHeight != -1) {
-            int lastHour = 0;
-
-            if (mBaseDate.hour < mFirstHour) {
-                // Above visible region
-                gotoY = mBaseDate.hour * (mCellHeight + HOUR_GAP);
-            } else {
-                lastHour = (mGridAreaHeight - mFirstHourOffset) / (mCellHeight + HOUR_GAP)
-                        + mFirstHour;
-
-                if (mBaseDate.hour >= lastHour) {
-                    // Below visible region
-
-                    // target hour + 1 (to give it room to see the event) -
-                    // grid height (to get the y of the top of the visible
-                    // region)
-                    gotoY = (int) ((mBaseDate.hour + 1 + mBaseDate.minute / 60.0f)
-                            * (mCellHeight + HOUR_GAP) - mGridAreaHeight);
-                }
-            }
-
-            if (DEBUG) {
-                Log.e(TAG, "Go " + gotoY + " 1st " + mFirstHour + ":" + mFirstHourOffset + "CH "
-                        + (mCellHeight + HOUR_GAP) + " lh " + lastHour + " gh " + mGridAreaHeight
-                        + " ymax " + mMaxViewStartY);
-            }
-
-            if (gotoY > mMaxViewStartY) {
-                gotoY = mMaxViewStartY;
-            } else if (gotoY < 0 && gotoY != Integer.MIN_VALUE) {
-                gotoY = 0;
-            }
-        }
-
-        recalc();
-
-        mRemeasure = true;
-        invalidate();
-
-        boolean delayAnimateToday = false;
-        if (gotoY != Integer.MIN_VALUE) {
-            ValueAnimator scrollAnim = ObjectAnimator.ofInt(this, "viewStartY", mViewStartY, gotoY);
-            scrollAnim.setDuration(GOTO_SCROLL_DURATION);
-            scrollAnim.setInterpolator(new AccelerateDecelerateInterpolator());
-            scrollAnim.addListener(mAnimatorListener);
-            scrollAnim.start();
-            delayAnimateToday = true;
-        }
-        if (animateToday) {
-            synchronized (mTodayAnimatorListener) {
-                if (mTodayAnimator != null) {
-                    mTodayAnimator.removeAllListeners();
-                    mTodayAnimator.cancel();
-                }
-                mTodayAnimator = ObjectAnimator.ofInt(this, "animateTodayAlpha",
-                        mAnimateTodayAlpha, 255);
-                mAnimateToday = true;
-                mTodayAnimatorListener.setFadingIn(true);
-                mTodayAnimatorListener.setAnimator(mTodayAnimator);
-                mTodayAnimator.addListener(mTodayAnimatorListener);
-                mTodayAnimator.setDuration(150);
-                if (delayAnimateToday) {
-                    mTodayAnimator.setStartDelay(GOTO_SCROLL_DURATION);
-                }
-                mTodayAnimator.start();
-            }
-        }
-        sendAccessibilityEventAsNeeded(false);
     }
 
     // Called from animation framework via reflection. Do not remove
@@ -1085,7 +946,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         }
 
         mViewStartY = viewStartY;
-
         computeFirstHour();
         invalidate();
     }
@@ -1113,11 +973,15 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     }
 
     public void updateTitle() {
+        //mBaseDate.set(CalendarController.CURRENT_SELECTED_TIME);
         Time start = new Time(mBaseDate);
-        start.normalize(true);
+        start.set(CalendarController.savedTime);
+        start.normalize(false);
+
+        //start.set(CalendarController.CURRENT_SELECTED_TIME);
         Time end = new Time(start);
         end.monthDay += mNumDays - 1;
-        // Move it forward one minute so the formatter doesn't lose a day
+        // Move it forward one minute so the formatter doesn't loose a day
         end.minute += 1;
         end.normalize(true);
 
@@ -1131,9 +995,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                 formatFlags |= DateUtils.FORMAT_ABBREV_MONTH;
             }
         }
-
-        mController.sendEvent(this, EventType.UPDATE_TITLE, start, end, null, -1, ViewType.CURRENT,
-                formatFlags, null, null);
     }
 
     /**
@@ -1245,6 +1106,9 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
      * loading new events.  This can change if there are all-day events.
      */
     private void remeasure(int width, int height) {
+
+        Log.e("Dates", mFirstJulianDay + "  " + mLastJulianDay);
+
         // Shrink to fit available space but make sure we can display at least two events
         MAX_UNEXPANDED_ALLDAY_HEIGHT = (int) (MIN_UNEXPANDED_ALLDAY_EVENT_HEIGHT * 4);
         MAX_UNEXPANDED_ALLDAY_HEIGHT = Math.min(MAX_UNEXPANDED_ALLDAY_HEIGHT, height / 6);
@@ -1267,7 +1131,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         int allDayHeight = 0;
         if (maxAllDayEvents > 0) {
             int maxAllAllDayHeight = height - DAY_HEADER_HEIGHT - MIN_HOURS_HEIGHT;
-            // If there is at most one all-day event per day, then use less
+            // If there is at most one all-day event per day, than use less
             // space (but more than the space for a single event).
             if (maxAllDayEvents == 1) {
                 allDayHeight = SINGLE_ALLDAY_HEIGHT;
@@ -1322,7 +1186,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 
         final long minimumDurationMillis = (long)
                 (MIN_EVENT_HEIGHT * DateUtils.MINUTE_IN_MILLIS / (mCellHeight / 60.0f));
-        Event.computePositions(mEvents, minimumDurationMillis);
+        eventHelper.computePositions(mEvents, minimumDurationMillis);
 
         // Compute the top of our reachable view
         mMaxViewStartY = HOUR_GAP + 24 * (mCellHeight + HOUR_GAP) - mGridAreaHeight;
@@ -1360,9 +1224,9 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 
     /**
      * Initialize the state for another view.  The given view is one that has
-     * its own bitmap and will use an animation to replace the current view.
+     * it's own bitmap and will use an animation to replace the current view.
      * The current view and new view are either both Week views or both Day
-     * views.  They differ in their base date.
+     * views.  They differ in there base date.
      *
      * @param view the view to initialize.
      */
@@ -1405,7 +1269,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         if (mNumDays > 1) {
             // This is the Week view.
             // With touch, we always switch to Day/Agenda View
-            // With track ball, if we selected a free slot, then create an event.
+            // With track ball, if we selected a free slot, than create an event.
             // If we selected a specific event, switch to EventInfo view.
             if (trackBallSelection) {
                 if (selectedEvent == null) {
@@ -1416,34 +1280,34 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                     if (mSelectionAllday) {
                         extraLong = CalendarController.EXTRA_CREATE_ALL_DAY;
                     }
-                    mController.sendEventRelatedEventWithExtra(this, EventType.CREATE_EVENT, -1,
-                            startMillis, endMillis, -1, -1, extraLong, -1);
+                   /* mController.sendEventRelatedEventWithExtra(this, EventType.CREATE_EVENT, -1,
+                            startMillis, endMillis, -1, -1, extraLong, -1);*/
                 } else {
                     if (mIsAccessibilityEnabled) {
                         mAccessibilityMgr.interrupt();
                     }
                     // Switch to the EventInfo view
-                    mController.sendEventRelatedEvent(this, EventType.VIEW_EVENT, selectedEvent.id,
+                    /*mController.sendEventRelatedEvent(this, EventType.VIEW_EVENT, selectedEvent.id,
                             selectedEvent.startMillis, selectedEvent.endMillis, 0, 0,
-                            getSelectedTimeInMillis());
+                            getSelectedTimeInMillis());*/
                 }
             } else {
                 // This was a touch selection.  If the touch selected a single
-                // unambiguous event, then view that event.  Otherwise go to
+                // unambiguous event, than view that event.  Otherwise go to
                 // Day/Agenda view.
                 if (mSelectedEvents.size() == 1) {
                     if (mIsAccessibilityEnabled) {
                         mAccessibilityMgr.interrupt();
                     }
-                    mController.sendEventRelatedEvent(this, EventType.VIEW_EVENT, selectedEvent.id,
+                   /* mController.sendEventRelatedEvent(this, EventType.VIEW_EVENT, selectedEvent.id,
                             selectedEvent.startMillis, selectedEvent.endMillis, 0, 0,
-                            getSelectedTimeInMillis());
+                            getSelectedTimeInMillis());*/
                 }
             }
         } else {
             // This is the Day view.
-            // If we selected a free slot, then create an event.
-            // If we selected an event, then go to the EventInfo view.
+            // If we selected a free slot, than create an event.
+            // If we selected an event, than go to the EventInfo view.
             if (selectedEvent == null) {
                 // Switch to the EditEvent view
                 long startMillis = getSelectedTimeInMillis();
@@ -1452,15 +1316,15 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                 if (mSelectionAllday) {
                     extraLong = CalendarController.EXTRA_CREATE_ALL_DAY;
                 }
-                mController.sendEventRelatedEventWithExtra(this, EventType.CREATE_EVENT, -1,
-                        startMillis, endMillis, -1, -1, extraLong, -1);
+                /*mController.sendEventRelatedEventWithExtra(this, EventType.CREATE_EVENT, -1,
+                        startMillis, endMillis, -1, -1, extraLong, -1);*/
             } else {
                 if (mIsAccessibilityEnabled) {
                     mAccessibilityMgr.interrupt();
                 }
-                mController.sendEventRelatedEvent(this, EventType.VIEW_EVENT, selectedEvent.id,
+                /*mController.sendEventRelatedEvent(this, EventType.VIEW_EVENT, selectedEvent.id,
                         selectedEvent.startMillis, selectedEvent.endMillis, 0, 0,
-                        getSelectedTimeInMillis());
+                        getSelectedTimeInMillis());*/
             }
         }
     }
@@ -1545,7 +1409,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                 long begin = selectedEvent.startMillis;
                 long end = selectedEvent.endMillis;
                 long id = selectedEvent.id;
-                mDeleteEventHelper.delete(begin, end, id, -1);
+                //mDeleteEventHelper.delete(begin, end, id, -1);
                 return true;
             case KeyEvent.KEYCODE_ENTER:
                 switchViews(true /* trackball or keyboard */);
@@ -1632,14 +1496,14 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 
             Time end = new Time(date);
             end.monthDay += mNumDays - 1;
-            mController.sendEvent(this, EventType.GO_TO, date, end, -1, ViewType.CURRENT);
+            //mController.sendEvent(this, EventType.GO_TO, date, end, -1, ViewType.CURRENT);
             return true;
         }
         if (mSelectionDay != selectionDay) {
             Time date = new Time(mBaseDate);
             date.setJulianDay(selectionDay);
             date.hour = mSelectionHour;
-            mController.sendEvent(this, EventType.GO_TO, date, date, -1, ViewType.CURRENT);
+            //mController.sendEvent(this, EventType.GO_TO, date, date, -1, ViewType.CURRENT);
         }
         setSelectedDay(selectionDay);
         mSelectedEvents.clear();
@@ -1732,7 +1596,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                                 b.append(mFormatter.format(mEventCountTemplate, i++, numEvents));
                                 b.append(" ");
                             }
-                            appendEventAccessibilityString(b, calEvent);
+                            //appendEventAccessibilityString(b, calEvent);
                         }
                     } else {
                         if (numEvents > 1) {
@@ -1742,7 +1606,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                                     .indexOf(mSelectedEventForAccessibility) + 1, numEvents));
                             b.append(" ");
                         }
-                        appendEventAccessibilityString(b, mSelectedEventForAccessibility);
+                        //appendEventAccessibilityString(b, mSelectedEventForAccessibility);
                     }
                 } else {
                     b.append(mCreateNewEventString);
@@ -1761,10 +1625,193 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     }
 
     /**
+     * method used to set date time, which is passed through parameter
+     */
+    public void setSelected(Time time, boolean ignoreTime, boolean animateToday) {
+        mBaseDate.set(time);
+        mController.setTime(time.toMillis(false));
+        setSelectedHour(mBaseDate.hour);
+        setSelectedEvent(null);
+        mPrevSelectedEvent = null;
+        long millis = mBaseDate.toMillis(false /* use isDst */);
+        setSelectedDay(Time.getJulianDay(millis, mBaseDate.gmtoff));
+        mSelectedEvents.clear();
+        mComputeSelectedEvents = true;
+
+        int gotoY = Integer.MIN_VALUE;
+
+        if (!ignoreTime && mGridAreaHeight != -1) {
+            int lastHour = 0;
+
+            if (mBaseDate.hour < mFirstHour) {
+                // Above visible region
+                gotoY = mBaseDate.hour * (mCellHeight + HOUR_GAP);
+            } else {
+                lastHour = (mGridAreaHeight - mFirstHourOffset) / (mCellHeight + HOUR_GAP)
+                        + mFirstHour;
+
+                if (mBaseDate.hour >= lastHour) {
+                    // Below visible region
+
+                    // target hour + 1 (to give it room to see the event) -
+                    // grid height (to get the y of the top of the visible
+                    // region)
+                    gotoY = (int) ((mBaseDate.hour + 1 + mBaseDate.minute / 60.0f)
+                            * (mCellHeight + HOUR_GAP) - mGridAreaHeight);
+                }
+            }
+
+            if (DEBUG) {
+                Log.e(TAG, "Go " + gotoY + " 1st " + mFirstHour + ":" + mFirstHourOffset + "CH "
+                        + (mCellHeight + HOUR_GAP) + " lh " + lastHour + " gh " + mGridAreaHeight
+                        + " ymax " + mMaxViewStartY);
+            }
+
+            if (gotoY > mMaxViewStartY) {
+                gotoY = mMaxViewStartY;
+            } else if (gotoY < 0 && gotoY != Integer.MIN_VALUE) {
+                gotoY = 0;
+            }
+        }
+
+        recalc();
+
+        mRemeasure = true;
+        invalidate();
+
+        boolean delayAnimateToday = false;
+        if (gotoY != Integer.MIN_VALUE) {
+            ValueAnimator scrollAnim = ObjectAnimator.ofInt(this, "viewStartY", mViewStartY, gotoY);
+            scrollAnim.setDuration(GOTO_SCROLL_DURATION);
+            scrollAnim.setInterpolator(new AccelerateDecelerateInterpolator());
+            scrollAnim.addListener(mAnimatorListener);
+            scrollAnim.start();
+            delayAnimateToday = true;
+        }
+        if (animateToday) {
+            synchronized (mTodayAnimatorListener) {
+                if (mTodayAnimator != null) {
+                    mTodayAnimator.removeAllListeners();
+                    mTodayAnimator.cancel();
+                }
+                mTodayAnimator = ObjectAnimator.ofInt(this, "animateTodayAlpha",
+                        mAnimateTodayAlpha, 255);
+                mAnimateToday = true;
+                mTodayAnimatorListener.setFadingIn(true);
+                mTodayAnimatorListener.setAnimator(mTodayAnimator);
+                mTodayAnimator.addListener(mTodayAnimatorListener);
+                mTodayAnimator.setDuration(150);
+                if (delayAnimateToday) {
+                    mTodayAnimator.setStartDelay(GOTO_SCROLL_DURATION);
+                }
+                mTodayAnimator.start();
+            }
+        }
+        sendAccessibilityEventAsNeeded(false);
+    }
+
+    // This is called after scrolling stops to move the selected hour
+    // to the visible part of the screen.
+    private void resetSelectedHour() {
+        if (mSelectionHour < mFirstHour + 1) {
+            setSelectedHour(mFirstHour + 1);
+            setSelectedEvent(null);
+            mSelectedEvents.clear();
+            mComputeSelectedEvents = true;
+        } else if (mSelectionHour > mFirstHour + mNumHours - 3) {
+            setSelectedHour(mFirstHour + mNumHours - 3);
+            setSelectedEvent(null);
+            mSelectedEvents.clear();
+            mComputeSelectedEvents = true;
+        }
+    }
+
+    private void initFirstHour() {
+        mFirstHour = mSelectionHour - mNumHours / 5;
+        if (mFirstHour < 0) {
+            mFirstHour = 0;
+        } else if (mFirstHour + mNumHours > 24) {
+            mFirstHour = 24 - mNumHours;
+        }
+    }
+
+    /**
+     * Recomputes the first full hour that is visible on screen after the
+     * screen is scrolled.
+     */
+    private void computeFirstHour() {
+        // Compute the first full hour that is visible on screen
+        mFirstHour = (mViewStartY + mCellHeight + HOUR_GAP - 1) / (mCellHeight + HOUR_GAP);
+        mFirstHourOffset = mFirstHour * (mCellHeight + HOUR_GAP) - mViewStartY;
+    }
+
+    private void adjustHourSelection() {
+        if (mSelectionHour < 0) {
+            setSelectedHour(0);
+            if (mMaxAlldayEvents > 0) {
+                mPrevSelectedEvent = null;
+                mSelectionAllday = true;
+            }
+        }
+
+        if (mSelectionHour > 23) {
+            setSelectedHour(23);
+        }
+
+        // If the selected hour is at least 2 time slots from the top and
+        // bottom of the screen, than don't scroll the view.
+        if (mSelectionHour < mFirstHour + 1) {
+            // If there are all-days events for the selected day but there
+            // are no more normal events earlier in the day, than jump to
+            // the all-day event area.
+            // Exception 1: allow the user to scroll to 8am with the trackball
+            // before jumping to the all-day event area.
+            // Exception 2: if 12am is on screen, than allow the user to select
+            // 12am before going up to the all-day event area.
+            int daynum = mSelectionDay - mFirstJulianDay;
+            if (daynum < mEarliestStartHour.length && daynum >= 0
+                    && mMaxAlldayEvents > 0
+                    && mEarliestStartHour[daynum] > mSelectionHour
+                    && mFirstHour > 0 && mFirstHour < 8) {
+                mPrevSelectedEvent = null;
+                mSelectionAllday = true;
+                setSelectedHour(mFirstHour + 1);
+                return;
+            }
+
+            if (mFirstHour > 0) {
+                mFirstHour -= 1;
+                mViewStartY -= (mCellHeight + HOUR_GAP);
+                if (mViewStartY < 0) {
+                    mViewStartY = 0;
+                }
+                return;
+            }
+        }
+
+        if (mSelectionHour > mFirstHour + mNumHours - 3) {
+            if (mFirstHour < 24 - mNumHours) {
+                mFirstHour += 1;
+                mViewStartY += (mCellHeight + HOUR_GAP);
+                if (mViewStartY > mMaxViewStartY) {
+                    mViewStartY = mMaxViewStartY;
+                }
+                return;
+            } else if (mFirstHour == 24 - mNumHours && mFirstHourOffset > 0) {
+                mViewStartY = mMaxViewStartY;
+            }
+        }
+    }
+
+    void clearCachedEvents() {
+        mLastReloadMillis = 0;
+    }
+
+    /**
      * @param b
      * @param calEvent
      */
-    private void appendEventAccessibilityString(StringBuilder b, Event calEvent) {
+    /*private void appendEventAccessibilityString(StringBuilder b, Event calEvent) {
         b.append(calEvent.getTitleAndLocation());
         b.append(PERIOD_SPACE);
         String when;
@@ -1780,9 +1827,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         when = Utils.formatDateRange(mContext, calEvent.startMillis, calEvent.endMillis, flags);
         b.append(when);
         b.append(PERIOD_SPACE);
-    }
-
+    }*/
     private View switchViews(boolean forward, float xOffSet, float width, float velocity) {
+        Log.e("Item", mEvents.size() + " ");
+
         mAnimationDistance = width - xOffSet;
         if (DEBUG) {
             Log.d(TAG, "switchViews(" + forward + ") O:" + xOffSet + " Dist:" + mAnimationDistance);
@@ -1858,114 +1906,23 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         view.reloadEvents();
         view.updateTitle();
         view.restartCurrentTimeUpdates();
-
+        mEventClickListener.onDayChange(start, end, mNumDays == 1);
         return view;
     }
 
-    // This is called after scrolling stops to move the selected hour
-    // to the visible part of the screen.
-    private void resetSelectedHour() {
-        if (mSelectionHour < mFirstHour + 1) {
-            setSelectedHour(mFirstHour + 1);
-            setSelectedEvent(null);
-            mSelectedEvents.clear();
-            mComputeSelectedEvents = true;
-        } else if (mSelectionHour > mFirstHour + mNumHours - 3) {
-            setSelectedHour(mFirstHour + mNumHours - 3);
-            setSelectedEvent(null);
-            mSelectedEvents.clear();
-            mComputeSelectedEvents = true;
-        }
+    public void setmEvents(ArrayList<Event> eventLists) {
+        this.mEvents = eventLists;
     }
 
-    private void initFirstHour() {
-        mFirstHour = mSelectionHour - mNumHours / 5;
-        if (mFirstHour < 0) {
-            mFirstHour = 0;
-        } else if (mFirstHour + mNumHours > 24) {
-            mFirstHour = 24 - mNumHours;
-        }
+    public ArrayList<Event> getEvents() {
+        return this.mEvents;
     }
 
-    /**
-     * Recomputes the first full hour that is visible on screen after the
-     * screen is scrolled.
-     */
-    private void computeFirstHour() {
-        // Compute the first full hour that is visible on screen
-        mFirstHour = (mViewStartY + mCellHeight + HOUR_GAP - 1) / (mCellHeight + HOUR_GAP);
-        mFirstHourOffset = mFirstHour * (mCellHeight + HOUR_GAP) - mViewStartY;
+    public void setEventTemp(ArrayList<Event> tempEventList) {
+        this.tempEventList = tempEventList;
     }
 
-    private void adjustHourSelection() {
-        if (mSelectionHour < 0) {
-            setSelectedHour(0);
-            if (mMaxAlldayEvents > 0) {
-                mPrevSelectedEvent = null;
-                mSelectionAllday = true;
-            }
-        }
-
-        if (mSelectionHour > 23) {
-            setSelectedHour(23);
-        }
-
-        // If the selected hour is at least 2 time slots from the top and
-        // bottom of the screen, then don't scroll the view.
-        if (mSelectionHour < mFirstHour + 1) {
-            // If there are all-days events for the selected day but there
-            // are no more normal events earlier in the day, then jump to
-            // the all-day event area.
-            // Exception 1: allow the user to scroll to 8am with the trackball
-            // before jumping to the all-day event area.
-            // Exception 2: if 12am is on screen, then allow the user to select
-            // 12am before going up to the all-day event area.
-            int daynum = mSelectionDay - mFirstJulianDay;
-            if (daynum < mEarliestStartHour.length && daynum >= 0
-                    && mMaxAlldayEvents > 0
-                    && mEarliestStartHour[daynum] > mSelectionHour
-                    && mFirstHour > 0 && mFirstHour < 8) {
-                mPrevSelectedEvent = null;
-                mSelectionAllday = true;
-                setSelectedHour(mFirstHour + 1);
-                return;
-            }
-
-            if (mFirstHour > 0) {
-                mFirstHour -= 1;
-                mViewStartY -= (mCellHeight + HOUR_GAP);
-                if (mViewStartY < 0) {
-                    mViewStartY = 0;
-                }
-                return;
-            }
-        }
-
-        if (mSelectionHour > mFirstHour + mNumHours - 3) {
-            if (mFirstHour < 24 - mNumHours) {
-                mFirstHour += 1;
-                mViewStartY += (mCellHeight + HOUR_GAP);
-                if (mViewStartY > mMaxViewStartY) {
-                    mViewStartY = mMaxViewStartY;
-                }
-                return;
-            } else if (mFirstHour == 24 - mNumHours && mFirstHourOffset > 0) {
-                mViewStartY = mMaxViewStartY;
-            }
-        }
-    }
-
-    void clearCachedEvents() {
-        mLastReloadMillis = 0;
-    }
-
-    /* package */ void reloadEvents() {
-        // Protect against this being called before this view has been
-        // initialized.
-//        if (mContext == null) {
-//            return;
-//        }
-
+    void reloadEvents() {
         // Make sure our time zones are up to date
         mTZUpdater.run();
 
@@ -1974,7 +1931,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         mSelectedEvents.clear();
 
         // The start date is the beginning of the week at 12am
-        Time weekStart = new Time(Utils.getTimeZone(mContext, mTZUpdater));
+        Time weekStart = new Time(timeZone);//Utils.getTimeZone(mContext, mTZUpdater));
         weekStart.set(mBaseDate);
         weekStart.hour = 0;
         weekStart.minute = 0;
@@ -1988,59 +1945,61 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         mLastReloadMillis = millis;
 
         // load events in the background
-//        mContext.startProgressSpinner();
-        final ArrayList<Event> events = new ArrayList<Event>();
-        mEventLoader.loadEventsInBackground(mNumDays, events, mFirstJulianDay, new Runnable() {
+        // mContext.startProgressSpinner();
+        // mEventLoader.loadEventsInBackground(mNumDays, events, mFirstJulianDay, new Runnable() {
 
-            public void run() {
-                boolean fadeinEvents = mFirstJulianDay != mLoadedFirstJulianDay;
-                mEvents = events;
-                mLoadedFirstJulianDay = mFirstJulianDay;
-                if (mAllDayEvents == null) {
-                    mAllDayEvents = new ArrayList<Event>();
-                } else {
-                    mAllDayEvents.clear();
-                }
+        // public void run() {
+        //addEvent();
+        //mEvents = this.tempEventList;
 
-                // Create a shorter array for all day events
-                for (Event e : events) {
-                    if (e.drawAsAllday()) {
-                        mAllDayEvents.add(e);
-                    }
-                }
+        boolean fadeinEvents = mFirstJulianDay != mLoadedFirstJulianDay;
+        mLoadedFirstJulianDay = mFirstJulianDay;
+        if (mAllDayEvents == null) {
+            mAllDayEvents = new ArrayList<>();
+        } else {
+            mAllDayEvents.clear();
+        }
 
-                // New events, new layouts
-                if (mLayouts == null || mLayouts.length < events.size()) {
-                    mLayouts = new StaticLayout[events.size()];
-                } else {
-                    Arrays.fill(mLayouts, null);
-                }
-
-                if (mAllDayLayouts == null || mAllDayLayouts.length < mAllDayEvents.size()) {
-                    mAllDayLayouts = new StaticLayout[events.size()];
-                } else {
-                    Arrays.fill(mAllDayLayouts, null);
-                }
-
-                computeEventRelations();
-
-                mRemeasure = true;
-                mComputeSelectedEvents = true;
-                recalc();
-
-                // Start animation to cross fade the events
-                if (fadeinEvents) {
-                    if (mEventsCrossFadeAnimation == null) {
-                        mEventsCrossFadeAnimation =
-                                ObjectAnimator.ofInt(DayView.this, "EventsAlpha", 0, 255);
-                        mEventsCrossFadeAnimation.setDuration(EVENTS_CROSS_FADE_DURATION);
-                    }
-                    mEventsCrossFadeAnimation.start();
-                } else {
-                    invalidate();
-                }
+        // Create a shorter array for all day events
+        for (Event e : mEvents) {
+            if (e.drawAsAllday()) {
+                mAllDayEvents.add(e);
             }
-        }, mCancelCallback);
+        }
+
+        // New events, new layouts
+        if (mLayouts == null || mLayouts.length < mEvents.size()) {
+            mLayouts = new StaticLayout[mEvents.size()];
+        } else {
+            Arrays.fill(mLayouts, null);
+        }
+
+        if (mAllDayLayouts == null || mAllDayLayouts.length < mAllDayEvents.size()) {
+            mAllDayLayouts = new StaticLayout[mEvents.size()];
+        } else {
+            Arrays.fill(mAllDayLayouts, null);
+        }
+
+        computeEventRelations();
+
+        mRemeasure = true;
+        mComputeSelectedEvents = true;
+        recalc();
+
+        // Start animation to cross fade the events
+        if (fadeinEvents) {
+            if (mEventsCrossFadeAnimation == null) {
+                mEventsCrossFadeAnimation =
+                        ObjectAnimator.ofInt(DayView.this, "EventsAlpha", 0, 255);
+                mEventsCrossFadeAnimation.setDuration(EVENTS_CROSS_FADE_DURATION);
+            }
+            mEventsCrossFadeAnimation.start();
+        } else {
+            ///invalidate();
+        }
+        invalidate();
+        // }
+        //}, mCancelCallback);
     }
 
     public int getEventsAlpha() {
@@ -2184,7 +2143,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         }
         mComputeSelectedEvents = false;
 
-        // Draw overscroll glow
+        // Draw overScroll glow
         if (!mEdgeEffectTop.isFinished()) {
             if (DAY_HEADER_HEIGHT != 0) {
                 canvas.translate(0, DAY_HEADER_HEIGHT);
@@ -2253,7 +2212,8 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     // Computes the x position for the left side of the given day (base 0)
     private int computeDayLeftPosition(int day) {
         int effectiveWidth = mViewWidth - mHoursWidth;
-        return day * effectiveWidth / mNumDays + mHoursWidth;
+        int value = day * effectiveWidth / mNumDays + mHoursWidth;
+        return value;
     }
 
     private void drawAllDayHighlights(Rect r, Canvas canvas, Paint p) {
@@ -2309,25 +2269,25 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     }
 
     private void drawDayHeaderLoop(Rect r, Canvas canvas, Paint p) {
-        // Draw the horizontal day background banner
-        // p.setColor(mCalendarDateBannerBackground);
-        // r.top = 0;
-        // r.bottom = DAY_HEADER_HEIGHT;
-        // r.left = 0;
-        // r.right = mHoursWidth + mNumDays * (mCellWidth + DAY_GAP);
-        // canvas.drawRect(r, p);
-        //
-        // Fill the extra space on the right side with the default background
-        // r.left = r.right;
-        // r.right = mViewWidth;
-        // p.setColor(mCalendarGridAreaBackground);
-        // canvas.drawRect(r, p);
-        if (mNumDays == 1 && ONE_DAY_HEADER_HEIGHT == 0) {
+        //Draw the horizontal day background banner
+         /*p.setColor(Color.parseColor("#000000"));
+         r.top = 0;
+         r.bottom = DAY_HEADER_HEIGHT;
+         r.left = 0;
+         r.right = mHoursWidth + mNumDays * (mCellWidth + DAY_GAP);
+         canvas.drawRect(r, p);
+
+         //Fill the extra space on the right side with the default background
+         r.left = r.right;
+         r.right = mViewWidth;
+         p.setColor(Color.parseColor("#000000"));
+         canvas.drawRect(r, p);*/
+        /*if (mNumDays == 1 && ONE_DAY_HEADER_HEIGHT == 0) {
             return;
-        }
+        }*/
 
         p.setTypeface(mBold);
-        p.setTextAlign(Paint.Align.RIGHT);
+        p.setTextAlign(Align.RIGHT);
         int cell = mFirstJulianDay;
 
         String[] dayNames = mDayStrs;
@@ -2410,7 +2370,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         }
         p.setAntiAlias(true);
         p.setAlpha(alpha);
-
         drawSelectedRect(r, canvas, p);
     }
 
@@ -2448,9 +2407,9 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                         midY, p);
                 canvas.drawLine(midX, r.top + verticalPadding, midX, r.bottom - verticalPadding, p);
             } else {
-                p.setStyle(Paint.Style.FILL);
+                p.setStyle(Style.FILL);
                 p.setTextSize(NEW_EVENT_HINT_FONT_SIZE);
-                p.setTextAlign(Paint.Align.LEFT);
+                p.setTextAlign(Align.LEFT);
                 p.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 canvas.drawText(mNewEventHintString, r.left + EVENT_TEXT_LEFT_MARGIN,
                         r.top + Math.abs(p.getFontMetrics().ascent) + EVENT_TEXT_TOP_MARGIN, p);
@@ -2460,7 +2419,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 
     private void drawHours(Rect r, Canvas canvas, Paint p) {
         setupHourTextPaint(p);
-
         int totCellHeight = mCellHeight + HOUR_GAP;
         int hourStep = (mHoursTextHeight + totCellHeight - 1) / totCellHeight;
         int deltaY = hourStep * totCellHeight;
@@ -2504,7 +2462,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
             x = computeDayLeftPosition(day) + DAY_HEADER_RIGHT_MARGIN;
             p.setTextAlign(Align.LEFT);
             p.setTextSize(DATE_HEADER_FONT_SIZE);
-
+            isToday = todayIndex == day;
             p.setTypeface(todayIndex == day ? mBold : Typeface.DEFAULT);
             p.setColor(todayIndex == day ? mWeek_todayColor : color);
             canvas.drawText(dateNumStr, x, y, p);
@@ -2542,20 +2500,30 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 
             // Draw day of the week
             x = computeDayLeftPosition(day) + DAY_HEADER_ONE_DAY_LEFT_MARGIN;
-            p.setTextSize(DAY_HEADER_FONT_SIZE);
+            /*p.setTextSize(DAY_HEADER_FONT_SIZE);
+            p.setColor(todayIndex == day ? Color.parseColor("#FF2290F9")
+                    : Color.parseColor("#868992"));
             p.setTypeface(Typeface.DEFAULT);
-            canvas.drawText(dayStr, x, y, p);
+            canvas.drawText(dayStr, x, y, p);*/
 
             // Draw day of the month
-            x += p.measureText(dayStr) + DAY_HEADER_ONE_DAY_RIGHT_MARGIN;
-            p.setTextSize(DATE_HEADER_FONT_SIZE);
-            p.setTypeface(todayIndex == day ? mBold : Typeface.DEFAULT);
-            canvas.drawText(dateNumStr, x, y, p);
+            //x += p.measureText(dayStr) + DAY_HEADER_ONE_DAY_RIGHT_MARGIN;
+            p.setTextSize(DAY_HEADER_FONT_SIZE);
+            p.setColor(todayIndex == day ? mWeek_todayColor : color);
+            p.setTypeface(Typeface.DEFAULT);
+            //canvas.drawText(dateNumStr + "/ " + mBaseDate.month + "/ " + mBaseDate.year, x, y, p);
+            canvas.drawText(getFormattedDate(), x, y, p);
         }
     }
 
+    String getFormattedDate() {
+        Date date = new Date();
+        date.setTime(mBaseDate.toMillis(true));
+        return new SimpleDateFormat(DATE_FORMAT_FOR_DAY_VIEW).format(date);
+    }
+
     private void drawGridBackground(Rect r, Canvas canvas, Paint p) {
-        Paint.Style savedStyle = p.getStyle();
+        Style savedStyle = p.getStyle();
 
         final float stopX = computeDayLeftPosition(mNumDays);
         float y = 0;
@@ -2772,7 +2740,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
             if (event.title != null) {
                 // MAX - 1 since we add a space
                 bob.append(drawTextSanitizer(event.title.toString(), MAX_EVENT_TEXT_LEN - 1));
-                bob.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
+                bob.setSpan(new StyleSpan(Typeface.BOLD), 0,
                         bob.length(), 0);
                 bob.append(' ');
             }
@@ -2810,7 +2778,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private void drawAllDayEvents(int firstDay, int numDays, Canvas canvas, Paint p) {
 
         p.setTextSize(NORMAL_FONT_SIZE);
-        p.setTextAlign(Paint.Align.LEFT);
+        p.setTextAlign(Align.LEFT);
         Paint eventTextPaint = mEventTextPaint;
 
         final float startY = DAY_HEADER_HEIGHT;
@@ -3001,7 +2969,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         }
 
         // For each event in the selected event list "mSelectedEvents", find
-        // its neighbors in the up and down directions. This could be done
+        // it's neighbors in the up and down directions. This could be done
         // more efficiently by sorting on the Event.getColumn() field, but
         // the list is expected to be very small.
 
@@ -3538,7 +3506,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         int width = rect.right - rect.left;
         int height = rect.bottom - rect.top;
 
-        // If the rectangle is too small for text, then return
+        // If the rectangle is too small for text, than return
         if (eventLayout == null || width < MIN_CELL_WIDTH_FOR_TEXT) {
             return;
         }
@@ -3652,7 +3620,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                     && oldSelectionDay == mSelectionDay && oldSelectionHour == mSelectionHour;
             if (!pressedSelected && mSelectedEvent != null) {
                 mSavedClickedEvent = mSelectedEvent;
-                mDownTouchTime = System.currentTimeMillis();
+                mDownTouchTime = CalendarController.savedTime;//System.currentTimeMillis();
                 postDelayed(mSetClick, mOnDownDelay);
             } else {
                 eventClickCleanup();
@@ -3830,9 +3798,8 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                 Time selectedTime = new Time(mBaseDate);
                 selectedTime.setJulianDay(mSelectionDay);
                 selectedTime.hour = mSelectionHour;
-                selectedTime.normalize(true /* ignore isDst */);
-                mController.sendEvent(this, EventType.GO_TO, null, null, selectedTime, -1,
-                        ViewType.DAY, CalendarController.EXTRA_GOTO_DATE, null, null);
+                selectedTime.normalize(false);
+                mEventClickListener.onWeekViewHeaderDayClick(selectedTime);
             }
             return;
         }
@@ -3842,23 +3809,27 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                 && selectedDay == mSelectionDay && selectedHour == mSelectionHour;
 
         if (pressedSelected && mSavedClickedEvent == null) {
-            // If the tap is on an already selected hour slot, then create a new
+            // If the tap is on an already selected hour slot, than create a new
             // event
             long extraLong = 0;
             if (mSelectionAllday) {
                 extraLong = CalendarController.EXTRA_CREATE_ALL_DAY;
             }
-            mSelectionMode = SELECTION_SELECTED;
-            mController.sendEventRelatedEventWithExtra(this, EventType.CREATE_EVENT, -1,
+            if (isEmptyCellClickEnable) {
+                mSelectionMode = SELECTION_SELECTED;
+            }
+            /*mController.sendEventRelatedEventWithExtra(this, EventType.CREATE_EVENT, -1,
                     getSelectedTimeInMillis(), 0, (int) ev.getRawX(), (int) ev.getRawY(),
-                    extraLong, -1);
+                    extraLong, -1);*/
         } else if (mSelectedEvent != null) {
             // If the tap is on an event, launch the "View event" view
             if (mIsAccessibilityEnabled) {
                 mAccessibilityMgr.interrupt();
             }
 
-            mSelectionMode = SELECTION_HIDDEN;
+            if (isEmptyCellClickEnable) {
+                mSelectionMode = SELECTION_HIDDEN;
+            }
 
             int yLocation =
                     (int) ((mSelectedEvent.top + mSelectedEvent.bottom) / 2);
@@ -3869,7 +3840,8 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
             }
             mClickedYLocation = yLocation;
             long clearDelay = (CLICK_DISPLAY_DURATION + mOnDownDelay) -
-                    (System.currentTimeMillis() - mDownTouchTime);
+                    //(System.currentTimeMillis() - mDownTouchTime);
+                    (CalendarController.savedTime - mDownTouchTime);
             if (clearDelay > 0) {
                 this.postDelayed(mClearClick, clearDelay);
             } else {
@@ -3885,36 +3857,41 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
             Time endTime = new Time(startTime);
             endTime.hour++;
 
-            mSelectionMode = SELECTION_SELECTED;
-            mController.sendEvent(this, EventType.GO_TO, startTime, endTime, -1, ViewType.CURRENT,
-                    CalendarController.EXTRA_GOTO_TIME, null, null);
+            if (isEmptyCellClickEnable) {
+                mSelectionMode = SELECTION_SELECTED;
+            }
+            //TODO Event Click called from here
+            // mController.sendEvent(this, EventType.GO_TO, startTime, endTime, -1, ViewType.CURRENT,
+            //         CalendarController.EXTRA_GOTO_TIME, null, null);
         }
         invalidate();
     }
 
     private void doLongPress(MotionEvent ev) {
-        eventClickCleanup();
-        if (mScrolling) {
-            return;
+        if (isLongClickEnable) {
+            eventClickCleanup();
+            if (mScrolling) {
+                return;
+            }
+
+            // Scale gesture in progress
+            if (mStartingSpanY != 0) {
+                return;
+            }
+
+            int x = (int) ev.getX();
+            int y = (int) ev.getY();
+
+            boolean validPosition = setSelectionFromPosition(x, y, false);
+            if (!validPosition) {
+                // return if the touch wasn't on an area of concern
+                return;
+            }
+
+            mSelectionMode = SELECTION_LONGPRESS;
+            invalidate();
+            performLongClick();
         }
-
-        // Scale gesture in progress
-        if (mStartingSpanY != 0) {
-            return;
-        }
-
-        int x = (int) ev.getX();
-        int y = (int) ev.getY();
-
-        boolean validPosition = setSelectionFromPosition(x, y, false);
-        if (!validPosition) {
-            // return if the touch wasn't on an area of concern
-            return;
-        }
-
-        mSelectionMode = SELECTION_LONGPRESS;
-        invalidate();
-        performLongClick();
     }
 
     private void doScroll(MotionEvent e1, MotionEvent e2, float deltaX, float deltaY) {
@@ -3942,7 +3919,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         }
 
         // If we haven't figured out the predominant scroll direction yet,
-        // then do it now.
+        // than do it now.
         if (mTouchMode == TOUCH_MODE_DOWN) {
             int absDistanceX = Math.abs(distanceX);
             int absDistanceY = Math.abs(distanceY);
@@ -4134,7 +4111,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                     + "\tViewStartHour: " + ViewStartHour + "\tmViewStartY:" + mViewStartY
                     + "\tmCellHeight:" + mCellHeight + " SpanY:" + detector.getCurrentSpanY());
         }
-
         return true;
     }
 
@@ -4247,7 +4223,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                     return true;
                 }
 
-                // If we were scrolling, then reset the selected hour so that it
+                // If we were scrolling, than reset the selected hour so that it
                 // is visible.
                 if (mScrolling) {
                     mScrolling = false;
@@ -4293,103 +4269,9 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         }
     }
 
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
-        MenuItem item;
-
-        // If the trackball is held down, then the context menu pops up and
-        // we never get onKeyUp() for the long-press. So check for it here
-        // and change the selection to the long-press state.
-        if (mSelectionMode != SELECTION_LONGPRESS) {
-            mSelectionMode = SELECTION_LONGPRESS;
-            invalidate();
-        }
-
-        final long startMillis = getSelectedTimeInMillis();
-        int flags = DateUtils.FORMAT_SHOW_TIME
-                | DateUtils.FORMAT_CAP_NOON_MIDNIGHT
-                | DateUtils.FORMAT_SHOW_WEEKDAY;
-        final String title = Utils.formatDateRange(mContext, startMillis, startMillis, flags);
-        menu.setHeaderTitle(title);
-
-        int numSelectedEvents = mSelectedEvents.size();
-        if (mNumDays == 1) {
-            // Day view.
-
-            // If there is a selected event, then allow it to be viewed and
-            // edited.
-            if (numSelectedEvents >= 1) {
-                item = menu.add(0, MENU_EVENT_VIEW, 0, R.string.event_view);
-                item.setOnMenuItemClickListener(mContextMenuHandler);
-                item.setIcon(android.R.drawable.ic_menu_info_details);
-
-                int accessLevel = getEventAccessLevel(mContext, mSelectedEvent);
-                if (accessLevel == ACCESS_LEVEL_EDIT) {
-                    item = menu.add(0, MENU_EVENT_EDIT, 0, R.string.event_edit);
-                    item.setOnMenuItemClickListener(mContextMenuHandler);
-                    item.setIcon(android.R.drawable.ic_menu_edit);
-                    item.setAlphabeticShortcut('e');
-                }
-
-                if (accessLevel >= ACCESS_LEVEL_DELETE) {
-                    item = menu.add(0, MENU_EVENT_DELETE, 0, R.string.event_delete);
-                    item.setOnMenuItemClickListener(mContextMenuHandler);
-                    item.setIcon(android.R.drawable.ic_menu_delete);
-                }
-
-                item = menu.add(0, MENU_EVENT_CREATE, 0, R.string.event_create);
-                item.setOnMenuItemClickListener(mContextMenuHandler);
-                item.setIcon(android.R.drawable.ic_menu_add);
-                item.setAlphabeticShortcut('n');
-            } else {
-                // Otherwise, if the user long-pressed on a blank hour, allow
-                // them to create an event. They can also do this by tapping.
-                item = menu.add(0, MENU_EVENT_CREATE, 0, R.string.event_create);
-                item.setOnMenuItemClickListener(mContextMenuHandler);
-                item.setIcon(android.R.drawable.ic_menu_add);
-                item.setAlphabeticShortcut('n');
-            }
-        } else {
-            // Week view.
-
-            // If there is a selected event, then allow it to be viewed and
-            // edited.
-            if (numSelectedEvents >= 1) {
-                item = menu.add(0, MENU_EVENT_VIEW, 0, R.string.event_view);
-                item.setOnMenuItemClickListener(mContextMenuHandler);
-                item.setIcon(android.R.drawable.ic_menu_info_details);
-
-                int accessLevel = getEventAccessLevel(mContext, mSelectedEvent);
-                if (accessLevel == ACCESS_LEVEL_EDIT) {
-                    item = menu.add(0, MENU_EVENT_EDIT, 0, R.string.event_edit);
-                    item.setOnMenuItemClickListener(mContextMenuHandler);
-                    item.setIcon(android.R.drawable.ic_menu_edit);
-                    item.setAlphabeticShortcut('e');
-                }
-
-                if (accessLevel >= ACCESS_LEVEL_DELETE) {
-                    item = menu.add(0, MENU_EVENT_DELETE, 0, R.string.event_delete);
-                    item.setOnMenuItemClickListener(mContextMenuHandler);
-                    item.setIcon(android.R.drawable.ic_menu_delete);
-                }
-            }
-
-            item = menu.add(0, MENU_EVENT_CREATE, 0, R.string.event_create);
-            item.setOnMenuItemClickListener(mContextMenuHandler);
-            item.setIcon(android.R.drawable.ic_menu_add);
-            item.setAlphabeticShortcut('n');
-
-            item = menu.add(0, MENU_DAY, 0, R.string.show_day_view);
-            item.setOnMenuItemClickListener(mContextMenuHandler);
-            item.setIcon(android.R.drawable.ic_menu_day);
-            item.setAlphabeticShortcut('d');
-        }
-
-        mPopup.dismiss();
-    }
-
     /**
      * Sets mSelectionDay and mSelectionHour based on the (x,y) touch position.
-     * If the touch position is not within the displayed grid, then this
+     * If the touch position is not within the displayed grid, than this
      * method returns false.
      *
      * @param x                the x position of the touch
@@ -4471,6 +4353,9 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
             mSelectionHour = savedHour;
             mSelectionAllday = savedAllDay;
         }
+        if (mSelectedEvent != null) {
+            Log.e("Selected Event", mSelectedEvent.title + " ");
+        }
         return true;
     }
 
@@ -4515,7 +4400,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                     float eventTop = yOffset + height * event.getColumn();
                     float eventBottom = eventTop + height;
                     if (eventTop < y && eventBottom > y) {
-                        // If the touch is inside the event rectangle, then
+                        // If the touch is inside the event rectangle, than
                         // add the event.
                         mSelectedEvents.add(event);
                         closestEvent = event;
@@ -4557,14 +4442,14 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                 continue;
             }
 
-            // If the event intersects the selection region, then add it to
+            // If the event intersects the selection region, than add it to
             // mSelectedEvents.
             if (geometry.eventIntersectsSelection(event, region)) {
                 mSelectedEvents.add(event);
             }
         }
 
-        // If there are any events in the selected region, then assign the
+        // If there are any events in the selected region, than assign the
         // closest one to mSelectedEvent.
         if (mSelectedEvents.size() > 0) {
             int len = mSelectedEvents.size();
@@ -4682,9 +4567,9 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                             if (mSelectionAllday) {
                                 extraLong = CalendarController.EXTRA_CREATE_ALL_DAY;
                             }
-                            mController.sendEventRelatedEventWithExtra(this,
+                           /* mController.sendEventRelatedEventWithExtra(this,
                                     EventType.CREATE_EVENT, -1, getSelectedTimeInMillis(), 0, -1,
-                                    -1, extraLong, -1);
+                                    -1, extraLong, -1);*/
                         }
                     }
                 }).show().setCanceledOnTouchOutside(true);
@@ -4734,6 +4619,55 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         f -= 0.5f; // center the values about 0.
         f *= 0.3f * Math.PI / 2.0f;
         return (float) Math.sin(f);
+    }
+
+    public void setColor(@CalendarColor.Type int type, int colorId) {
+        int color = mContext.getResources().getColor(colorId);
+        switch (type) {
+            case CalendarColor.WEEK_TODAY:
+                mWeek_todayColor = color;
+                break;
+            case CalendarColor.WEEK_SATURDAY:
+                mWeek_saturdayColor = color;
+                break;
+            case CalendarColor.WEEK_SUNDAY:
+                break;
+            case CalendarColor.CALENDAR_DATE_BANNER_TEXT_COLOR:
+                mCalendarDateBannerTextColor = color;
+            case CalendarColor.FUTURE_BG_COLOR:
+                mFutureBgColorRes = color;
+            case CalendarColor.BG_COLOR:
+                mBgColor = color;
+                break;
+            case CalendarColor.CALENDAR_HOUR_LABEL_COLOR:
+                mCalendarHourLabelColor = color;
+                break;
+            case CalendarColor.CALENDAR_GRID_AREA_SELECTED:
+                mCalendarGridAreaSelected = color;
+                break;
+            case CalendarColor.CALENDAR_GRIDLINE_INNER_HORIZONTAL_COLOR:
+                mCalendarGridLineInnerHorizontalColor = color;
+                break;
+            case CalendarColor.CALENDAR_GRIDLINE_INNER_VERTICAL_COLOR:
+                mCalendarGridLineInnerVerticalColor = color;
+                break;
+            case CalendarColor.PRESSED_COLOR:
+                mPressedColor = color;
+            case CalendarColor.CLICKED_COLOR:
+                mClickedColor = color;
+                break;
+            case CalendarColor.EVENT_TEXT_COLOR:
+                mEventTextColor = color;
+                break;
+            case CalendarColor.MORE_EVENTS_TEXT_COLOR:
+                mMoreEventsTextColor = color;
+        }
+        invalidate();
+    }
+
+    public void setmIs24HourFormat(boolean mIs24HourFormat) {
+        this.mIs24HourFormat = mIs24HourFormat;
+        invalidate();
     }
 
     class TodayAnimatorListener extends AnimatorListenerAdapter {
@@ -4799,10 +4733,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
             view = (DayView) mViewSwitcher.getNextView();
             view.mViewStartX = 0;
 
-            if (mCounter == sCounter) {
+            /*if (mCounter == sCounter) {
                 mController.sendEvent(this, EventType.GO_TO, mStart, mEnd, null, -1,
                         ViewType.CURRENT, CalendarController.EXTRA_GOTO_DATE, null, null);
-            }
+            }*/
         }
 
         @Override
@@ -4811,62 +4745,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 
         @Override
         public void onAnimationStart(Animation animation) {
-        }
-    }
-
-    private class ContextMenuHandler implements MenuItem.OnMenuItemClickListener {
-
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case MENU_EVENT_VIEW: {
-                    if (mSelectedEvent != null) {
-                        mController.sendEventRelatedEvent(this, EventType.VIEW_EVENT_DETAILS,
-                                mSelectedEvent.id, mSelectedEvent.startMillis,
-                                mSelectedEvent.endMillis, 0, 0, -1);
-                    }
-                    break;
-                }
-                case MENU_EVENT_EDIT: {
-                    if (mSelectedEvent != null) {
-                        mController.sendEventRelatedEvent(this, EventType.EDIT_EVENT,
-                                mSelectedEvent.id, mSelectedEvent.startMillis,
-                                mSelectedEvent.endMillis, 0, 0, -1);
-                    }
-                    break;
-                }
-                case MENU_DAY: {
-                    mController.sendEvent(this, EventType.GO_TO, getSelectedTime(), null, -1,
-                            ViewType.DAY);
-                    break;
-                }
-                case MENU_AGENDA: {
-                    mController.sendEvent(this, EventType.GO_TO, getSelectedTime(), null, -1,
-                            ViewType.AGENDA);
-                    break;
-                }
-                case MENU_EVENT_CREATE: {
-                    long startMillis = getSelectedTimeInMillis();
-                    long endMillis = startMillis + DateUtils.HOUR_IN_MILLIS;
-                    mController.sendEventRelatedEvent(this, EventType.CREATE_EVENT, -1,
-                            startMillis, endMillis, 0, 0, -1);
-                    break;
-                }
-                case MENU_EVENT_DELETE: {
-                    if (mSelectedEvent != null) {
-                        Event selectedEvent = mSelectedEvent;
-                        long begin = selectedEvent.startMillis;
-                        long end = selectedEvent.endMillis;
-                        long id = selectedEvent.id;
-                        mController.sendEventRelatedEvent(this, EventType.DELETE_EVENT, id, begin,
-                                end, 0, 0, -1);
-                    }
-                    break;
-                }
-                default: {
-                    return false;
-                }
-            }
-            return true;
         }
     }
 
@@ -4913,7 +4791,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     }
 
     class DismissPopup implements Runnable {
-
         public void run() {
             // Protect against null-pointer exceptions
             if (mPopup != null) {
@@ -4923,7 +4800,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     }
 
     class UpdateCurrentTime implements Runnable {
-
         public void run() {
             long currentTime = System.currentTimeMillis();
             mCurrentTime.set(currentTime);

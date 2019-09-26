@@ -41,23 +41,15 @@ import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.CalendarCache;
-import android.provider.SearchRecentSuggestions;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.SparseIntArray;
-import android.widget.Toast;
 
-import com.android.calendar.alerts.AlertReceiver;
-import com.android.calendar.event.EventViewUtils;
-import com.android.colorpicker.ColorPickerDialog;
-import com.android.colorpicker.ColorPickerSwatch;
 import com.android.timezonepicker.TimeZoneInfo;
 import com.android.timezonepicker.TimeZonePickerDialog;
 import com.android.timezonepicker.TimeZonePickerDialog.OnTimeZoneSetListener;
 import com.android.timezonepicker.TimeZonePickerUtils;
-
-import ws.xsoh.etar.R;
+import com.kiprosh.calendar.R;
 
 public class GeneralPreferences extends PreferenceFragment implements
         OnSharedPreferenceChangeListener, OnPreferenceChangeListener, OnTimeZoneSetListener {
@@ -237,7 +229,7 @@ public class GeneralPreferences extends PreferenceFragment implements
         mColor.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                showColorPickerDialog();
+                //showColorPickerDialog();
                 return true;
             }
         });
@@ -278,33 +270,6 @@ public class GeneralPreferences extends PreferenceFragment implements
 
         migrateOldPreferences(sharedPreferences);
 
-    }
-
-    private void showColorPickerDialog() {
-        final ColorPickerDialog colorPickerDialog = new ColorPickerDialog();
-        // Retrieve current color to show it as selected
-        String selectedColorName = Utils.getSharedPreference(getActivity(), KEY_COLOR_PREF, "teal");
-        int selectedColor = getResources().getColor(DynamicTheme.getColorId(selectedColorName));
-
-        colorPickerDialog.initialize(R.string.preferences_color_pick,
-                new int[]{
-                        getResources().getColor(R.color.colorPrimary),
-                        getResources().getColor(R.color.colorBluePrimary),
-                        getResources().getColor(R.color.colorPurplePrimary),
-                        getResources().getColor(R.color.colorRedPrimary),
-                        getResources().getColor(R.color.colorOrangePrimary),
-                        getResources().getColor(R.color.colorGreenPrimary)
-                }, selectedColor, 3, 2);
-
-        colorPickerDialog.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
-            @Override
-            public void onColorSelected(int colour) {
-                Utils.setSharedPreference(getActivity(), KEY_COLOR_PREF, DynamicTheme.getColorName(colorMap.get(colour)));
-            }
-        });
-
-        FragmentManager fm = this.getFragmentManager();
-        colorPickerDialog.show(fm, "colorpicker");
     }
 
     private void initializeColorMap() {
@@ -380,7 +345,7 @@ public class GeneralPreferences extends PreferenceFragment implements
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Activity a = getActivity();
-        if (key.equals(KEY_ALERTS)) {
+        /*if (key.equals(KEY_ALERTS)) {
 
             if (a != null) {
                 Intent intent = new Intent();
@@ -392,13 +357,13 @@ public class GeneralPreferences extends PreferenceFragment implements
                 }
                 a.sendBroadcast(intent);
             }
-        }
+        }*/
         if (a != null) {
             BackupManager.dataChanged(a.getPackageName());
         }
 
         if (key.equals(KEY_THEME_PREF) || key.equals(KEY_COLOR_PREF)) {
-            ((CalendarSettingsActivity) getActivity()).restartActivity();
+            //((CalendarSettingsActivity) getActivity()).restartActivity();
         }
     }
 
@@ -493,7 +458,7 @@ public class GeneralPreferences extends PreferenceFragment implements
 
         for (int i = 0; i < count; i++) {
             int value = Integer.parseInt(values[i].toString());
-            entries[i] = EventViewUtils.constructReminderLabel(getActivity(), value, false);
+            // entries[i] = EventViewUtils.constructReminderLabel(getActivity(), value, false);
         }
 
         mSnoozeDelay.setEntries(entries);
@@ -503,7 +468,7 @@ public class GeneralPreferences extends PreferenceFragment implements
     public boolean onPreferenceTreeClick(
             PreferenceScreen preferenceScreen, Preference preference) {
         final String key = preference.getKey();
-        if (KEY_CLEAR_SEARCH_HISTORY.equals(key)) {
+        /*if (KEY_CLEAR_SEARCH_HISTORY.equals(key)) {
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getActivity(),
                     Utils.getSearchAuthority(getActivity()),
                     CalendarRecentSuggestionsProvider.MODE);
@@ -519,7 +484,8 @@ public class GeneralPreferences extends PreferenceFragment implements
             return true;
         } else {
             return super.onPreferenceTreeClick(preferenceScreen, preference);
-        }
+        }*/
+        return true;
     }
 
     @Override

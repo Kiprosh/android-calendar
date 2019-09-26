@@ -18,7 +18,6 @@ package com.android.calendar;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
@@ -34,9 +33,6 @@ import android.provider.CalendarContract.Events;
 import android.text.format.Time;
 import android.util.Log;
 import android.util.Pair;
-
-import com.android.calendar.event.EditEventActivity;
-import com.android.calendar.selectcalendars.SelectVisibleCalendarsActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
@@ -72,17 +68,16 @@ public class CalendarController {
     private static final boolean DEBUG = false;
     private static final String TAG = "CalendarController";
     private static WeakHashMap<Context, WeakReference<CalendarController>> instances =
-            new WeakHashMap<Context, WeakReference<CalendarController>>();
+            new WeakHashMap<>();
     private final Context mContext;
     // This uses a LinkedHashMap so that we can replace fragments based on the
     // view id they are being expanded into since we can't guarantee a reference
     // to the handler will be findable
     private final LinkedHashMap<Integer, EventHandler> eventHandlers =
-            new LinkedHashMap<Integer, EventHandler>(5);
-    private final LinkedList<Integer> mToBeRemovedEventHandlers = new LinkedList<Integer>();
-    private final LinkedHashMap<Integer, EventHandler> mToBeAddedEventHandlers = new LinkedHashMap<
-            Integer, EventHandler>();
-    private final WeakHashMap<Object, Long> filters = new WeakHashMap<Object, Long>(1);
+            new LinkedHashMap<>(5);
+    private final LinkedList<Integer> mToBeRemovedEventHandlers = new LinkedList<>();
+    private final LinkedHashMap<Integer, EventHandler> mToBeAddedEventHandlers = new LinkedHashMap<>();
+    private final WeakHashMap<Object, Long> filters = new WeakHashMap<>(1);
     private final Time mTime = new Time();
     private final Runnable mUpdateTimezone = new Runnable() {
         @Override
@@ -99,7 +94,9 @@ public class CalendarController {
     private long mEventId = -1;
     private long mDateFlags = 0;
 
-    private CalendarController(Context context) {
+    public static long savedTime;
+
+    public CalendarController(Context context) {
         mContext = context;
         mUpdateTimezone.run();
         mTime.setToNow();
@@ -410,13 +407,13 @@ public class CalendarController {
         if (!handled) {
             // Launch Settings
             if (event.eventType == EventType.LAUNCH_SETTINGS) {
-                launchSettings();
+
                 return;
             }
 
             // Launch Calendar Visible Selector
             if (event.eventType == EventType.LAUNCH_SELECT_VISIBLE_CALENDARS) {
-                launchSelectVisibleCalendars();
+                //launchSelectVisibleCalendars();
                 return;
             }
 
@@ -438,7 +435,7 @@ public class CalendarController {
                 launchEditEvent(event.id, event.startTime.toMillis(false), endTime, false);
                 return;
             } else if (event.eventType == EventType.DELETE_EVENT) {
-                launchDeleteEvent(event.id, event.startTime.toMillis(false), endTime);
+                //launchDeleteEvent(event.id, event.startTime.toMillis(false), endTime);
                 return;
             } else if (event.eventType == EventType.SEARCH) {
                 launchSearch(event.id, event.query, event.componentName);
@@ -555,20 +552,6 @@ public class CalendarController {
         return mPreviousViewType;
     }
 
-    private void launchSelectVisibleCalendars() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setClass(mContext, SelectVisibleCalendarsActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        mContext.startActivity(intent);
-    }
-
-    private void launchSettings() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setClass(mContext, CalendarSettingsActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        mContext.startActivity(intent);
-    }
-
     private void launchCreateEvent(long startMillis, long endMillis, boolean allDayEvent,
                                    String title, long calendarId) {
         Intent intent = generateCreateEventIntent(startMillis, endMillis, allDayEvent, title,
@@ -580,7 +563,6 @@ public class CalendarController {
     public Intent generateCreateEventIntent(long startMillis, long endMillis,
                                             boolean allDayEvent, String title, long calendarId) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setClass(mContext, EditEventActivity.class);
         intent.putExtra(EXTRA_EVENT_BEGIN_TIME, startMillis);
         intent.putExtra(EXTRA_EVENT_END_TIME, endMillis);
         intent.putExtra(EXTRA_EVENT_ALL_DAY, allDayEvent);
@@ -606,29 +588,11 @@ public class CalendarController {
         Intent intent = new Intent(Intent.ACTION_EDIT, uri);
         intent.putExtra(EXTRA_EVENT_BEGIN_TIME, startMillis);
         intent.putExtra(EXTRA_EVENT_END_TIME, endMillis);
-        intent.setClass(mContext, EditEventActivity.class);
+        //intent.setClass(mContext, EditEventActivity.class);
         intent.putExtra(EVENT_EDIT_ON_LAUNCH, edit);
         mEventId = eventId;
         mContext.startActivity(intent);
     }
-
-    private void launchDeleteEvent(long eventId, long startMillis, long endMillis) {
-        launchDeleteEventAndFinish(null, eventId, startMillis, endMillis, -1);
-    }
-
-    private void launchDeleteEventAndFinish(Activity parentActivity, long eventId, long startMillis,
-                                            long endMillis, int deleteWhich) {
-        DeleteEventHelper deleteEventHelper = new DeleteEventHelper(mContext, parentActivity,
-                parentActivity != null /* exit when done */);
-        deleteEventHelper.delete(startMillis, endMillis, eventId, deleteWhich);
-    }
-
-//    private void launchAlerts() {
-//        Intent intent = new Intent();
-//        intent.setClass(mContext, AlertActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        mContext.startActivity(intent);
-//    }
 
     private void launchSearch(long eventId, String query, ComponentName componentName) {
         final SearchManager searchManager =

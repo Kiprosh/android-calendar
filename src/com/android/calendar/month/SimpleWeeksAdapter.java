@@ -96,9 +96,11 @@ public class SimpleWeeksAdapter extends BaseAdapter implements OnTouchListener {
     protected int mDaysPerWeek = DEFAULT_DAYS_PER_WEEK;
     protected int mFocusMonth = DEFAULT_MONTH_FOCUS;
     ListView mListView;
+    MonthFieldColors monthFieldColors;
 
-    public SimpleWeeksAdapter(Context context, HashMap<String, Integer> params) {
+    public SimpleWeeksAdapter(MonthFieldColors monthFieldColors, Context context, HashMap<String, Integer> params) {
         mContext = context;
+        this.monthFieldColors = monthFieldColors;
 
         // Get default week start based on locale, subtracting one for use with android Time.
         Calendar cal = Calendar.getInstance(Locale.getDefault());
@@ -211,7 +213,7 @@ public class SimpleWeeksAdapter extends BaseAdapter implements OnTouchListener {
             // We store the drawing parameters in the view so it can be recycled
             drawingParams = (HashMap<String, Integer>) v.getTag();
         } else {
-            v = new SimpleWeekView(mContext);
+            v = new SimpleWeekView(monthFieldColors, mContext);
             // Set up the new view
             LayoutParams params = new LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -259,7 +261,7 @@ public class SimpleWeeksAdapter extends BaseAdapter implements OnTouchListener {
         if (mGestureDetector.onTouchEvent(event)) {
             SimpleWeekView view = (SimpleWeekView) v;
             Time day = ((SimpleWeekView) v).getDayFromLocation(event.getX());
-            if (Log.isLoggable(TAG, Log.DEBUG)) {
+            if (true) {
                 Log.d(TAG, "Touched day at Row=" + view.mWeek + " day=" + day.toString());
             }
             if (day != null) {

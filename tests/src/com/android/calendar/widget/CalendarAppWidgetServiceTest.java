@@ -18,7 +18,6 @@
 package com.android.calendar.widget;
 
 import com.android.calendar.widget.CalendarAppWidgetModel.EventInfo;
-import com.android.calendar.widget.CalendarAppWidgetService.CalendarFactory;
 import com.android.calendar.Utils;
 
 import android.content.Context;

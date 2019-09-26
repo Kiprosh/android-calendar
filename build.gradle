@@ -16,97 +16,6 @@ allprojects {
     }
 }
 
-project(':external:calendar') {
-    apply plugin: 'android-library'
-
-    android {
-        compileSdkVersion 27
-        buildToolsVersion '27.0.3'
-
-        defaultConfig {
-            minSdkVersion 19
-            targetSdkVersion 27
-        }
-
-        sourceSets {
-                main {
-                    manifest.srcFile 'AndroidManifest.xml'
-                    java.srcDirs = ['src']
-                    resources.srcDirs = ['src']
-                    aidl.srcDirs = ['src']
-                    renderscript.srcDirs = ['src']
-                    res.srcDirs = ['res']
-                    assets.srcDirs = ['assets']
-            }
-
-        }
-
-        lintOptions {
-            abortOnError false
-        }
-    }
-}
-
-project(':external:colorpicker') {
-    apply plugin: 'android-library'
-
-    android {
-        compileSdkVersion 27
-        buildToolsVersion '27.0.3'
-
-        defaultConfig {
-            minSdkVersion 19
-            targetSdkVersion 27
-        }
-
-        sourceSets {
-                main {
-                    manifest.srcFile 'AndroidManifest.xml'
-                    java.srcDirs = ['src']
-                    resources.srcDirs = ['src']
-                    aidl.srcDirs = ['src']
-                    renderscript.srcDirs = ['src']
-                    res.srcDirs = ['res']
-                    assets.srcDirs = ['assets']
-            }
-        }
-    }
-}
-
-project(':external:datetimepicker') {
-    apply plugin: 'android-library'
-
-    dependencies {
-        implementation 'com.android.support:support-v4:27.1.1'
-    }
-
-    android {
-        compileSdkVersion 27
-        buildToolsVersion '27.0.3'
-
-        defaultConfig {
-            minSdkVersion 19
-            targetSdkVersion 27
-        }
-
-        sourceSets {
-                main {
-                    manifest.srcFile 'AndroidManifest.xml'
-                    java.srcDirs = ['src']
-                    resources.srcDirs = ['src']
-                    aidl.srcDirs = ['src']
-                    renderscript.srcDirs = ['src']
-                    res.srcDirs = ['res']
-                    assets.srcDirs = ['assets']
-            }
-        }
-
-        lintOptions {
-            abortOnError false
-        }
-    }
-}
-
 project(':external:timezonepicker') {
     apply plugin: 'android-library'
 
@@ -140,47 +49,12 @@ project(':external:timezonepicker') {
     }
 }
 
-project(':external:chips') {
-    apply plugin: 'android-library'
-
-    android {
-        compileSdkVersion 27
-        buildToolsVersion '27.0.3'
-
-        defaultConfig {
-            minSdkVersion 19
-            targetSdkVersion 27
-        }
-
-        sourceSets {
-                main {
-                    manifest.srcFile 'AndroidManifest.xml'
-                    java.srcDirs = ['src']
-                    resources.srcDirs = ['src']
-                    aidl.srcDirs = ['src']
-                    renderscript.srcDirs = ['src']
-                    res.srcDirs = ['res']
-                    assets.srcDirs = ['assets']
-            }
-        }
-
-
-        lintOptions {
-            abortOnError false
-        }
-    }
-}
-
 apply plugin: 'com.android.application'
 
 dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:design:27.1.1'
-    implementation project(':external:calendar')
-    implementation project(':external:colorpicker')
-    implementation project(':external:datetimepicker')
     implementation project(':external:timezonepicker')
-    implementation project(':external:chips')
 }
 
 android {

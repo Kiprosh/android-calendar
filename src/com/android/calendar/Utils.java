@@ -50,8 +50,8 @@ import android.text.util.Linkify;
 import android.util.Log;
 
 import com.android.calendar.CalendarController.ViewType;
-import com.android.calendar.CalendarEventModel.ReminderEntry;
 import com.android.calendar.CalendarUtils.TimeZoneUtils;
+import com.kiprosh.calendar.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,8 +68,6 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import ws.xsoh.etar.R;
 
 import static android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME;
 
@@ -257,7 +255,10 @@ public class Utils {
      * @param timeZone The time zone to set Calendar to, or **tbd**
      */
     public static void setTimeZone(Context context, String timeZone) {
-        mTZUtils.setTimeZone(context, timeZone);
+        SharedPreferences preferences = context.getSharedPreferences("TIMEZONE", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("TIMEZONE_ID", timeZone);
+        editor.apply();
     }
 
     /**
@@ -276,8 +277,10 @@ public class Utils {
      * display
      */
     public static String getTimeZone(Context context, Runnable callback) {
-        return mTZUtils.getTimeZone(context, callback);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("TIMEZONE", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("TIMEZONE_ID", Time.getCurrentTimezone());
     }
+
 
     /**
      * Formats a date or a time range according to the local conventions.
@@ -806,8 +809,8 @@ public class Utils {
     /**
      * Null-safe object comparison
      *
-     * @param s1
-     * @param s2
+     * @param o1
+     * @param o2
      * @return
      */
     public static boolean equals(Object o1, Object o2) {
@@ -878,7 +881,7 @@ public class Utils {
      * @param top            The lowest y value the dna should be drawn at
      * @param bottom         The highest y value the dna should be drawn at
      * @param dayXs          An array of x values to draw the dna at, one for each day
-     * @param conflictColor  the color to use for conflicts
+     * @param context       the color to use for conflicts
      * @return
      */
     public static HashMap<Integer, DNAStrand> createDNAStrands(int firstJulianDay,
@@ -1565,7 +1568,7 @@ public class Utils {
 
         // Start the email intent.  Email from the account of the calendar owner in case there
         // are multiple email accounts.
-        Intent emailIntent = new Intent(android.content.Intent.ACTION_SENDTO, Uri.parse(uri));
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
         emailIntent.putExtra("fromAccountString", ownerAccount);
 
         // Workaround a Email bug that overwrites the body with this intent extra.  If not
@@ -2020,7 +2023,7 @@ public class Utils {
      * @param bundle The incoming bundle that contains the reminder info.
      * @return ArrayList<ReminderEntry> of the reminder minutes and methods.
      */
-    public static ArrayList<ReminderEntry> readRemindersFromBundle(Bundle bundle) {
+    /*public static ArrayList<ReminderEntry> readRemindersFromBundle(Bundle bundle) {
         ArrayList<ReminderEntry> reminders = null;
 
         ArrayList<Integer> reminderMinutes = bundle.getIntegerArrayList(
@@ -2056,7 +2059,7 @@ public class Utils {
         }
 
         return reminders;
-    }
+    }*/
 
     // A single strand represents one color of events. Events are divided up by
     // color to make them convenient to draw. The black strand is special in

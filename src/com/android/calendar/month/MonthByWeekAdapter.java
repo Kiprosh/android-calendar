@@ -18,7 +18,6 @@ package com.android.calendar.month;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Handler;
 import android.os.Message;
 import android.text.format.Time;
 import android.util.Log;
@@ -31,15 +30,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.LayoutParams;
 
 import com.android.calendar.CalendarController;
-import com.android.calendar.CalendarController.EventType;
-import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.Event;
 import com.android.calendar.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ws.xsoh.etar.R;
 
 public class MonthByWeekAdapter extends SimpleWeeksAdapter {
     public static final String WEEK_PARAMS_IS_MINI = "mini_month";
@@ -65,6 +61,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
     protected int mOrientation = Configuration.ORIENTATION_LANDSCAPE;
     protected ArrayList<ArrayList<Event>> mEventDayList = new ArrayList<ArrayList<Event>>();
     protected ArrayList<Event> mEvents = null;
+    CallbackForDayView callbackForDayView;
     MonthWeekEventsView mClickedView;
     MonthWeekEventsView mSingleTapUpView;
     MonthWeekEventsView mLongClickedView;
@@ -107,15 +104,16 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
     long mClickTime;                        // Used to calculate minimum click animation time
     private boolean mAnimateToday = false;
     private long mAnimateTime = 0;
-    private Handler mEventDialogHandler;
+    MonthFieldColors monthFieldColors;
 
-    public MonthByWeekAdapter(Context context, HashMap<String, Integer> params, Handler handler) {
-        super(context, params);
-        mEventDialogHandler = handler;
+    public MonthByWeekAdapter(MonthFieldColors monthFieldColors, CallbackForDayView callbackForDayView, Context context, HashMap<String, Integer> params) {
+        super(monthFieldColors, context, params);
+        this.monthFieldColors = monthFieldColors;
+        this.callbackForDayView = callbackForDayView;
         if (params.containsKey(WEEK_PARAMS_IS_MINI)) {
             mIsMiniMonth = params.get(WEEK_PARAMS_IS_MINI) != 0;
         }
-        mShowAgendaWithMonth = Utils.getConfigBool(context, R.bool.show_agenda_with_month);
+        mShowAgendaWithMonth = false;
         ViewConfiguration vc = ViewConfiguration.get(context);
         mOnDownDelay = ViewConfiguration.getTapTimeout();
         mMovedPixelToCancel = vc.getScaledTouchSlop();
@@ -239,13 +237,13 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                     isAnimatingToday = true;
                     // There is a bug that causes invalidates to not work some
                     // of the time unless we recreate the view.
-                    v = new MonthWeekEventsView(mContext);
+                    v = new MonthWeekEventsView(monthFieldColors, mContext);
                 }
             } else {
                 drawingParams = (HashMap<String, Integer>) v.getTag();
             }
         } else {
-            v = new MonthWeekEventsView(mContext);
+            v = new MonthWeekEventsView(monthFieldColors, mContext);
         }
         if (drawingParams == null) {
             drawingParams = new HashMap<String, Integer>();
@@ -314,19 +312,29 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
 
     @Override
     protected void onDayTapped(Time day) {
+
         setDayParameters(day);
         if (mShowAgendaWithMonth || mIsMiniMonth) {
             // If agenda view is visible with month view , refresh the views
             // with the selected day's info
-            mController.sendEvent(mContext, EventType.GO_TO, day, day, -1,
-                    ViewType.CURRENT, CalendarController.EXTRA_GOTO_DATE, null, null);
+            mController.sendEvent(mContext, CalendarController.EventType.GO_TO, day, day, -1,
+                    CalendarController.ViewType.CURRENT, CalendarController.EXTRA_GOTO_DATE, null, null);
         } else {
             // Else , switch to the detailed view
-            mController.sendEvent(mContext, EventType.GO_TO, day, day, -1,
-                    ViewType.DETAIL,
+            if (callbackForDayView != null) {
+                callbackForDayView.callDayFragment(day);
+            }
+
+            mController.sendEvent(mContext, CalendarController.EventType.GO_TO, day, day, -1,
+                    CalendarController.ViewType.DETAIL,
                     CalendarController.EXTRA_GOTO_DATE
                             | CalendarController.EXTRA_GOTO_BACK_TO_PREVIOUS, null, null);
         }
+    }
+
+
+    public interface CallbackForDayView {
+        void callDayFragment(Time day);
     }
 
     private void setDayParameters(Time day) {
@@ -412,7 +420,6 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                     mLongClickedView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     Message message = new Message();
                     message.obj = day;
-                    mEventDialogHandler.sendMessage(message);
                 }
                 mLongClickedView.clearClickedDay();
                 mLongClickedView = null;

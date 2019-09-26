@@ -34,12 +34,11 @@ import android.view.accessibility.AccessibilityManager;
 
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
+import com.kiprosh.calendar.R;
 
 import java.security.InvalidParameterException;
 import java.text.NumberFormat;
 import java.util.HashMap;
-
-import ws.xsoh.etar.R;
 
 /**
  * <p>
@@ -167,10 +166,15 @@ public class SimpleWeekView extends View {
     protected int mTodayOutlineColor;
     protected int mWeekNumColor;
     Time mLastHoverTime = null;
+    public MonthFieldColors monthFieldColors;
 
     public SimpleWeekView(Context context) {
         super(context);
+    }
 
+    public SimpleWeekView(MonthFieldColors monthFieldColors, Context context) {
+        super(context);
+        this.monthFieldColors = monthFieldColors;
         Resources res = context.getResources();
         DynamicTheme theme = new DynamicTheme();
         mBGColor = theme.getColor(context, "month_bgcolor");

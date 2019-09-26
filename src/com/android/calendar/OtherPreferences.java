@@ -34,7 +34,7 @@ import android.text.format.Time;
 import android.util.Log;
 import android.widget.TimePicker;
 
-import ws.xsoh.etar.R;
+import com.kiprosh.calendar.R;
 
 public class OtherPreferences extends PreferenceFragment implements OnPreferenceChangeListener {
     // Must be the same keys that are used in the other_preferences.xml file.
