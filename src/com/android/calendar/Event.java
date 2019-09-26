@@ -52,7 +52,7 @@ public class Event implements Cloneable, Parcelable, Comparable {
     };
     public long id;
     public int color;
-    public CharSequence title;
+    public String title;
     public CharSequence location;
     public boolean allDay;
     public String organizer;
@@ -136,7 +136,7 @@ public class Event implements Cloneable, Parcelable, Comparable {
                                      0.0f, 0.0f, null, null, null, null, 0, 0));*/
 
 
-    public Event(long id, int color, CharSequence title, CharSequence location, boolean allDay, String organizer, boolean guestsCanModify, int startDay, int endDay, int startTime, int endTime, long startMillis, long endMillis, boolean hasAlarm, boolean isRepeating) {
+    public Event(long id, int color, String title, CharSequence location, boolean allDay, String organizer, boolean guestsCanModify, int startDay, int endDay, int startTime, int endTime, long startMillis, long endMillis, boolean hasAlarm, boolean isRepeating) {
         this.id = id;
         this.color = color;
         this.title = title;
@@ -154,7 +154,7 @@ public class Event implements Cloneable, Parcelable, Comparable {
         this.isRepeating = isRepeating;
     }
 
-    public Event(long id, int color, CharSequence title, CharSequence location, boolean allDay, String organizer, boolean guestsCanModify, int startDay, int endDay, int startTime, int endTime, long startMillis, long endMillis, boolean hasAlarm, boolean isRepeating, int selfAttendeeStatus, float left, float right, float top, float bottom, Event nextRight, Event nextLeft, Event nextUp, Event nextDown, int mColumn, int mMaxColumns) {
+    public Event(long id, int color, String title, CharSequence location, boolean allDay, String organizer, boolean guestsCanModify, int startDay, int endDay, int startTime, int endTime, long startMillis, long endMillis, boolean hasAlarm, boolean isRepeating, int selfAttendeeStatus, float left, float right, float top, float bottom, Event nextRight, Event nextLeft, Event nextUp, Event nextDown, int mColumn, int mMaxColumns) {
         this.id = id;
         this.color = color;
         this.title = title;
@@ -193,7 +193,7 @@ public class Event implements Cloneable, Parcelable, Comparable {
         return title;
     }
 
-    public void setTitle(CharSequence title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -398,6 +398,7 @@ public class Event implements Cloneable, Parcelable, Comparable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(aggregateId);
         parcel.writeLong(id);
+        parcel.writeString(title);
         parcel.writeInt(color);
         parcel.writeByte((byte) (allDay ? 1 : 0));
         parcel.writeString(organizer);

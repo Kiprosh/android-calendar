@@ -5,16 +5,15 @@ import android.text.format.Time;
 
 public interface CalendarListeners {
 
-    void onEventClick(Time tapEvent, Event clickedEvent);
+    void onEventClick(boolean isDayView, Time tapEvent, Event clickedEvent);
 
     void onDayChange(Time selectedStartDay, Time selectedEndDay, boolean isDayView);
 
     void onWeekViewHeaderDayClick(Time selectedDay);
 
+    void callOtherCalendarViews(Time time);
 
-    public void callOtherCalendarViews(Time time);
+    void updateToolbarTitleOnScroll(long dateInMilliseconds);
 
-    public void updateToolbarTitleOnScroll(long dateInMilliseconds);
-
-    public void callAPIForEvents(long updatedTimeInMillis);
+    void callAPIForEvents(long updatedTimeInMillis);
 }

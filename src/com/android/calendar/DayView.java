@@ -87,6 +87,7 @@ import java.util.regex.Pattern;
  */
 public class DayView extends View implements
         ScaleGestureDetector.OnScaleGestureListener, View.OnClickListener, View.OnLongClickListener {
+    public static final float GRID_LINE_INNER_WIDTH = 1;
     /* package */ static final int MINUTES_PER_HOUR = 60;
     /* package */ static final int MINUTES_PER_DAY = MINUTES_PER_HOUR * 24;
     /* package */ static final int MILLIS_PER_MINUTE = 60 * 1000;
@@ -123,7 +124,6 @@ public class DayView extends View implements
     private static final int UPDATE_CURRENT_TIME_DELAY = 300000;
     // The number of milliseconds to show the popup window
     private static final int POPUP_DISMISS_DELAY = 3000;
-    public static final float GRID_LINE_INNER_WIDTH = 1;
     private static final int DAY_GAP = 1;
     private static final int HOUR_GAP = 1;
     // More events text will transition between invisible and this alpha
@@ -155,11 +155,11 @@ public class DayView extends View implements
     private static final int SELECTION_LONGPRESS = 3;
     // The rest of this file was borrowed from Launcher2 - PagedView.java
     private static final int MINIMUM_SNAP_VELOCITY = 2200;
+    public static float GRID_LINE_LEFT_MARGIN = 0;
     protected static StringBuilder mStringBuilder = new StringBuilder(50);
     // TODO recreate formatter when locale changes
     protected static Formatter mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
     private static String TAG = "DayView";
-    public static float GRID_LINE_LEFT_MARGIN = 0;
     private static boolean DEBUG_SCALING = false;
     private static float mScale = 0; // Used for supporting different screen densities
     private static int DEFAULT_CELL_HEIGHT = 64;
@@ -262,20 +262,6 @@ public class DayView extends View implements
      * Whether to use the expand or collapse icon.
      */
     private static boolean mUseExpandIcon = true;
-    private final String DATE_FORMAT_FOR_DAY_VIEW = "EEEE, dd MMMM yyyy";
-    private final Runnable mTZUpdater = new Runnable() {
-        @Override
-        public void run() {
-            String tz = Utils.getTimeZone(mContext, this);
-            mBaseDate.timezone = tz;
-            mBaseDate.normalize(true);
-            mBaseDate.switchTimezone(tz);
-            mCurrentTime.switchTimezone(tz);
-            invalidate();
-        }
-    };
-    public int mTodayJulianDay;
-    public int mFirstJulianDay;
     private static boolean mShowAllAllDayEvents = false;
     private static int sCounter = 0;
     protected final EventGeometry mEventGeometry;
@@ -285,6 +271,7 @@ public class DayView extends View implements
     protected final Drawable mTodayHeaderDrawable;
     protected final Drawable mExpandAlldayDrawable;
     protected final Drawable mCollapseAlldayDrawable;
+    private final String DATE_FORMAT_FOR_DAY_VIEW = "EEEE, dd MMMM yyyy";
     //private final ContextMenuHandler mContextMenuHandler = new ContextMenuHandler();
     private final CalendarController mController;
     private final ContinueScroll mContinueScroll = new ContinueScroll();
@@ -314,8 +301,31 @@ public class DayView extends View implements
     private final ScrollInterpolator mHScrollInterpolator;
     private final String mCreateNewEventString;
     private final String mNewEventHintString;
-    public boolean isToday = false;
     private final Pattern drawTextSanitizerFilter = Pattern.compile("[\t\n],");
+    private final Runnable mTZUpdater = new Runnable() {
+        @Override
+        public void run() {
+            String tz = Utils.getTimeZone(mContext, this);
+            mBaseDate.timezone = tz;
+            mBaseDate.normalize(true);
+            mBaseDate.switchTimezone(tz);
+            mCurrentTime.switchTimezone(tz);
+            invalidate();
+        }
+    };
+    // Clears the "clicked" color from the clicked event and launch the event
+    private final Runnable mClearClick = new Runnable() {
+        @Override
+        public void run() {
+            if (mClickedEvent != null && mEventClickListener != null) {
+                mEventClickListener.onEventClick(mNumDays == 1, getSelectedTime(), mClickedEvent);
+            }
+            mClickedEvent = null;
+            DayView.this.invalidate();
+        }
+    };
+    public int mTodayJulianDay;
+    public int mFirstJulianDay;
     protected boolean mPaused = true;
     protected Context mContext;
     protected int mNumDays = 7;
@@ -332,6 +342,8 @@ public class DayView extends View implements
     ObjectAnimator mMoreAlldayEventsAnimator;
     // Animates the current time marker when Today is pressed
     ObjectAnimator mTodayAnimator;
+    public boolean isToday = false;
+    public String[] mDayStrs;
     private boolean isLongClickEnable;
     //private final DeleteEventHelper mDeleteEventHelper;
     private boolean isEmptyCellClickEnable;
@@ -348,9 +360,7 @@ public class DayView extends View implements
      */
     private long mLastPopupEventID;
     private Time mCurrentTime;
-    public String[] mDayStrs;
     ArrayList<Event> tempEventList = new ArrayList<>();
-    long savedTime;
     private int mLoadedFirstJulianDay = -1;
     private int mLastJulianDay;
     private int mMonthLength;
@@ -399,17 +409,7 @@ public class DayView extends View implements
     private int mSelectionDay;        // Julian day
     private int mSelectionHour;
     private CalendarListeners mEventClickListener;
-    // Clears the "clicked" color from the clicked event and launch the event
-    private final Runnable mClearClick = new Runnable() {
-        @Override
-        public void run() {
-            if (mClickedEvent != null && mEventClickListener != null) {
-                mEventClickListener.onEventClick(getSelectedTime(), mClickedEvent);
-            }
-            mClickedEvent = null;
-            DayView.this.invalidate();
-        }
-    };
+    long savedTime;
     // Current selection info for accessibility
     private int mSelectionDayForAccessibility;        // Julian day
     private int mSelectionHourForAccessibility;
@@ -1828,7 +1828,6 @@ public class DayView extends View implements
         b.append(when);
         b.append(PERIOD_SPACE);
     }*/
-
     private View switchViews(boolean forward, float xOffSet, float width, float velocity) {
         Log.e("Item", mEvents.size() + " ");
 

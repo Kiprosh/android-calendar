@@ -130,10 +130,10 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         dayView = new DayView(savedTime, eventList, getActivity(), mController, mViewSwitcher, mNumDays,
                 new CalendarListeners() {
             @Override
-            public void onEventClick(Time tapEvent, Event clickedEvent) {
+            public void onEventClick(boolean isDayView, Time tapEvent, Event clickedEvent) {
                 CalendarListeners listener = getParentFragmentObject();
                 if (listener != null) {
-                    listener.onEventClick(tapEvent, clickedEvent);
+                    listener.onEventClick(isDayView, tapEvent, clickedEvent);
                 }
             }
 
@@ -226,10 +226,14 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         if (fragmentManager == null) {
             return null;
         } else {
-            for (Fragment fragment : fragmentManager.getFragments()) {
-                if (fragment instanceof CalendarListeners) {
-                    parentFragment = (CalendarListeners) fragment;
-                    break;
+            if (getActivity() instanceof CalendarListeners) {
+                parentFragment = (CalendarListeners) getActivity();
+            } else {
+                for (Fragment fragment : fragmentManager.getFragments()) {
+                    if (fragment instanceof CalendarListeners) {
+                        parentFragment = (CalendarListeners) fragment;
+                        break;
+                    }
                 }
             }
         }
