@@ -51,7 +51,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
@@ -820,7 +819,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         item.setVisible(ImportActivity.hasThingsToImport());
 
         mSearchMenu = menu.findItem(R.id.action_search);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchMenu);
+        mSearchView = (SearchView) mSearchMenu.getActionView();
         if (mSearchView != null) {
             Utils.setUpSearchView(mSearchView, this);
             mSearchView.setOnQueryTextListener(this);
