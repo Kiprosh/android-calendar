@@ -30,7 +30,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.CalendarContract.Events;
 import android.provider.SearchRecentSuggestions;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.format.Time;
@@ -49,7 +48,7 @@ import static android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME;
 import static android.provider.CalendarContract.EXTRA_EVENT_END_TIME;
 
 public class SearchActivity extends AppCompatActivity implements CalendarController.EventHandler,
-        SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener {
+        SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
 
     protected static final String BUNDLE_KEY_RESTORE_TIME = "key_restore_time";
@@ -252,9 +251,9 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
 
         MenuItem item = menu.findItem(R.id.action_search);
 
-        MenuItemCompat.expandActionView(item);
-        MenuItemCompat.setOnActionExpandListener(item, this);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(item);
+        item.expandActionView();
+        item.setOnActionExpandListener(this);
+        mSearchView = (SearchView) item.getActionView();
         Utils.setUpSearchView(mSearchView, this);
         mSearchView.setQuery(mQuery, false);
         mSearchView.clearFocus();
