@@ -1043,7 +1043,11 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                 break;
             case ViewType.DAY:
                 mNavigationView.getMenu().findItem(R.id.day_menu_item).setChecked(true);
-                frag = new DayFragment(timeMillis, 1);
+                frag = new DayFragment();
+                Bundle args = new Bundle();
+                args.putLong("timeInMillis", timeMillis);
+                args.putInt("numOfDays", 1);
+                frag.setArguments(args);
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.day_view);
                 }
@@ -1061,7 +1065,11 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             case ViewType.WEEK:
             default:
                 mNavigationView.getMenu().findItem(R.id.week_menu_item).setChecked(true);
-                frag = new DayFragment(timeMillis, Utils.getDaysPerWeek(this));
+                frag = new DayFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong("timeInMillis", timeMillis);
+                bundle.putInt("numOfDays", Utils.getDaysPerWeek(this));
+                frag.setArguments(bundle);
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.week_view);
                 }

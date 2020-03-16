@@ -74,15 +74,6 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
         mSelectedDay.setToNow();
     }
 
-    public DayFragment(long timeMillis, int numOfDays) {
-        mNumDays = numOfDays;
-        if (timeMillis == 0) {
-            mSelectedDay.setToNow();
-        } else {
-            mSelectedDay.set(timeMillis);
-        }
-    }
-
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -101,8 +92,15 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.day_activity, null);
-
-        mViewSwitcher = (ViewSwitcher) v.findViewById(R.id.switcher);
+        Bundle args = getArguments();
+        mNumDays = args.getInt("numOfDays");
+        long timeInMillis = args.getLong("timeInMillis");
+        if (timeInMillis == 0) {
+            mSelectedDay.setToNow();
+        } else {
+            mSelectedDay.set(timeInMillis);
+        }
+        mViewSwitcher = v.findViewById(R.id.switcher);
         mViewSwitcher.setFactory(this);
         mViewSwitcher.getCurrentView().requestFocus();
         ((DayView) mViewSwitcher.getCurrentView()).updateTitle();
