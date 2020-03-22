@@ -79,6 +79,7 @@ import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.agenda.AgendaFragment;
 import com.android.calendar.alerts.AlertService;
 import com.android.calendar.alerts.NotificationMgr;
+import com.android.calendar.helpers.IntentKeys;
 import com.android.calendar.month.MonthByWeekFragment;
 import com.android.calendar.selectcalendars.SelectVisibleCalendarsFragment;
 import com.android.datetimepicker.date.DatePickerDialog;
@@ -719,7 +720,11 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
         if (mShowCalendarControls) {
-            Fragment miniMonthFrag = new MonthByWeekFragment(timeMillis, true);
+            Fragment miniMonthFrag = new MonthByWeekFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
+            bundle.putBoolean(IntentKeys.KEY_IS_MINI_MONTH, true);
+            miniMonthFrag.setArguments(bundle);
             ft.replace(R.id.mini_month, miniMonthFrag);
             mController.registerEventHandler(R.id.mini_month, (EventHandler) miniMonthFrag);
 
@@ -1051,7 +1056,11 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                 break;
             case ViewType.MONTH:
                 mNavigationView.getMenu().findItem(R.id.month_menu_item).setChecked(true);
-                frag = new MonthByWeekFragment(timeMillis, false);
+                frag = new MonthByWeekFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
+                bundle.putBoolean(IntentKeys.KEY_IS_MINI_MONTH, false);
+                frag.setArguments(bundle);
                 if (mShowAgendaWithMonth) {
                     secFrag = new AgendaFragment(timeMillis, false);
                 }

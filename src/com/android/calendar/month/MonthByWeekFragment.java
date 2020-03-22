@@ -52,6 +52,7 @@ import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.Utils;
 import com.android.calendar.event.CreateEventDialogFragment;
+import com.android.calendar.helpers.IntentKeys;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -152,16 +153,6 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
             }
         }
     };
-
-
-    public MonthByWeekFragment() {
-        this(System.currentTimeMillis(), true);
-    }
-
-    public MonthByWeekFragment(long initialTime, boolean isMiniMonth) {
-        super(initialTime);
-        mIsMiniMonth = isMiniMonth;
-    }
 
     /**
      * Updates the uri used by the loader according to the current position of
@@ -285,6 +276,11 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v;
+        Bundle args = getArguments();
+        long timeInMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
+        mIsMiniMonth = args.getBoolean(IntentKeys.KEY_IS_MINI_MONTH);
+        populateData(timeInMillis);
+
         if (mIsMiniMonth) {
             v = inflater.inflate(R.layout.month_by_week, container, false);
         } else {
