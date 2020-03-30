@@ -1042,10 +1042,14 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         switch (viewType) {
             case ViewType.AGENDA:
                 mNavigationView.getMenu().findItem(R.id.agenda_menu_item).setChecked(true);
-                frag = new AgendaFragment(timeMillis, false);
+                frag = new AgendaFragment();
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.agenda_view);
                 }
+                Bundle bundleAgenda = new Bundle();
+                bundleAgenda.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
+                bundleAgenda.putBoolean(IntentKeys.KEY_IS_USED_FOR_SEARCH, false);
+                frag.setArguments(bundleAgenda);
                 break;
             case ViewType.DAY:
                 mNavigationView.getMenu().findItem(R.id.day_menu_item).setChecked(true);
@@ -1062,7 +1066,11 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                 bundle.putBoolean(IntentKeys.KEY_IS_MINI_MONTH, false);
                 frag.setArguments(bundle);
                 if (mShowAgendaWithMonth) {
-                    secFrag = new AgendaFragment(timeMillis, false);
+                    secFrag = new AgendaFragment();
+                    bundle = new Bundle();
+                    bundle.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
+                    bundle.putBoolean(IntentKeys.KEY_IS_USED_FOR_SEARCH, false);
+                    secFrag.setArguments(bundle);
                 }
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.month_view);
@@ -1350,11 +1358,18 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                     startActivity(intent);
                 } else {
                     // start event info as a dialog
-                    EventInfoFragment fragment = new EventInfoFragment(this,
-                            event.id, event.startTime.toMillis(false),
-                            event.endTime.toMillis(false), response, true,
-                            EventInfoFragment.DIALOG_WINDOW_STYLE,
-                            null /* No reminders to explicitly pass in. */);
+                    EventInfoFragment fragment = new EventInfoFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putLong(IntentKeys.KEY_EVENT_ID, event.id);
+                    bundle.putLong(IntentKeys.KEY_START_TIME_MILLIS, event.startTime.toMillis(false));
+                    bundle.putLong(IntentKeys.KEY_END_TIME_MILLIS, event.endTime.toMillis(false));
+                    bundle.putInt(IntentKeys.KEY_ATTENDEE_RESPONSE, response);
+                    bundle.putBoolean(IntentKeys.KEY_IS_DIALOG, true);
+                    bundle.putInt(IntentKeys.KEY_WINDOW_STYLE, EventInfoFragment.DIALOG_WINDOW_STYLE);
+                    bundle.putSerializable(IntentKeys.KEY_LIST_REMINDER_ENTRY, null);
+                    fragment.setArguments(bundle);
+
+
                     fragment.setDialogParams(event.x, event.y, mActionBar.getHeight());
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();

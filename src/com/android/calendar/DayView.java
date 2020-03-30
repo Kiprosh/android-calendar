@@ -2914,12 +2914,14 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
             }
             Rect r = drawEventRect(event, canvas, p, eventTextPaint, (int) event.top,
                     (int) event.bottom);
-            // add drawable icon in day view in all day case
-            Drawable icon = getResources().getDrawable(R.drawable.ic_menu_settings);
+            // add drawable icon in day view for all day event case
             setupAllDayTextRect(r);
-            icon.setBounds(r.left, r.top, r.left + icon.getIntrinsicWidth(), r.top + icon.getIntrinsicHeight());
-            icon.draw(canvas);
-            r.left = r.left + icon.getIntrinsicWidth() + EVENT_ALL_DAY_TEXT_LEFT_MARGIN;
+            if (mNumDays == 1 && event.isAllDayIconVisible() && event.getDayViewDrawableId() != 0) {
+                Drawable icon = getResources().getDrawable(event.getDayViewDrawableId());
+                icon.setBounds(r.left, r.top, r.left + icon.getIntrinsicWidth(), r.top + icon.getIntrinsicHeight());
+                icon.draw(canvas);
+                r.left = r.left + icon.getIntrinsicWidth() + EVENT_ALL_DAY_TEXT_LEFT_MARGIN;
+            }
 
             StaticLayout layout = getEventLayout(mAllDayLayouts, i, event, eventTextPaint, r);
             drawEventText(layout, r, canvas, r.top, r.bottom, true);

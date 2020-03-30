@@ -30,6 +30,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.calendar.CalendarEventModel.ReminderEntry;
+import com.android.calendar.helpers.IntentKeys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,11 +147,18 @@ public class EventInfoActivity extends AppCompatActivity {
         if (mInfoFragment == null) {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
-            mInfoFragment = new EventInfoFragment(this, mEventId, mStartMillis, mEndMillis,
-                    attendeeResponse, isDialog, (isDialog ?
+            mInfoFragment = new EventInfoFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong(IntentKeys.KEY_EVENT_ID, mEventId);
+            bundle.putLong(IntentKeys.KEY_START_TIME_MILLIS, mStartMillis);
+            bundle.putLong(IntentKeys.KEY_END_TIME_MILLIS, mEndMillis);
+            bundle.putInt(IntentKeys.KEY_ATTENDEE_RESPONSE, attendeeResponse);
+            bundle.putBoolean(IntentKeys.KEY_IS_DIALOG, isDialog);
+            bundle.putInt(IntentKeys.KEY_WINDOW_STYLE, (isDialog ?
                     EventInfoFragment.DIALOG_WINDOW_STYLE :
-                    EventInfoFragment.FULL_WINDOW_STYLE),
-                    reminders);
+                    EventInfoFragment.FULL_WINDOW_STYLE));
+            bundle.putSerializable(IntentKeys.KEY_LIST_REMINDER_ENTRY, reminders);
+            mInfoFragment.setArguments(bundle);
             ft.replace(R.id.main_frame, mInfoFragment);
             ft.commit();
         }

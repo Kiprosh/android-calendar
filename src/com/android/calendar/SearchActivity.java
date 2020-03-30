@@ -42,6 +42,7 @@ import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.agenda.AgendaFragment;
+import com.android.calendar.helpers.IntentKeys;
 
 import ws.xsoh.etar.R;
 
@@ -167,7 +168,12 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
 
-        AgendaFragment searchResultsFragment = new AgendaFragment(timeMillis, true);
+        AgendaFragment searchResultsFragment = new AgendaFragment();
+        Bundle bundleAgenda = new Bundle();
+        bundleAgenda.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
+        bundleAgenda.putBoolean(IntentKeys.KEY_IS_USED_FOR_SEARCH, true);
+        searchResultsFragment.setArguments(bundleAgenda);
+
         ft.replace(R.id.search_results, searchResultsFragment);
         mController.registerEventHandler(R.id.search_results, searchResultsFragment);
 
@@ -182,10 +188,17 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
 
-            mEventInfoFragment = new EventInfoFragment(this, event.id,
-                    event.startTime.toMillis(false), event.endTime.toMillis(false),
-                    event.getResponse(), false, EventInfoFragment.DIALOG_WINDOW_STYLE,
-                    null /* No reminders to explicitly pass in. */);
+            mEventInfoFragment = new EventInfoFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong(IntentKeys.KEY_EVENT_ID, event.id);
+            bundle.putLong(IntentKeys.KEY_START_TIME_MILLIS, event.startTime.toMillis(false));
+            bundle.putLong(IntentKeys.KEY_END_TIME_MILLIS, event.endTime.toMillis(false));
+            bundle.putInt(IntentKeys.KEY_ATTENDEE_RESPONSE, event.getResponse());
+            bundle.putBoolean(IntentKeys.KEY_IS_DIALOG, false);
+            bundle.putInt(IntentKeys.KEY_WINDOW_STYLE, EventInfoFragment.DIALOG_WINDOW_STYLE);
+            bundle.putSerializable(IntentKeys.KEY_LIST_REMINDER_ENTRY, null);
+            mEventInfoFragment.setArguments(bundle);
+
             ft.replace(R.id.agenda_event_info, mEventInfoFragment);
             ft.commit();
         } else {

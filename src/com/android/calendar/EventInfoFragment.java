@@ -102,6 +102,7 @@ import com.android.calendar.event.EditEventActivity;
 import com.android.calendar.event.EditEventHelper;
 import com.android.calendar.event.EventColorPickerDialog;
 import com.android.calendar.event.EventViewUtils;
+import com.android.calendar.helpers.IntentKeys;
 import com.android.calendar.icalendar.IcalendarUtils;
 import com.android.calendar.icalendar.Organizer;
 import com.android.calendar.icalendar.VCalendar;
@@ -421,48 +422,8 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
     };
     private CalendarController mController;
 
-    public EventInfoFragment(Context context, Uri uri, long startMillis, long endMillis,
-                             int attendeeResponse, boolean isDialog, int windowStyle,
-                             ArrayList<ReminderEntry> reminders) {
-
-        Resources r = context.getResources();
-        if (mScale == 0) {
-            mScale = context.getResources().getDisplayMetrics().density;
-            if (mScale != 1) {
-                mCustomAppIconSize *= mScale;
-                if (isDialog) {
-                    DIALOG_TOP_MARGIN *= mScale;
-                }
-            }
-        }
-        if (isDialog) {
-            setDialogSize(r);
-        }
-        mIsDialog = isDialog;
-
-        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-        mUri = uri;
-        mStartMillis = startMillis;
-        mEndMillis = endMillis;
-        mAttendeeResponseFromIntent = attendeeResponse;
-        mWindowStyle = windowStyle;
-
-        // Pass in null if no reminders are being specified.
-        // This may be used to explicitly show certain reminders already known
-        // about, such as during configuration changes.
-        mReminders = reminders;
-    }
-
     // This is currently required by the fragment manager.
     public EventInfoFragment() {
-    }
-
-    public EventInfoFragment(Context context, long eventId, long startMillis, long endMillis,
-                             int attendeeResponse, boolean isDialog, int windowStyle,
-                             ArrayList<ReminderEntry> reminders) {
-        this(context, ContentUris.withAppendedId(Events.CONTENT_URI, eventId), startMillis,
-                endMillis, attendeeResponse, isDialog, windowStyle, reminders);
-        mEventId = eventId;
     }
 
     public static int getResponseFromButtonId(int buttonId) {
@@ -531,7 +492,6 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mReminderChangeListener = new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -644,6 +604,38 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        Bundle args = getArguments();
+        mEventId = args.getLong(IntentKeys.KEY_EVENT_ID);
+        mStartMillis = args.getLong(IntentKeys.KEY_START_TIME_MILLIS);
+        mEndMillis = args.getLong(IntentKeys.KEY_END_TIME_MILLIS);
+        mAttendeeResponseFromIntent = args.getInt(IntentKeys.KEY_ATTENDEE_RESPONSE);
+        boolean isDialog = args.getBoolean(IntentKeys.KEY_IS_DIALOG);
+        mWindowStyle = args.getInt(IntentKeys.KEY_WINDOW_STYLE);
+        if (args.getSerializable(IntentKeys.KEY_LIST_REMINDER_ENTRY) != null) {
+            mReminders = (ArrayList<ReminderEntry>) args.getSerializable(IntentKeys.KEY_LIST_REMINDER_ENTRY);
+        } else {
+            mReminders = null;
+        }
+
+
+        Resources r = getActivity().getResources();
+        if (mScale == 0) {
+            mScale = getActivity().getResources().getDisplayMetrics().density;
+            if (mScale != 1) {
+                mCustomAppIconSize *= mScale;
+                if (isDialog) {
+                    DIALOG_TOP_MARGIN *= mScale;
+                }
+            }
+        }
+        if (isDialog) {
+            setDialogSize(r);
+        }
+        mIsDialog = isDialog;
+
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+        mUri = ContentUris.withAppendedId(Events.CONTENT_URI, mEventId);
+
         mActivity = activity;
         // Ensure that mIsTabletConfig is set before creating the menu.
         mIsTabletConfig = Utils.getConfigBool(mActivity, R.bool.tablet_config);
@@ -703,7 +695,6 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         if (savedInstanceState != null) {
             mIsDialog = savedInstanceState.getBoolean(BUNDLE_KEY_IS_DIALOG, false);
             mWindowStyle = savedInstanceState.getInt(BUNDLE_KEY_WINDOW_STYLE,
