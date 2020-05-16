@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract.Calendars;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,8 @@ import com.android.calendar.Utils;
 import com.android.calendar.selectcalendars.CalendarColorCache.OnCalendarColorsLoadedListener;
 
 import ws.xsoh.etar.R;
+
+import static com.android.calendar.StringConstants.HOLIDAYS_OWNER_ACCOUNT;
 
 public class SelectVisibleCalendarsFragment extends Fragment
         implements AdapterView.OnItemClickListener, CalendarController.EventHandler,
@@ -59,6 +62,7 @@ public class SelectVisibleCalendarsFragment extends Fragment
             Calendars.SYNC_EVENTS,
             "(" + Calendars.ACCOUNT_NAME + "=" + Calendars.OWNER_ACCOUNT + ") AS " + IS_PRIMARY,
     };
+    //"DISTINCT " + Calendars.OWNER_ACCOUNT,
     private static int mUpdateToken;
     private static int mQueryToken;
     private static int mCalendarItemLayout = R.layout.mini_calendar_item;
@@ -142,7 +146,27 @@ public class SelectVisibleCalendarsFragment extends Fragment
         if (mAdapter == null || mAdapter.getCount() <= position) {
             return;
         }
-        toggleVisibility(position);
+        SelectCalendarsSimpleAdapter.CalendarRow[] calendarRow = mAdapter.getmData();
+        Log.d("HolidaysIssueTETFVJAVSA", "***calendarRow----->" + calendarRow[position].ownerAccount + ", & " + calendarRow[position].accountName);
+
+        if (calendarRow[position].ownerAccount.contains(HOLIDAYS_OWNER_ACCOUNT)) {
+            Log.d("HolidaysIssueTETFVJAVSA", "STARTED..............................");
+            for (int i = 0; i < calendarRow.length; i++) {
+                SelectCalendarsSimpleAdapter.CalendarRow cr = calendarRow[i];
+                Log.d("HolidaysIssueTETFVJAVSA", "***----->" + cr.ownerAccount + ", & " + cr.accountName);
+                /*if(cr.ownerAccount.contains("#holiday@group.v.calendar.google.com")) {
+                    //Log.d("HolidaysIssueTETFVJAVSA","*** HANDLE TOGGLE----->"+calendarRow[i]);
+                    toggleVisibility(i);
+                }*/
+                if (cr.ownerAccount.equals(calendarRow[position].ownerAccount)) {
+                    Log.d("HolidaysIssueTETFVJAVSA", "CHANGING ACCOUNTS----->" + cr.ownerAccount + ", & " + cr.accountName);
+                    toggleVisibility(i);
+                }
+
+            }
+        } else {
+            toggleVisibility(position);
+        }
     }
 
     @Override
@@ -157,6 +181,7 @@ public class SelectVisibleCalendarsFragment extends Fragment
      * Write back the changes that have been made.
      */
     public void toggleVisibility(int position) {
+        Log.d("HolidaysIssue", "toggleVisibility position->" + position);
         mUpdateToken = mService.getNextToken();
         Uri uri = ContentUris.withAppendedId(Calendars.CONTENT_URI, mAdapter.getItemId(position));
         ContentValues values = new ContentValues();

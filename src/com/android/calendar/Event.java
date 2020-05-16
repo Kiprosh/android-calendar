@@ -38,10 +38,14 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ws.xsoh.etar.R;
+
+import static com.android.calendar.StringConstants.HOLIDAYS_OWNER_ACCOUNT;
 
 // TODO: should Event be Parcelable so it can be passed via Intents?
 public class Event implements Cloneable {
@@ -85,6 +89,7 @@ public class Event implements Cloneable {
             Instances.SELF_ATTENDEE_STATUS,  // 16
             Events.ORGANIZER,                // 17
             Events.GUESTS_CAN_MODIFY,        // 18
+            Calendars.ACCOUNT_NAME,        // 20
             Instances.ALL_DAY + "=1 OR (" + Instances.END + "-" + Instances.BEGIN + ")>="
                     + DateUtils.DAY_IN_MILLIS + " AS " + DISPLAY_AS_ALLDAY, // 19
     };
@@ -110,6 +115,7 @@ public class Event implements Cloneable {
     private static final int PROJECTION_ORGANIZER_INDEX = 17;
     private static final int PROJECTION_GUESTS_CAN_INVITE_OTHERS_INDEX = 18;
     private static final int PROJECTION_DISPLAY_AS_ALLDAY = 19;
+    private static final int PROJECTION_ACCOUNT_NAME = 20;
     private static String mNoTitleString;
     private static int mNoColorColor;
 
@@ -120,6 +126,7 @@ public class Event implements Cloneable {
     public CharSequence location;
     public boolean allDay;
     public String organizer;
+    public String accountName;
     public boolean guestsCanModify;
 
     public int startDay;       // start Julian day
@@ -151,6 +158,7 @@ public class Event implements Cloneable {
 
         e.id = 0;
         e.title = null;
+        e.accountName = null;
         e.color = 0;
         e.location = null;
         e.allDay = false;
@@ -314,12 +322,22 @@ public class Event implements Cloneable {
         // Sort events in two passes so we ensure the allday and standard events
         // get sorted in the correct order
         cEvents.moveToPosition(-1);
+        Set<String> holidays = new HashSet<>();
         while (cEvents.moveToNext()) {
             Event e = generateEventFromCursor(cEvents);
             if (e.startDay > endDay || e.endDay < startDay) {
                 continue;
             }
-            events.add(e);
+            //events.add(e);
+            if (e.organizer.contains(HOLIDAYS_OWNER_ACCOUNT)) {
+                if (!holidays.contains(e.title)) {
+                    holidays.add(String.valueOf(e.title));
+                    events.add(e);
+                }
+            } else {
+                events.add(e);
+            }
+            Log.d("HolidaysIssue", "HashSet-->" + holidays.toString());
         }
     }
 
@@ -335,6 +353,9 @@ public class Event implements Cloneable {
         e.location = cEvents.getString(PROJECTION_LOCATION_INDEX);
         e.allDay = cEvents.getInt(PROJECTION_ALL_DAY_INDEX) != 0;
         e.organizer = cEvents.getString(PROJECTION_ORGANIZER_INDEX);
+        int accountName = cEvents.getColumnIndexOrThrow(Calendars.ACCOUNT_NAME);
+        e.accountName = cEvents.getString(accountName);
+        Log.d("HolidaysIssue", "e.title-->" + e.title + ", e.organizer-->" + e.organizer + ", AN->" + e.accountName);
         e.guestsCanModify = cEvents.getInt(PROJECTION_GUESTS_CAN_INVITE_OTHERS_INDEX) != 0;
 
         if (e.title == null || e.title.length() == 0) {
