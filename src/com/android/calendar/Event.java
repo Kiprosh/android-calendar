@@ -337,7 +337,6 @@ public class Event implements Cloneable {
             } else {
                 events.add(e);
             }
-            Log.d("HolidaysIssue", "HashSet-->" + holidays.toString());
         }
     }
 
@@ -355,7 +354,6 @@ public class Event implements Cloneable {
         e.organizer = cEvents.getString(PROJECTION_ORGANIZER_INDEX);
         int accountName = cEvents.getColumnIndexOrThrow(Calendars.ACCOUNT_NAME);
         e.accountName = cEvents.getString(accountName);
-        Log.d("HolidaysIssue", "e.title-->" + e.title + ", e.organizer-->" + e.organizer + ", AN->" + e.accountName);
         e.guestsCanModify = cEvents.getInt(PROJECTION_GUESTS_CAN_INVITE_OTHERS_INDEX) != 0;
 
         if (e.title == null || e.title.length() == 0) {

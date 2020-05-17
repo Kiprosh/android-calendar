@@ -22,7 +22,6 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +71,6 @@ public class AgendaByDayAdapter extends BaseAdapter {
 
     public AgendaByDayAdapter(Context context) {
         mContext = context;
-        Log.d("HolidaysIssueTry", "************************************************ ADAPTER *********************************");
         calendarData = Calendar.getInstance();
         mAgendaAdapter = new AgendaAdapter(context, R.layout.agenda_item);
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -180,8 +178,6 @@ public class AgendaByDayAdapter extends BaseAdapter {
             // If we have no row info, mAgendaAdapter returns the view.
             return mAgendaAdapter.getView(position, convertView, parent);
         }
-        //Imp log
-        //Log.d("HolidaysIssue","AgendaByDayAdapter mRowInfo--->"+mRowInfo);
         DynamicTheme theme = new DynamicTheme();
         RowInfo row = mRowInfo.get(position);
         if (row.mType == TYPE_DAY) {
@@ -294,8 +290,6 @@ public class AgendaByDayAdapter extends BaseAdapter {
     }
 
     public void changeCursor(DayAdapterInfo info) {
-        Log.d("HolidaysIssueTry", "changeCursor.......");
-        //this.agendaHolidays = agendaHolidays;
         calculateDays(info);
         mAgendaAdapter.changeCursor(info.cursor);
     }
@@ -309,9 +303,7 @@ public class AgendaByDayAdapter extends BaseAdapter {
         long now = System.currentTimeMillis();
         tempTime.set(now);
         mTodayJulianDay = Time.getJulianDay(now, tempTime.gmtoff);
-        Log.d("HolidaysIssueTry", "calculateDays is last........" + agendaHolidays.size());
         agendaHolidays.clear();
-        Log.d("HolidaysIssueTry", "calculateDays is last........" + agendaHolidays.size());
         LinkedList<MultipleDayInfo> multipleDayList = new LinkedList<MultipleDayInfo>();
         for (int position = 0; cursor.moveToNext(); position++) {
             int startDay = cursor.getInt(AgendaWindowAdapter.INDEX_START_DAY);
@@ -327,10 +319,7 @@ public class AgendaByDayAdapter extends BaseAdapter {
                 titleString = "NO TITLE";
             }
             calendarData.setTimeInMillis(startTime);
-            Log.d("HolidaysIssueTry", "accountName-->" + accountName + ", && title->" + titleString +
-                    ", && date->" + calendarData.getTime());
             currentYear = calendarData.get(Calendar.YEAR);
-            //Log.d("HolidaysIssueTry","currentYear-->"+currentYear);
             if (allDay) {
                 startTime = Utils.convertAlldayUtcToLocal(tempTime, startTime, mTimeZone);
                 endTime = Utils.convertAlldayUtcToLocal(tempTime, endTime, mTimeZone);
@@ -414,9 +403,6 @@ public class AgendaByDayAdapter extends BaseAdapter {
                 agendaHolidays.add(titleString + currentYear);
             }
         }
-
-        Log.d("lsdlkjsakd", "agendaHolidays-->" + agendaHolidays);
-
 
         // There are no more cursor events but we might still have multiple-day
         // events left.  So create day headers and events for those.

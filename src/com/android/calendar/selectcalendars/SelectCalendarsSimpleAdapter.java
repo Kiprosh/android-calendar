@@ -25,7 +25,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.provider.CalendarContract.Calendars;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.TouchDelegate;
 import android.view.View;
@@ -143,7 +142,6 @@ public class SelectCalendarsSimpleAdapter extends BaseAdapter implements ListAda
             mData[p].ownerAccount = c.getString(mOwnerAccountColumn);
             mData[p].accountName = c.getString(mAccountNameColumn);
             mData[p].accountType = c.getString(mAccountTypeColumn);
-            Log.d("HolidaysIssueTETFVJAVSA", "mData[p]-->" + mData[p].toString());
             p++;
         }
         mRowCount = p;
@@ -159,7 +157,6 @@ public class SelectCalendarsSimpleAdapter extends BaseAdapter implements ListAda
         if (position >= mRowCount) {
             return null;
         }
-        Log.d("HolidaysIssue", "position-->" + position);
         String name = mData[position].displayName;
         boolean selected = mData[position].selected;
 

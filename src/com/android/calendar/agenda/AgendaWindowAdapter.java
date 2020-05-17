@@ -332,8 +332,6 @@ public class AgendaWindowAdapter extends BaseAdapter
     @Override
     public long getItemId(int position) {
         DayAdapterInfo info = getAdapterInfoByPosition(position);
-        Log.d("HolidaysIssue", "DayAdapterInfo(....) " + position + " Also get row info");
-
         if (info != null) {
             int curPos = info.dayAdapter.getCursorPosition(position - info.offset);
             if (curPos == Integer.MIN_VALUE) {
@@ -533,7 +531,6 @@ public class AgendaWindowAdapter extends BaseAdapter
         } else {
             cursor.moveToPosition(cursorPosition);
         }
-        Log.d("HolidaysIssue", "buildAgendaItemFromCursor(....)");
         AgendaItem agendaItem = new AgendaItem();
         agendaItem.begin = cursor.getLong(AgendaWindowAdapter.INDEX_BEGIN);
         agendaItem.end = cursor.getLong(AgendaWindowAdapter.INDEX_END);
@@ -780,7 +777,6 @@ public class AgendaWindowAdapter extends BaseAdapter
             mQueryQueue.add(queryData);
             queuedQuery = true;
             if (doQueryNow) {
-                Log.d("HolidaysIssueTry", "queueQuery method");
                 doQuery(queryData);
             }
         }
@@ -1055,8 +1051,6 @@ public class AgendaWindowAdapter extends BaseAdapter
         int size; // dayAdapter.getCount()
 
         public DayAdapterInfo(Context context) {
-            Log.d("HolidaysIssueTry", "DayAdapterInfo............................");
-
             dayAdapter = new AgendaByDayAdapter(context);
         }
 
@@ -1091,8 +1085,6 @@ public class AgendaWindowAdapter extends BaseAdapter
             }
             QuerySpec data = (QuerySpec) cookie;
 
-            Log.d("HolidaysIssue", "QueryHandler IMP");
-
             if (cursor == null) {
                 if (mAgendaListView != null && mAgendaListView.getContext() instanceof Activity) {
                     ((Activity) mAgendaListView.getContext()).finish();
@@ -1118,7 +1110,6 @@ public class AgendaWindowAdapter extends BaseAdapter
 
             // Notify Listview of changes and update position
             int cursorSize = cursor.getCount();
-            Log.d("HolidaysIssue", "DATE TYPE-->" + data.queryType + " cursorSize-->" + cursorSize);
             if (cursorSize > 0 || mAdapterInfos.isEmpty() || data.queryType == QUERY_TYPE_CLEAN) {
                 final int listPositionOffset = processNewCursor(data, cursor);
                 int newPosition = -1;
@@ -1336,7 +1327,6 @@ public class AgendaWindowAdapter extends BaseAdapter
                             || !isInRange(queryData.start, queryData.end)) {
                         // Query accepted
                         if (DEBUGLOG) Log.e(TAG, "Query accepted. QueueSize:" + mQueryQueue.size());
-                        Log.d("HolidaysIssue", "Loop.............");
                         doQuery(queryData);
                         break;
                     } else {
@@ -1365,7 +1355,6 @@ public class AgendaWindowAdapter extends BaseAdapter
                 DayAdapterInfo info = pruneAdapterInfo(data.queryType);
                 int listPositionOffset = 0;
                 if (info == null) {
-                    Log.d("HolidaysIssueTry", "processNewCursor");
                     info = new DayAdapterInfo(mContext);
                 } else {
                     if (DEBUGLOG)
