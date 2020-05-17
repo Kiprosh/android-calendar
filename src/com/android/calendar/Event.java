@@ -328,7 +328,6 @@ public class Event implements Cloneable {
             if (e.startDay > endDay || e.endDay < startDay) {
                 continue;
             }
-            //events.add(e);
             if (e.organizer.contains(HOLIDAYS_OWNER_ACCOUNT)) {
                 if (!holidays.contains(e.title)) {
                     holidays.add(String.valueOf(e.title));

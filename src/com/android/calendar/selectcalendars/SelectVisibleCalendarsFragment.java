@@ -61,7 +61,6 @@ public class SelectVisibleCalendarsFragment extends Fragment
             Calendars.SYNC_EVENTS,
             "(" + Calendars.ACCOUNT_NAME + "=" + Calendars.OWNER_ACCOUNT + ") AS " + IS_PRIMARY,
     };
-    //"DISTINCT " + Calendars.OWNER_ACCOUNT,
     private static int mUpdateToken;
     private static int mQueryToken;
     private static int mCalendarItemLayout = R.layout.mini_calendar_item;

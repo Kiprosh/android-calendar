@@ -42,6 +42,8 @@ import java.util.Locale;
 
 import ws.xsoh.etar.R;
 
+import static com.android.calendar.StringConstants.HOLIDAYS_OWNER_ACCOUNT;
+
 public class AgendaByDayAdapter extends BaseAdapter {
     static final int TYPE_LAST = 2;
     private static final int TYPE_DAY = 0;
@@ -399,7 +401,7 @@ public class AgendaByDayAdapter extends BaseAdapter {
                 rowInfo.add(new RowInfo(TYPE_MEETING, startDay, position, id, startTime, endTime,
                         instanceId, allDay));
             }
-            if (titleString != null && titleString.length() != 0 && ownerName.contains("holiday@group.v.calendar.google.com")) {
+            if (titleString != null && titleString.length() != 0 && ownerName.contains(HOLIDAYS_OWNER_ACCOUNT)) {
                 agendaHolidays.add(titleString + currentYear);
             }
         }
@@ -675,21 +677,6 @@ public class AgendaByDayAdapter extends BaseAdapter {
             mFirstDayAfterYesterday = false;
             mInstanceId = -1;
             mAllDay = false;
-        }
-
-        @Override
-        public String toString() {
-            return "RowInfo{" +
-                    "mType=" + mType +
-                    ", mDay=" + mDay +
-                    ", mPosition=" + mPosition +
-                    ", mEventId=" + mEventId +
-                    ", mEventStartTimeMilli=" + mEventStartTimeMilli +
-                    ", mEventEndTimeMilli=" + mEventEndTimeMilli +
-                    ", mInstanceId=" + mInstanceId +
-                    ", mAllDay=" + mAllDay +
-                    ", mFirstDayAfterYesterday=" + mFirstDayAfterYesterday +
-                    '}';
         }
     }
 

@@ -387,18 +387,5 @@ public class SelectCalendarsSimpleAdapter extends BaseAdapter implements ListAda
         String accountType;
         int color;
         boolean selected;
-
-        @Override
-        public String toString() {
-            return "CalendarRow{" +
-                    "id=" + id +
-                    ", displayName='" + displayName + '\'' +
-                    ", ownerAccount='" + ownerAccount + '\'' +
-                    ", accountName='" + accountName + '\'' +
-                    ", accountType='" + accountType + '\'' +
-                    ", color=" + color +
-                    ", selected=" + selected +
-                    '}';
-        }
     }
 }
