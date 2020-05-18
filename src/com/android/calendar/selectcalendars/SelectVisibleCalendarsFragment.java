@@ -147,10 +147,10 @@ public class SelectVisibleCalendarsFragment extends Fragment
         SelectCalendarsSimpleAdapter.CalendarRow[] calendarRow = mAdapter.getmData();
 
         if (calendarRow[position].ownerAccount.contains(HOLIDAYS_OWNER_ACCOUNT)) {
-            for (int i = 0; i < calendarRow.length; i++) {
-                SelectCalendarsSimpleAdapter.CalendarRow cr = calendarRow[i];
+            for (int index = 0; index < calendarRow.length; index++) {
+                SelectCalendarsSimpleAdapter.CalendarRow cr = calendarRow[index];
                 if (cr.ownerAccount.equals(calendarRow[position].ownerAccount)) {
-                    toggleVisibility(i);
+                    toggleVisibility(index);
                 }
 
             }
