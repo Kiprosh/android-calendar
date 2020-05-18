@@ -94,6 +94,7 @@ public class AgendaWindowAdapter extends BaseAdapter
     public static final int INDEX_OWNER_ACCOUNT = 14;
     public static final int INDEX_CAN_ORGANIZER_RESPOND = 15;
     public static final int INDEX_TIME_ZONE = 16;
+    public static final int INDEX_CALENDAR_ACCOUNT_NAME = 17;
     static final boolean BASICLOG = false;
     static final boolean DEBUGLOG = false;
     private static final String TAG = "AgendaWindowAdapter";
@@ -119,6 +120,7 @@ public class AgendaWindowAdapter extends BaseAdapter
             Instances.OWNER_ACCOUNT, // 14
             Instances.CAN_ORGANIZER_RESPOND, // 15
             Instances.EVENT_TIMEZONE, // 16
+            Calendars.ACCOUNT_NAME, //17
     };
     // Listview may have a bug where the index/position is not consistent when there's a header.
     // position == positionInListView - OFF_BY_ONE_BUG

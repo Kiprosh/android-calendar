@@ -33,12 +33,16 @@ import com.android.calendar.Utils;
 import com.android.calendar.agenda.AgendaWindowAdapter.DayAdapterInfo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Formatter;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Locale;
 
 import ws.xsoh.etar.R;
+
+import static com.android.calendar.StringConstants.HOLIDAYS_OWNER_ACCOUNT;
 
 public class AgendaByDayAdapter extends BaseAdapter {
     static final int TYPE_LAST = 2;
@@ -52,6 +56,10 @@ public class AgendaByDayAdapter extends BaseAdapter {
     private final StringBuilder mStringBuilder;
     private ArrayList<RowInfo> mRowInfo;
     private int mTodayJulianDay;
+    private String currentYear;
+    int lastYear;
+    private LinkedHashSet<String> agendaHolidaySet = new LinkedHashSet<>();
+    private Calendar calendarData;
     private Time mTmpTime;
     private String mTimeZone;
     private final Runnable mTZUpdater = new Runnable() {
@@ -65,6 +73,7 @@ public class AgendaByDayAdapter extends BaseAdapter {
 
     public AgendaByDayAdapter(Context context) {
         mContext = context;
+        calendarData = Calendar.getInstance();
         mAgendaAdapter = new AgendaAdapter(context, R.layout.agenda_item);
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mStringBuilder = new StringBuilder(50);
@@ -171,7 +180,6 @@ public class AgendaByDayAdapter extends BaseAdapter {
             // If we have no row info, mAgendaAdapter returns the view.
             return mAgendaAdapter.getView(position, convertView, parent);
         }
-
         DynamicTheme theme = new DynamicTheme();
         RowInfo row = mRowInfo.get(position);
         if (row.mType == TYPE_DAY) {
@@ -297,7 +305,7 @@ public class AgendaByDayAdapter extends BaseAdapter {
         long now = System.currentTimeMillis();
         tempTime.set(now);
         mTodayJulianDay = Time.getJulianDay(now, tempTime.gmtoff);
-
+        agendaHolidaySet.clear();
         LinkedList<MultipleDayInfo> multipleDayList = new LinkedList<MultipleDayInfo>();
         for (int position = 0; cursor.moveToNext(); position++) {
             int startDay = cursor.getInt(AgendaWindowAdapter.INDEX_START_DAY);
@@ -306,6 +314,15 @@ public class AgendaByDayAdapter extends BaseAdapter {
             long endTime = cursor.getLong(AgendaWindowAdapter.INDEX_END);
             long instanceId = cursor.getLong(AgendaWindowAdapter.INDEX_INSTANCE_ID);
             boolean allDay = cursor.getInt(AgendaWindowAdapter.INDEX_ALL_DAY) != 0;
+            String accountName = cursor.getString(AgendaWindowAdapter.INDEX_CALENDAR_ACCOUNT_NAME);
+            String ownerName = cursor.getString(AgendaWindowAdapter.INDEX_OWNER_ACCOUNT);
+            String titleString = cursor.getString(AgendaWindowAdapter.INDEX_TITLE);
+            if (titleString == null || titleString.length() == 0) {
+                titleString = mContext.getResources().getString(R.string.no_title_label);
+                ;
+            }
+            calendarData.setTimeInMillis(startTime);
+            currentYear = String.valueOf(calendarData.get(Calendar.YEAR));
             if (allDay) {
                 startTime = Utils.convertAlldayUtcToLocal(tempTime, startTime, mTimeZone);
                 endTime = Utils.convertAlldayUtcToLocal(tempTime, endTime, mTimeZone);
@@ -372,7 +389,8 @@ public class AgendaByDayAdapter extends BaseAdapter {
 
             // Skip over the days outside of the adapter's range
             endDay = Math.min(endDay, dayAdapterInfo.end);
-            if (endDay > startDay) {
+            String holidayName = titleString.concat(currentYear);
+            if (endDay > startDay && !agendaHolidaySet.contains(holidayName)) {
                 long nextMidnight = Utils.getNextMidnight(tempTime, startTime, mTimeZone);
                 multipleDayList.add(new MultipleDayInfo(position, endDay, id, nextMidnight,
                         endTime, instanceId, allDay));
@@ -380,10 +398,13 @@ public class AgendaByDayAdapter extends BaseAdapter {
                 // event, the end time is midnight
                 rowInfo.add(new RowInfo(TYPE_MEETING, startDay, position, id, startTime,
                         nextMidnight, instanceId, allDay));
-            } else {
+            } else if (!agendaHolidaySet.contains(holidayName)) {
                 // Add in the event for this cursor position
                 rowInfo.add(new RowInfo(TYPE_MEETING, startDay, position, id, startTime, endTime,
                         instanceId, allDay));
+            }
+            if (!titleString.isEmpty() && ownerName.contains(HOLIDAYS_OWNER_ACCOUNT)) {
+                agendaHolidaySet.add(holidayName);
             }
         }
 

@@ -39,6 +39,8 @@ import com.android.calendar.selectcalendars.CalendarColorCache.OnCalendarColorsL
 
 import ws.xsoh.etar.R;
 
+import static com.android.calendar.StringConstants.HOLIDAYS_OWNER_ACCOUNT;
+
 public class SelectVisibleCalendarsFragment extends Fragment
         implements AdapterView.OnItemClickListener, CalendarController.EventHandler,
         OnCalendarColorsLoadedListener {
@@ -142,7 +144,19 @@ public class SelectVisibleCalendarsFragment extends Fragment
         if (mAdapter == null || mAdapter.getCount() <= position) {
             return;
         }
-        toggleVisibility(position);
+        SelectCalendarsSimpleAdapter.CalendarRow[] calendarRow = mAdapter.getmData();
+
+        if (calendarRow[position].ownerAccount.contains(HOLIDAYS_OWNER_ACCOUNT)) {
+            for (int index = 0; index < calendarRow.length; index++) {
+                SelectCalendarsSimpleAdapter.CalendarRow cr = calendarRow[index];
+                if (cr.ownerAccount.equals(calendarRow[position].ownerAccount)) {
+                    toggleVisibility(index);
+                }
+
+            }
+        } else {
+            toggleVisibility(position);
+        }
     }
 
     @Override

@@ -144,6 +144,7 @@ public class SelectCalendarsSimpleAdapter extends BaseAdapter implements ListAda
             mData[p].accountType = c.getString(mAccountTypeColumn);
             p++;
         }
+        mRowCount = p;
     }
 
     public void changeCursor(Cursor c) {
@@ -374,7 +375,11 @@ public class SelectCalendarsSimpleAdapter extends BaseAdapter implements ListAda
         }
     }
 
-    private class CalendarRow {
+    CalendarRow[] getmData() {
+        return mData;
+    }
+
+    public class CalendarRow {
         long id;
         String displayName;
         String ownerAccount;
