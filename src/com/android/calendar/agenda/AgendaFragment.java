@@ -42,6 +42,7 @@ import com.android.calendar.EventInfoFragment;
 import com.android.calendar.GeneralPreferences;
 import com.android.calendar.StickyHeaderListView;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.IntentKeys;
 
 import java.util.Date;
 
@@ -54,8 +55,8 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     protected static final String BUNDLE_KEY_RESTORE_INSTANCE_ID = "key_restore_instance_id";
     private static final String TAG = AgendaFragment.class.getSimpleName();
     private static boolean DEBUG = false;
-    private final Time mTime;
-    private final long mInitialTimeMillis;
+    private Time mTime;
+    private long mInitialTimeMillis;
     // Tracks the time of the top visible view in order to send UPDATE_TITLE messages to the action
     // bar.
     int mJulianDayOnTop = -1;
@@ -82,15 +83,11 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     private long mLastShownEventId = -1;
     private long mLastHandledEventId = -1;
     private Time mLastHandledEventTime = null;
+    private boolean calledConstructor;
 
     public AgendaFragment() {
-        this(0, false);
-    }
-
-    // timeMillis - time of first event to show
-    // usedForSearch - indicates if this fragment is used in the search fragment
-    public AgendaFragment(long timeMillis, boolean usedForSearch) {
-        mInitialTimeMillis = timeMillis;
+        calledConstructor = true;
+        mInitialTimeMillis = 0;
         mTime = new Time();
         mLastHandledEventTime = new Time();
 
@@ -100,24 +97,45 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
             mTime.set(mInitialTimeMillis);
         }
         mLastHandledEventTime.set(mTime);
-        mUsedForSearch = usedForSearch;
+        mUsedForSearch = false;
     }
+
+    // timeMillis - time of first event to show
+    // usedForSearch - indicates if this fragment is used in the search fragment
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mTimeZone = Utils.getTimeZone(activity, mTZUpdater);
-        mTime.switchTimezone(mTimeZone);
-        mActivity = activity;
-        if (mOnAttachedInfo != null) {
-            showEventInfo(mOnAttachedInfo, mOnAttachAllDay, true);
-            mOnAttachedInfo = null;
-        }
     }
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        if (!calledConstructor) {
+            Bundle args = getArguments();
+            mInitialTimeMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
+            mUsedForSearch = args.getBoolean(IntentKeys.KEY_IS_USED_FOR_SEARCH);
+
+            mTime = new Time();
+            mLastHandledEventTime = new Time();
+
+            if (mInitialTimeMillis == 0) {
+                mTime.setToNow();
+            } else {
+                mTime.set(mInitialTimeMillis);
+            }
+            mLastHandledEventTime.set(mTime);
+        }
+
+
+        mTimeZone = Utils.getTimeZone(getActivity(), mTZUpdater);
+        mTime.switchTimezone(mTimeZone);
+        mActivity = getActivity();
+        if (mOnAttachedInfo != null) {
+            showEventInfo(mOnAttachedInfo, mOnAttachAllDay, true);
+            mOnAttachedInfo = null;
+        }
+
         mController = CalendarController.getInstance(mActivity);
         mShowEventDetailsWithAgenda =
                 Utils.getConfigBool(mActivity, R.bool.show_event_details_with_agenda);
@@ -137,8 +155,6 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         int screenWidth = mActivity.getResources().getDisplayMetrics().widthPixels;
         View v = inflater.inflate(R.layout.agenda_fragment, null);
 
@@ -300,7 +316,6 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     @Override
     public void onPause() {
         super.onPause();
-
         mAgendaListView.onPause();
 
 //        mContentResolver.unregisterContentObserver(mObserver);
@@ -418,10 +433,16 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
                     (EventInfoFragment) fragmentManager.findFragmentById(R.id.agenda_event_info);
             if (fOld == null || replaceFragment || fOld.getStartMillis() != startMillis ||
                     fOld.getEndMillis() != endMillis || fOld.getEventId() != event.id) {
-                mEventFragment = new EventInfoFragment(mActivity, event.id,
-                        startMillis, endMillis,
-                        Attendees.ATTENDEE_STATUS_NONE, false,
-                        EventInfoFragment.DIALOG_WINDOW_STYLE, null);
+                mEventFragment = new EventInfoFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong(IntentKeys.KEY_EVENT_ID, event.id);
+                bundle.putLong(IntentKeys.KEY_START_TIME_MILLIS, startMillis);
+                bundle.putLong(IntentKeys.KEY_END_TIME_MILLIS, endMillis);
+                bundle.putInt(IntentKeys.KEY_ATTENDEE_RESPONSE, Attendees.ATTENDEE_STATUS_NONE);
+                bundle.putBoolean(IntentKeys.KEY_IS_DIALOG, false);
+                bundle.putInt(IntentKeys.KEY_WINDOW_STYLE, EventInfoFragment.DIALOG_WINDOW_STYLE);
+                bundle.putSerializable(IntentKeys.KEY_LIST_REMINDER_ENTRY, null);
+                mEventFragment.setArguments(bundle);
                 ft.replace(R.id.agenda_event_info, mEventFragment);
                 ft.commit();
             } else {

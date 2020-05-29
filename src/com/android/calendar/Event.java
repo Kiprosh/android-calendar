@@ -145,11 +145,14 @@ public class Event implements Cloneable {
     public Event nextDown;
     private int mColumn;
     private int mMaxColumns;
+    private int dayViewDrawableId;
+    private boolean isAllDayIconVisible;
 
     public static final Event newInstance() {
         Event e = new Event();
 
         e.id = 0;
+        e.dayViewDrawableId = 0;
         e.title = null;
         e.color = 0;
         e.location = null;
@@ -335,6 +338,8 @@ public class Event implements Cloneable {
         e.location = cEvents.getString(PROJECTION_LOCATION_INDEX);
         e.allDay = cEvents.getInt(PROJECTION_ALL_DAY_INDEX) != 0;
         e.organizer = cEvents.getString(PROJECTION_ORGANIZER_INDEX);
+        //Set default icon in all day event tag of day view
+        //e.dayViewDrawableId = R.drawable.ic_menu_settings;
         e.guestsCanModify = cEvents.getInt(PROJECTION_GUESTS_CAN_INVITE_OTHERS_INDEX) != 0;
 
         if (e.title == null || e.title.length() == 0) {
@@ -639,5 +644,21 @@ public class Event implements Cloneable {
     public boolean drawAsAllday() {
         // Use >= so we'll pick up Exchange allday events
         return allDay || endMillis - startMillis >= DateUtils.DAY_IN_MILLIS;
+    }
+
+    public int getDayViewDrawableId() {
+        return dayViewDrawableId;
+    }
+
+    public void setDayViewDrawableId(int dayViewDrawableId) {
+        this.dayViewDrawableId = dayViewDrawableId;
+    }
+
+    public boolean isAllDayIconVisible() {
+        return isAllDayIconVisible;
+    }
+
+    public void setAllDayIconVisible(boolean allDayIconVisible) {
+        isAllDayIconVisible = allDayIconVisible;
     }
 }
