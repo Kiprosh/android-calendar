@@ -146,7 +146,7 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
         }
     };
 
-    public SimpleDayPickerFragment(long initialTime) {
+    public void populateData(long initialTime) {
         goTo(initialTime, false, true, true);
         mHandler = new Handler();
     }

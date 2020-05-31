@@ -34,6 +34,7 @@ import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.IntentKeys;
 
 import ws.xsoh.etar.R;
 
@@ -69,7 +70,10 @@ public class SelectVisibleCalendarsActivity extends AbstractCalendarActivity {
                 R.id.body_frame);
 
         if (mFragment == null) {
-            mFragment = new SelectVisibleCalendarsFragment(R.layout.calendar_sync_item);
+            mFragment = new SelectVisibleCalendarsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt(IntentKeys.KEY_LAYOUT_ID, R.layout.calendar_sync_item);
+            mFragment.setArguments(bundle);
 
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.body_frame, mFragment);

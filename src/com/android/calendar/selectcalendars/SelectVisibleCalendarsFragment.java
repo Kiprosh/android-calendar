@@ -35,6 +35,7 @@ import com.android.calendar.CalendarController;
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.IntentKeys;
 import com.android.calendar.selectcalendars.CalendarColorCache.OnCalendarColorsLoadedListener;
 
 import ws.xsoh.etar.R;
@@ -74,10 +75,6 @@ public class SelectVisibleCalendarsFragment extends Fragment
     public SelectVisibleCalendarsFragment() {
     }
 
-    public SelectVisibleCalendarsFragment(int itemLayout) {
-        mCalendarItemLayout = itemLayout;
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -107,6 +104,8 @@ public class SelectVisibleCalendarsFragment extends Fragment
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        Bundle args = getArguments();
+        mCalendarItemLayout = args.getInt(IntentKeys.KEY_LAYOUT_ID);
     }
 
     @Override
