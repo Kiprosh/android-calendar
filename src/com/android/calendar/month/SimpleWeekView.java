@@ -27,6 +27,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
@@ -34,6 +35,7 @@ import android.view.accessibility.AccessibilityManager;
 
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.MonthFieldColorHelper;
 
 import java.security.InvalidParameterException;
 import java.text.NumberFormat;
@@ -167,9 +169,12 @@ public class SimpleWeekView extends View {
     protected int mTodayOutlineColor;
     protected int mWeekNumColor;
     Time mLastHoverTime = null;
+    public MonthFieldColorHelper monthFieldColors;
 
-    public SimpleWeekView(Context context) {
+    public SimpleWeekView(MonthFieldColorHelper monthFieldColors, Context context) {
         super(context);
+        this.monthFieldColors = monthFieldColors;
+        Log.d("dashdisa", "SimpleWeekView C'tor-->" + monthFieldColors);
 
         Resources res = context.getResources();
         DynamicTheme theme = new DynamicTheme();
@@ -197,6 +202,8 @@ public class SimpleWeekView extends View {
         }
 
         // Sets up any standard paints that will be used
+        Log.d("dashdisa", "############## SimpleWeekView initView->" + monthFieldColors);
+
         initView();
     }
 
@@ -318,6 +325,8 @@ public class SimpleWeekView extends View {
      * want to use a different paint.
      */
     protected void initView() {
+        Log.d("dashdisa", "2222222222...... ############## SimpleWeekView initView--->" + monthFieldColors);
+
         p.setFakeBoldText(false);
         p.setAntiAlias(true);
         p.setTextSize(MINI_DAY_NUMBER_TEXT_SIZE);

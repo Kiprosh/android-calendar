@@ -1,4 +1,4 @@
-package com.android.calendar.helper;
+package com.android.calendar.helpers;
 
 import android.content.Context;
 import android.os.Parcel;
@@ -7,18 +7,6 @@ import android.os.Parcelable;
 import com.android.calendar.DynamicTheme;
 
 public class MonthFieldColorHelper implements Parcelable {
-
-    public static final Parcelable.Creator<MonthFieldColorHelper> CREATOR = new Parcelable.Creator<MonthFieldColorHelper>() {
-        @Override
-        public MonthFieldColorHelper createFromParcel(Parcel in) {
-            return new MonthFieldColorHelper(in);
-        }
-
-        @Override
-        public MonthFieldColorHelper[] newArray(int size) {
-            return new MonthFieldColorHelper[size];
-        }
-    };
     private int monthWeekNumColor;
     private int monthNumColor;
     private int monthNumOtherColor;
@@ -40,6 +28,25 @@ public class MonthFieldColorHelper implements Parcelable {
     private int monthSundayColor;
     private int monthDayNameColor;
 
+    public static final Creator<MonthFieldColorHelper> CREATOR = new Creator<MonthFieldColorHelper>() {
+        @Override
+        public MonthFieldColorHelper createFromParcel(Parcel in) {
+            return new MonthFieldColorHelper(in);
+        }
+
+        @Override
+        public MonthFieldColorHelper[] newArray(int size) {
+            return new MonthFieldColorHelper[size];
+        }
+    };
+    private int bGColor;
+    private int selectedWeekBGColor;
+    private int focusMonthColor;
+    private int otherMonthColor;
+    private int daySeparatorColor;
+    private int todayOutlineColor;
+    private int weekNumColor;
+
     public MonthFieldColorHelper(Context context) {
         DynamicTheme dynamicTheme = new DynamicTheme();
         monthWeekNumColor = dynamicTheme.getColor(context, "month_week_num_color");
@@ -59,6 +66,14 @@ public class MonthFieldColorHelper implements Parcelable {
         daySeparatorInnerColor = dynamicTheme.getColor(context, "month_grid_lines");
         todayAnimateColor = dynamicTheme.getColor(context, "today_highlight_color");
         clickedDayColor = dynamicTheme.getColor(context, "day_clicked_background_color");
+
+        bGColor = dynamicTheme.getColor(context, "month_bgcolor");
+        selectedWeekBGColor = dynamicTheme.getColor(context, "month_selected_week_bgcolor");
+        focusMonthColor = dynamicTheme.getColor(context, "month_mini_day_number");
+        otherMonthColor = dynamicTheme.getColor(context, "month_other_month_day_number");
+        daySeparatorColor = dynamicTheme.getColor(context, "month_grid_lines");
+        todayOutlineColor = dynamicTheme.getColor(context, "mini_month_today_outline_color");
+        weekNumColor = dynamicTheme.getColor(context, "month_week_num_color");
     }
 
     public MonthFieldColorHelper(Parcel in) {
@@ -82,6 +97,13 @@ public class MonthFieldColorHelper implements Parcelable {
         monthSaturdayColor = in.readInt();
         monthSundayColor = in.readInt();
         monthDayNameColor = in.readInt();
+        bGColor = in.readInt();
+        selectedWeekBGColor = in.readInt();
+        focusMonthColor = in.readInt();
+        otherMonthColor = in.readInt();
+        daySeparatorColor = in.readInt();
+        todayOutlineColor = in.readInt();
+        weekNumColor = in.readInt();
     }
 
     public int getMonthSaturdayColor() {
@@ -244,32 +266,123 @@ public class MonthFieldColorHelper implements Parcelable {
         this.clickedDayColor = clickedDayColor;
     }
 
+    public int getBgColor() {
+        return bGColor;
+    }
+
+    public void setBgColor(int bGColor) {
+        this.bGColor = bGColor;
+    }
+
+    public int getSelectedWeekBGColor() {
+        return selectedWeekBGColor;
+    }
+
+    public void setSelectedWeekBGColor(int selectedWeekBGColor) {
+        this.selectedWeekBGColor = selectedWeekBGColor;
+    }
+
+    public int getFocusMonthColor() {
+        return focusMonthColor;
+    }
+
+    public void setFocusMonthColor(int focusMonthColor) {
+        this.focusMonthColor = focusMonthColor;
+    }
+
+    public int getOtherMonthColor() {
+        return otherMonthColor;
+    }
+
+    public void setOtherMonthColor(int otherMonthColor) {
+        this.otherMonthColor = otherMonthColor;
+    }
+
+    public int getDaySeparatorColor() {
+        return daySeparatorColor;
+    }
+
+    public void setDaySeparatorColor(int daySeparatorColor) {
+        this.daySeparatorColor = daySeparatorColor;
+    }
+
+    public int getTodayOutlineColor() {
+        return todayOutlineColor;
+    }
+
+    public void setTodayOutlineColor(int todayOutlineColor) {
+        this.todayOutlineColor = todayOutlineColor;
+    }
+
+    public int getWeekNumColor() {
+        return weekNumColor;
+    }
+
+    public void setWeekNumColor(int weekNumColor) {
+        this.weekNumColor = weekNumColor;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(monthWeekNumColor);
-        parcel.writeInt(monthNumColor);
-        parcel.writeInt(monthNumOtherColor);
-        parcel.writeInt(monthNumTodayColor);
-        parcel.writeInt(monthEventColor);
-        parcel.writeInt(monthDeclinedEventColor);
-        parcel.writeInt(monthDeclinedExtrasColor);
-        parcel.writeInt(monthEventExtraColor);
-        parcel.writeInt(monthEventOtherColor);
-        parcel.writeInt(monthEventExtraOtherColor);
-        parcel.writeInt(monthBGTodayColor);
-        parcel.writeInt(monthBGFocusMonthColor);
-        parcel.writeInt(monthBGOtherColor);
-        parcel.writeInt(monthBGColor);
-        parcel.writeInt(daySeparatorInnerColor);
-        parcel.writeInt(todayAnimateColor);
-        parcel.writeInt(clickedDayColor);
-        parcel.writeInt(monthSaturdayColor);
-        parcel.writeInt(monthSundayColor);
-        parcel.writeInt(monthDayNameColor);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(monthWeekNumColor);
+        dest.writeInt(monthNumColor);
+        dest.writeInt(monthNumOtherColor);
+        dest.writeInt(monthNumTodayColor);
+        dest.writeInt(monthEventColor);
+        dest.writeInt(monthDeclinedEventColor);
+        dest.writeInt(monthDeclinedExtrasColor);
+        dest.writeInt(monthEventExtraColor);
+        dest.writeInt(monthEventOtherColor);
+        dest.writeInt(monthEventExtraOtherColor);
+        dest.writeInt(monthBGTodayColor);
+        dest.writeInt(monthBGFocusMonthColor);
+        dest.writeInt(monthBGOtherColor);
+        dest.writeInt(monthBGColor);
+        dest.writeInt(daySeparatorInnerColor);
+        dest.writeInt(todayAnimateColor);
+        dest.writeInt(clickedDayColor);
+        dest.writeInt(monthSaturdayColor);
+        dest.writeInt(monthSundayColor);
+        dest.writeInt(monthDayNameColor);
+        dest.writeInt(bGColor);
+        dest.writeInt(selectedWeekBGColor);
+        dest.writeInt(focusMonthColor);
+        dest.writeInt(otherMonthColor);
+        dest.writeInt(daySeparatorColor);
+        dest.writeInt(todayOutlineColor);
+        dest.writeInt(weekNumColor);
     }
+
+
+    @Override
+    public String toString() {
+        return "MonthFieldColorHelper{" +
+                "monthWeekNumColor=" + monthWeekNumColor +
+                ", monthNumColor=" + monthNumColor +
+                ", monthNumOtherColor=" + monthNumOtherColor +
+                ", monthNumTodayColor=" + monthNumTodayColor +
+                ", monthEventColor=" + monthEventColor +
+                ", monthDeclinedEventColor=" + monthDeclinedEventColor +
+                ", monthDeclinedExtrasColor=" + monthDeclinedExtrasColor +
+                ", monthEventExtraColor=" + monthEventExtraColor +
+                ", monthEventOtherColor=" + monthEventOtherColor +
+                ", monthEventExtraOtherColor=" + monthEventExtraOtherColor +
+                ", monthBGTodayColor=" + monthBGTodayColor +
+                ", monthBGFocusMonthColor=" + monthBGFocusMonthColor +
+                ", monthBGOtherColor=" + monthBGOtherColor +
+                ", monthBGColor=" + monthBGColor +
+                ", daySeparatorInnerColor=" + daySeparatorInnerColor +
+                ", todayAnimateColor=" + todayAnimateColor +
+                ", clickedDayColor=" + clickedDayColor +
+                ", monthSaturdayColor=" + monthSaturdayColor +
+                ", monthSundayColor=" + monthSundayColor +
+                ", monthDayNameColor=" + monthDayNameColor +
+                '}';
+    }
+
 }

@@ -48,11 +48,11 @@ import com.android.calendar.CalendarController;
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
-import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.Utils;
 import com.android.calendar.event.CreateEventDialogFragment;
 import com.android.calendar.helpers.IntentKeys;
+import com.android.calendar.helpers.MonthFieldColorHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,6 +80,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     private static final int LOADER_THROTTLE_DELAY = 500;
     protected static boolean mShowDetailsInMonth = false;
     private final Time mDesiredDay = new Time();
+    static MonthFieldColorHelper monthFieldColors;
     private final Runnable mTZUpdater = new Runnable() {
         @Override
         public void run() {
@@ -99,6 +100,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     protected float mMinimumTwoMonthFlingVelocity;
     protected boolean mIsMiniMonth;
     protected boolean mHideDeclined;
+    private long timeInMillis;
     protected int mFirstLoadedJulianDay;
     protected int mLastLoadedJulianDay;
     private CreateEventDialogFragment mEventDialog;
@@ -220,6 +222,13 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
 
     @Override
     public void onAttach(Activity activity) {
+        Bundle args = getArguments();
+        timeInMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
+        mIsMiniMonth = args.getBoolean(IntentKeys.KEY_IS_MINI_MONTH);
+        monthFieldColors = args.getParcelable(IntentKeys.KEY_COLOR_HELPER);
+        super.setColorData(monthFieldColors);
+
+        Log.d("dashdisa", "onAttach MonthByWeekFragment monthFieldColors-->" + monthFieldColors);
         super.onAttach(activity);
         mTZUpdater.run();
         if (mAdapter != null) {
@@ -251,7 +260,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     }
 
     @Override
-    protected void setUpAdapter() {
+    protected void setUpAdapter(MonthFieldColorHelper monthFieldColors) {
         mFirstDayOfWeek = Utils.getFirstDayOfWeek(mContext);
         mShowWeekNumber = Utils.getShowWeekNumber(mContext);
 
@@ -264,7 +273,8 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
                 Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff));
         weekParams.put(SimpleWeeksAdapter.WEEK_PARAMS_DAYS_PER_WEEK, mDaysPerWeek);
         if (mAdapter == null) {
-            mAdapter = new MonthByWeekAdapter(getActivity(), weekParams, mEventDialogHandler);
+            Log.d("dashdisa", "setUpAdapter MonthByWeekFragment-->" + monthFieldColors);
+            mAdapter = new MonthByWeekAdapter(monthFieldColors, getActivity(), weekParams, mEventDialogHandler);
             mAdapter.registerDataSetObserver(mObserver);
         } else {
             mAdapter.updateParams(weekParams);
@@ -276,9 +286,6 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v;
-        Bundle args = getArguments();
-        long timeInMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
-        mIsMiniMonth = args.getBoolean(IntentKeys.KEY_IS_MINI_MONTH);
         populateData(timeInMillis);
 
         if (mIsMiniMonth) {
@@ -295,9 +302,14 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
         super.onActivityCreated(savedInstanceState);
         mListView.setSelector(new StateListDrawable());
         mListView.setOnTouchListener(this);
+        Log.d("dashdisa", "OnActivityCreated MonthByWeekFragment");
 
         if (!mIsMiniMonth) {
-            mListView.setBackgroundColor(new DynamicTheme().getColor(getActivity(), "month_bgcolor"));
+            if (monthFieldColors == null) {
+                monthFieldColors = new MonthFieldColorHelper(mContext);
+            }
+            mListView.setBackgroundColor(monthFieldColors.getMonthBGColor());
+            //mListView.setBackgroundColor(new DynamicTheme().getColor(getActivity(), "month_bgcolor"));
         }
 
         // To get a smoother transition when showing this fragment, delay loading of events until

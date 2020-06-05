@@ -83,6 +83,7 @@ import android.widget.ViewSwitcher;
 
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
+import com.android.calendar.helpers.DayFieldColorHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -271,7 +272,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private static int mNewEventHintColor;
     private static int mCalendarHourLabelColor;
     private static int mMoreAlldayEventsTextAlpha = MORE_EVENTS_MAX_ALPHA;
-
+    private DayFieldColorHelper dayFieldColorHelper;
     // Actual cell height we're using (may be modified by all day
     // events), shared among all DayViews
     private static int mCellHeight = 0; // shared among all DayViews
@@ -572,9 +573,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     private boolean mTouchExplorationEnabled = false;
 
     public DayView(Context context, CalendarController controller,
-                   ViewSwitcher viewSwitcher, EventLoader eventLoader, int numDays) {
+                   ViewSwitcher viewSwitcher, EventLoader eventLoader, int numDays, DayFieldColorHelper dayFieldColorHelper) {
         super(context);
         mContext = context;
+        this.dayFieldColorHelper = dayFieldColorHelper;
         initAccessibilityVariables();
 
         mResources = context.getResources();
@@ -798,7 +800,25 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         mTodayJulianDay = Time.getJulianDay(currentTime, mCurrentTime.gmtoff);
 
         DynamicTheme dynTheme = new DynamicTheme();
-        mWeek_todayColor = dynTheme.getColor(mContext, "week_today");
+        if (dayFieldColorHelper == null) {
+            dayFieldColorHelper = new DayFieldColorHelper(getContext());
+        }
+        mWeek_todayColor = dayFieldColorHelper.getWeekTodayColor();
+        mWeek_saturdayColor = dayFieldColorHelper.getWeekSaturdayColor();
+        mWeek_sundayColor = dayFieldColorHelper.getWeekSundayColor();
+        mCalendarDateBannerTextColor = dayFieldColorHelper.getCalendarDateBannerTextColor();
+        mFutureBgColorRes = dayFieldColorHelper.getFutureBgColorRes();
+        mBgColor = dayFieldColorHelper.getBgColor();
+        mCalendarHourLabelColor = dayFieldColorHelper.getCalendarHourLabelColor();
+        mCalendarGridAreaSelected = dayFieldColorHelper.getCalendarGridAreaSelected();
+        mCalendarGridLineInnerHorizontalColor = dayFieldColorHelper.getCalendarGridLineInnerHorizontalColor();
+        mCalendarGridLineInnerVerticalColor = dayFieldColorHelper.getCalendarGridLineInnerVerticalColor();
+        mPressedColor = dayFieldColorHelper.getPressedColor();
+        mClickedColor = dayFieldColorHelper.getClickedColor();
+        mEventTextColor = dayFieldColorHelper.getEventTextColor();
+        mMoreEventsTextColor = dayFieldColorHelper.getMoreEventsTextColor();
+
+        /*mWeek_todayColor = dynTheme.getColor(mContext, "week_today");
         mWeek_saturdayColor = dynTheme.getColor(mContext, "week_saturday");
         mWeek_sundayColor = dynTheme.getColor(mContext, "week_sunday");
         mCalendarDateBannerTextColor = dynTheme.getColor(mContext, "calendar_date_banner_text_color");
@@ -812,7 +832,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         mClickedColor = dynTheme.getColor(mContext, "day_event_clicked_background_color");
         mEventTextColor = dynTheme.getColor(mContext, "calendar_event_text_color");
         mMoreEventsTextColor = dynTheme.getColor(mContext, "month_event_other_color");
-
+*/
         mEventTextPaint.setTextSize(EVENT_TEXT_FONT_SIZE);
         mEventTextPaint.setTextAlign(Paint.Align.LEFT);
         mEventTextPaint.setAntiAlias(true);

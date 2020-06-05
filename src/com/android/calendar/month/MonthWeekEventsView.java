@@ -48,6 +48,7 @@ import com.android.calendar.Event;
 import com.android.calendar.LunarUtils;
 import com.android.calendar.Utils;
 import com.android.calendar.ViewDetailsPreferences;
+import com.android.calendar.helpers.MonthFieldColorHelper;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -157,12 +158,17 @@ public class MonthWeekEventsView extends SimpleWeekView {
     private int mAnimateTodayAlpha = 0;
     private ObjectAnimator mTodayAnimator = null;
     private int[] mDayXs;
+    public MonthFieldColorHelper monthFieldColors;
 
     /**
      * Shows up as an error if we don't include this.
      */
-    public MonthWeekEventsView(Context context) {
-        super(context);
+    public MonthWeekEventsView(MonthFieldColorHelper monthFieldColors, Context context) {
+        super(monthFieldColors, context);
+        Log.d("dashdisa", "MonthWeekEventsView C'tor-->" + monthFieldColors);
+
+        this.monthFieldColors = monthFieldColors;
+
     }
 
     // Sets the list of events for this week. Takes a sorted list of arrays
@@ -230,7 +236,7 @@ public class MonthWeekEventsView extends SimpleWeekView {
         Resources res = context.getResources();
         DynamicTheme dynamicTheme = new DynamicTheme();
 
-        mMonthWeekNumColor = dynamicTheme.getColor(context, "month_week_num_color");
+       /* mMonthWeekNumColor = dynamicTheme.getColor(context, "month_week_num_color");
         mMonthNumColor = dynamicTheme.getColor(context, "month_day_number");
         mMonthNumOtherColor = dynamicTheme.getColor(context, "month_day_number_other");
         mMonthNumTodayColor = dynamicTheme.getColor(context, "month_today_number");
@@ -247,6 +253,27 @@ public class MonthWeekEventsView extends SimpleWeekView {
         mDaySeparatorInnerColor = dynamicTheme.getColor(context, "month_grid_lines");
         mTodayAnimateColor = dynamicTheme.getColor(context, "today_highlight_color");
         mClickedDayColor = dynamicTheme.getColor(context, "day_clicked_background_color");
+*/
+        if (super.monthFieldColors == null) {
+            super.monthFieldColors = new MonthFieldColorHelper(context);
+        }
+        mMonthWeekNumColor = super.monthFieldColors.getMonthWeekNumColor();
+        mMonthNumColor = super.monthFieldColors.getMonthNumColor();
+        mMonthNumOtherColor = super.monthFieldColors.getMonthNumOtherColor();
+        mMonthNumTodayColor = super.monthFieldColors.getMonthNumTodayColor();
+        mMonthEventColor = super.monthFieldColors.getMonthEventColor();
+        mMonthDeclinedEventColor = super.monthFieldColors.getMonthDeclinedEventColor();
+        mMonthDeclinedExtrasColor = super.monthFieldColors.getMonthDeclinedExtrasColor();
+        mMonthEventExtraColor = super.monthFieldColors.getMonthEventExtraColor();
+        mMonthEventOtherColor = super.monthFieldColors.getMonthEventOtherColor();
+        mMonthEventExtraOtherColor = super.monthFieldColors.getMonthEventExtraOtherColor();
+        mMonthBGTodayColor = super.monthFieldColors.getMonthBGTodayColor();
+        mMonthBGFocusMonthColor = super.monthFieldColors.getMonthBGFocusMonthColor();
+        mMonthBGOtherColor = super.monthFieldColors.getMonthBGOtherColor();
+        mMonthBGColor = super.monthFieldColors.getMonthBGColor();
+        mDaySeparatorInnerColor = super.monthFieldColors.getDaySeparatorInnerColor();
+        mTodayAnimateColor = super.monthFieldColors.getTodayAnimateColor();
+        mClickedDayColor = super.monthFieldColors.getClickedDayColor();
         mTodayDrawable = res.getDrawable(R.drawable.today_blue_week_holo_light);
     }
 
@@ -257,7 +284,7 @@ public class MonthWeekEventsView extends SimpleWeekView {
     @Override
     protected void initView() {
         super.initView();
-
+        Log.d("dashdisa", "void initView().....");
         if (!mInitialized) {
             Resources resources = getContext().getResources();
             mShowDetailsInMonth = Utils.getConfigBool(getContext(), R.bool.show_details_in_month);
@@ -302,6 +329,7 @@ public class MonthWeekEventsView extends SimpleWeekView {
             mInitialized = true;
         }
         mPadding = mDefaultEdgeSpacing;
+        Log.d("dashdisa", "******************* LOAD COLOR method call-->" + monthFieldColors);
         loadColors(getContext());
         // TODO modify paint properties depending on isMini
 

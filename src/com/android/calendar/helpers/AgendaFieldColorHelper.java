@@ -1,4 +1,4 @@
-package com.android.calendar.helper;
+package com.android.calendar.helpers;
 
 import android.content.Context;
 import android.os.Parcel;

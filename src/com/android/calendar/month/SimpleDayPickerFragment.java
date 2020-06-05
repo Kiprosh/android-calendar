@@ -38,6 +38,8 @@ import android.widget.TextView;
 
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.IntentKeys;
+import com.android.calendar.helpers.MonthFieldColorHelper;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -151,9 +153,16 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
         mHandler = new Handler();
     }
 
+    MonthFieldColorHelper monthFieldColors;
+
+    void setColorData(MonthFieldColorHelper monthFieldColors) {
+        this.monthFieldColors = monthFieldColors;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        Log.d("dashdisa", "onAttach SimpledDayPickerFragment");
         mContext = activity;
         String tz = Time.getCurrentTimezone();
         ViewConfiguration viewConfig = ViewConfiguration.get(activity);
@@ -183,7 +192,7 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
                 LIST_TOP_OFFSET *= mScale;
             }
         }
-        setUpAdapter();
+        setUpAdapter(monthFieldColors);
         setListAdapter(mAdapter);
     }
 
@@ -191,7 +200,8 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
      * Creates a new adapter if necessary and sets up its parameters. Override
      * this method to provide a custom adapter.
      */
-    protected void setUpAdapter() {
+    protected void setUpAdapter(MonthFieldColorHelper monthFieldColors) {
+        this.monthFieldColors = monthFieldColors;
         HashMap<String, Integer> weekParams = new HashMap<String, Integer>();
         weekParams.put(SimpleWeeksAdapter.WEEK_PARAMS_NUM_WEEKS, mNumWeeks);
         weekParams.put(SimpleWeeksAdapter.WEEK_PARAMS_SHOW_WEEK, mShowWeekNumber ? 1 : 0);
@@ -199,7 +209,7 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
         weekParams.put(SimpleWeeksAdapter.WEEK_PARAMS_JULIAN_DAY,
                 Time.getJulianDay(mSelectedDay.toMillis(false), mSelectedDay.gmtoff));
         if (mAdapter == null) {
-            mAdapter = new SimpleWeeksAdapter(getActivity(), weekParams);
+            mAdapter = new SimpleWeeksAdapter(monthFieldColors, getActivity(), weekParams);
             mAdapter.registerDataSetObserver(mObserver);
         } else {
             mAdapter.updateParams(weekParams);
@@ -272,7 +282,8 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
     @Override
     public void onResume() {
         super.onResume();
-        setUpAdapter();
+        Log.d("dashdisa", "onResume SimpledDayPickerFragment");
+        setUpAdapter(monthFieldColors);
         doResumeUpdates();
     }
 
@@ -337,6 +348,15 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.month_by_week,
                 container, false);
+
+        Bundle args = getArguments();
+        long timeInMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
+        boolean mIsMiniMonth = args.getBoolean(IntentKeys.KEY_IS_MINI_MONTH);
+        MonthFieldColorHelper monthFieldColors = args.getParcelable(IntentKeys.KEY_COLOR_HELPER);
+
+        Log.d("dashdisa", "SimpleDayPickerFragment onCreateView-->" + monthFieldColors);
+        Log.d("dashdisa", "mIsMiniMonth-->" + mIsMiniMonth);
+        Log.d("dashdisa", "timeInMillis-->" + timeInMillis);
         mDayNamesHeader = (ViewGroup) v.findViewById(R.id.day_names);
         return v;
     }

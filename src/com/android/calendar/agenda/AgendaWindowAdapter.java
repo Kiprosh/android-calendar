@@ -46,6 +46,7 @@ import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.StickyHeaderListView;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.AgendaFieldColorHelper;
 
 import java.util.Date;
 import java.util.Formatter;
@@ -165,6 +166,7 @@ public class AgendaWindowAdapter extends BaseAdapter
     private final int mSelectedItemBackgroundColor;
     private final int mSelectedItemTextColor;
     private final float mItemRightMargin;
+    AgendaFieldColorHelper agendaFieldColors;
     boolean mCleanQueryInitiated = false;
     // Used to stop a fling motion if the ListView is set to a specific position
     int mListViewScrollState = OnScrollListener.SCROLL_STATE_IDLE;
@@ -220,8 +222,10 @@ public class AgendaWindowAdapter extends BaseAdapter
     private AgendaAdapter.ViewHolder mSelectedVH = null;
 
     public AgendaWindowAdapter(Context context,
-                               AgendaListView agendaListView, boolean showEventOnStart) {
+                               AgendaListView agendaListView, boolean showEventOnStart, AgendaFieldColorHelper agendaFieldColors) {
         mContext = context;
+        Log.d("sdjsdjs", "AgendaWindowAdapter c'tor");
+
         mResources = context.getResources();
         mSelectedItemBackgroundColor = mResources
                 .getColor(R.color.agenda_selected_background_color);
@@ -588,7 +592,7 @@ public class AgendaWindowAdapter extends BaseAdapter
         if (searchQuery != null) {
             mSearchQuery = searchQuery;
         }
-
+        Log.d("sdjsdjs", "AgendaWindowAdapter refresh");
         if (DEBUGLOG) {
             Log.e(TAG, this + ": refresh " + goToTime.toString() + " id " + id
                     + ((searchQuery != null) ? searchQuery : "")
@@ -1048,8 +1052,9 @@ public class AgendaWindowAdapter extends BaseAdapter
         int offset; // offset in position in the list view
         int size; // dayAdapter.getCount()
 
-        public DayAdapterInfo(Context context) {
-            dayAdapter = new AgendaByDayAdapter(context);
+        public DayAdapterInfo(Context context, AgendaFieldColorHelper agendaFieldColors) {
+            Log.d("djsadkjhsd", "mAgendaListView.getAgendaFieldColors()--->" + agendaFieldColors);
+            dayAdapter = new AgendaByDayAdapter(context, agendaFieldColors);
         }
 
         @Override
@@ -1353,7 +1358,8 @@ public class AgendaWindowAdapter extends BaseAdapter
                 DayAdapterInfo info = pruneAdapterInfo(data.queryType);
                 int listPositionOffset = 0;
                 if (info == null) {
-                    info = new DayAdapterInfo(mContext);
+                    Log.d("sdjsdjs", "AgendaWindowAdapter processNewCursor");
+                    info = new DayAdapterInfo(mContext, mAgendaListView.getAgendaFieldColors());
                 } else {
                     if (DEBUGLOG)
                         Log.e(TAG, "processNewCursor listPositionOffsetA="

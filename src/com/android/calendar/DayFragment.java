@@ -32,6 +32,8 @@ import android.widget.ViewSwitcher.ViewFactory;
 
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
+import com.android.calendar.helpers.DayFieldColorHelper;
+import com.android.calendar.helpers.IntentKeys;
 
 import ws.xsoh.etar.R;
 
@@ -53,6 +55,7 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
     protected Animation mInAnimationBackward;
     protected Animation mOutAnimationBackward;
     EventLoader mEventLoader;
+    private DayFieldColorHelper dayFieldColorHelper;
 
     Time mSelectedDay = new Time();
 
@@ -93,8 +96,9 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.day_activity, null);
         Bundle args = getArguments();
-        mNumDays = args.getInt("numOfDays");
-        long timeInMillis = args.getLong("timeInMillis");
+        mNumDays = args.getInt(IntentKeys.KEY_NUMBER_OF_DAYS);
+        long timeInMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
+        dayFieldColorHelper = args.getParcelable(IntentKeys.KEY_COLOR_HELPER);
         if (timeInMillis == 0) {
             mSelectedDay.setToNow();
         } else {
@@ -111,7 +115,7 @@ public class DayFragment extends Fragment implements CalendarController.EventHan
     public View makeView() {
         mTZUpdater.run();
         DayView view = new DayView(getActivity(), CalendarController
-                .getInstance(getActivity()), mViewSwitcher, mEventLoader, mNumDays);
+                .getInstance(getActivity()), mViewSwitcher, mEventLoader, mNumDays, dayFieldColorHelper);
         view.setId(VIEW_ID);
         view.setLayoutParams(new ViewSwitcher.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));

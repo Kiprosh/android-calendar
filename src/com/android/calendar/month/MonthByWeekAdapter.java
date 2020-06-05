@@ -35,6 +35,7 @@ import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.Event;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.MonthFieldColorHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,9 +109,10 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
     private boolean mAnimateToday = false;
     private long mAnimateTime = 0;
     private Handler mEventDialogHandler;
+    MonthFieldColorHelper monthFieldColors;
 
-    public MonthByWeekAdapter(Context context, HashMap<String, Integer> params, Handler handler) {
-        super(context, params);
+    public MonthByWeekAdapter(MonthFieldColorHelper monthFieldColors, Context context, HashMap<String, Integer> params, Handler handler) {
+        super(monthFieldColors, context, params);
         mEventDialogHandler = handler;
         if (params.containsKey(WEEK_PARAMS_IS_MINI)) {
             mIsMiniMonth = params.get(WEEK_PARAMS_IS_MINI) != 0;
@@ -119,6 +121,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
         ViewConfiguration vc = ViewConfiguration.get(context);
         mOnDownDelay = ViewConfiguration.getTapTimeout();
         mMovedPixelToCancel = vc.getScaledTouchSlop();
+        this.monthFieldColors = monthFieldColors;
         mTotalClickDelay = mOnDownDelay + mOnTapDelay;
     }
 
@@ -239,13 +242,15 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                     isAnimatingToday = true;
                     // There is a bug that causes invalidates to not work some
                     // of the time unless we recreate the view.
-                    v = new MonthWeekEventsView(mContext);
+                    Log.d("dashdisa", "1. MonthByWeekAdapter-->" + monthFieldColors);
+                    v = new MonthWeekEventsView(monthFieldColors, mContext);
                 }
             } else {
                 drawingParams = (HashMap<String, Integer>) v.getTag();
             }
         } else {
-            v = new MonthWeekEventsView(mContext);
+            Log.d("dashdisa", "2. MonthByWeekAdapter-->" + monthFieldColors);
+            v = new MonthWeekEventsView(monthFieldColors, mContext);
         }
         if (drawingParams == null) {
             drawingParams = new HashMap<String, Integer>();
