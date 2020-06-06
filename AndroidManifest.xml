@@ -48,12 +48,10 @@
         android:theme="@style/CalendarAppTheme"
         android:usesCleartextTraffic="false">
 
+
         <activity
-            android:name="com.android.calendar.AllInOneActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/CalendarTheme.WithoutActionBar"
-            android:windowSoftInputMode="adjustPan">
+            android:name="com.android.calendar.TestFragment"
+            android:theme="@style/CalendarTheme.WithoutActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,6 +59,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.APP_CALENDAR" />
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name="com.android.calendar.AllInOneActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/CalendarTheme.WithoutActionBar"
+            android:windowSoftInputMode="adjustPan">
+            <!--
+                        <intent-filter>
+                            <action android:name="android.intent.action.MAIN" />
+
+                            <category android:name="android.intent.category.DEFAULT" />
+                            <category android:name="android.intent.category.LAUNCHER" />
+                            <category android:name="android.intent.category.APP_CALENDAR" />
+                        </intent-filter>
+            -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -74,11 +89,11 @@
         <activity-alias
             android:name="com.android.calendar.LaunchActivity"
             android:exported="true"
-            android:targetActivity="com.android.calendar.AllInOneActivity"></activity-alias>
+            android:targetActivity="com.android.calendar.TestFragment"></activity-alias>
 
         <activity
             android:name="com.android.calendar.EventInfoActivity"
-            android:parentActivityName="com.android.calendar.AllInOneActivity">
+            android:parentActivityName="com.android.calendar.TestFragment">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -91,7 +106,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.android.calendar.AllInOneActivity" />
+                android:value="com.android.calendar.TestFragment" />
         </activity>
 
         <activity
@@ -162,7 +177,7 @@
         <activity
             android:name="com.android.calendar.CalendarSettingsActivity"
             android:label="@string/preferences_title"
-            android:parentActivityName="com.android.calendar.AllInOneActivity" />
+            android:parentActivityName="com.android.calendar.TestFragment" />
 
         <!-- Declarations for search -->
         <!-- Make all activities a searchable context -->
