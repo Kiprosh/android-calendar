@@ -83,22 +83,6 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     private long mLastShownEventId = -1;
     private long mLastHandledEventId = -1;
     private Time mLastHandledEventTime = null;
-    private boolean calledConstructor;
-
-    public AgendaFragment() {
-        calledConstructor = true;
-        mInitialTimeMillis = 0;
-        mTime = new Time();
-        mLastHandledEventTime = new Time();
-
-        if (mInitialTimeMillis == 0) {
-            mTime.setToNow();
-        } else {
-            mTime.set(mInitialTimeMillis);
-        }
-        mLastHandledEventTime.set(mTime);
-        mUsedForSearch = false;
-    }
 
     // timeMillis - time of first event to show
     // usedForSearch - indicates if this fragment is used in the search fragment
@@ -111,23 +95,10 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        if (!calledConstructor) {
-            Bundle args = getArguments();
-            mInitialTimeMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
-            mUsedForSearch = args.getBoolean(IntentKeys.KEY_IS_USED_FOR_SEARCH);
-
-            mTime = new Time();
-            mLastHandledEventTime = new Time();
-
-            if (mInitialTimeMillis == 0) {
-                mTime.setToNow();
-            } else {
-                mTime.set(mInitialTimeMillis);
-            }
-            mLastHandledEventTime.set(mTime);
-        }
-
-
+        Bundle args = getArguments();
+        mInitialTimeMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
+        mUsedForSearch = args.getBoolean(IntentKeys.KEY_IS_USED_FOR_SEARCH);
+        updateTime();
         mTimeZone = Utils.getTimeZone(getActivity(), mTZUpdater);
         mTime.switchTimezone(mTimeZone);
         mActivity = getActivity();
@@ -325,7 +296,21 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
 //        Utils.setDefaultView(this, CalendarApplication.AGENDA_VIEW_ID);
     }
 
+    private void updateTime() {
+        mTime = new Time();
+        mLastHandledEventTime = new Time();
+        if (mInitialTimeMillis == 0) {
+            mTime.setToNow();
+        } else {
+            mTime.set(mInitialTimeMillis);
+        }
+        mLastHandledEventTime.set(mTime);
+    }
+
     private void goTo(EventInfo event, boolean animate) {
+        if (mTime == null) {
+            updateTime();
+        }
         if (event.selectedTime != null) {
             mTime.set(event.selectedTime);
         } else if (event.startTime != null) {
