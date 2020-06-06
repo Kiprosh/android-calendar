@@ -226,26 +226,4 @@ public class DayFieldColorHelper implements Parcelable {
     public void setCalendarHourLabelColor(int calendarHourLabelColor) {
         this.calendarHourLabelColor = calendarHourLabelColor;
     }
-
-    @Override
-    public String toString() {
-        return "DayFieldColorHelper{" +
-                "pressedColor=" + pressedColor +
-                ", clickedColor=" + clickedColor +
-                ", eventTextColor=" + eventTextColor +
-                ", moreEventsTextColor=" + moreEventsTextColor +
-                ", weekTodayColor=" + weekTodayColor +
-                ", weekSaturdayColor=" + weekSaturdayColor +
-                ", weekSundayColor=" + weekSundayColor +
-                ", calendarDateBannerTextColor=" + calendarDateBannerTextColor +
-                ", calendarGridAreaSelected=" + calendarGridAreaSelected +
-                ", calendarGridLineInnerHorizontalColor=" + calendarGridLineInnerHorizontalColor +
-                ", calendarGridLineInnerVerticalColor=" + calendarGridLineInnerVerticalColor +
-                ", futureBgColor=" + futureBgColor +
-                ", futureBgColorRes=" + futureBgColorRes +
-                ", bgColor=" + bgColor +
-                ", newEventHintColor=" + newEventHintColor +
-                ", calendarHourLabelColor=" + calendarHourLabelColor +
-                '}';
-    }
 }

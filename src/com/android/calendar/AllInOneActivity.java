@@ -724,7 +724,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     }
 
     private MonthFieldColorHelper setMonthViewColor() {
-        /*monthFieldColors = new MonthFieldColorHelper(this);
+        monthFieldColors = new MonthFieldColorHelper(this);
         monthFieldColors.setMonthNumColor(getColorFromResource(R.color.calendar_number_text));
         monthFieldColors.setMonthNumTodayColor(getColorFromResource(R.color.calendar_selected_text));
         monthFieldColors.setMonthBGOtherColor(getColorFromResource(R.color.calendar_background));
@@ -732,25 +732,25 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         monthFieldColors.setMonthBGTodayColor(getColorFromResource(R.color.calendar_selected_background));
         monthFieldColors.setMonthDayNameColor(getColorFromResource(R.color.calendar_day_text));
         monthFieldColors.setMonthSaturdayColor(getColorFromResource(R.color.calendar_day_text));
-        monthFieldColors.setMonthSundayColor(getColorFromResource(R.color.calendar_day_text));*/
+        monthFieldColors.setMonthSundayColor(getColorFromResource(R.color.calendar_day_text));
         return monthFieldColors;
     }
 
     private AgendaFieldColorHelper getAgendaFieldColor() {
-        /*agendaFieldColorHelper = new AgendaFieldColorHelper(this);
+        agendaFieldColorHelper = new AgendaFieldColorHelper(this);
         agendaFieldColorHelper.setDeclinedColor(getColorFromResource(R.color.purple));
         agendaFieldColorHelper.setStandardColor(getColorFromResource(R.color.red));
         agendaFieldColorHelper.setWhereDeclinedColor(getColorFromResource(R.color.green));
-        agendaFieldColorHelper.setWhereColor(getColorFromResource(R.color.orange));*/
+        agendaFieldColorHelper.setWhereColor(getColorFromResource(R.color.orange));
         return agendaFieldColorHelper;
     }
 
     private DayFieldColorHelper getDayFieldColor() {
-        /*dayFieldColorHelper = new DayFieldColorHelper(this);
+        dayFieldColorHelper = new DayFieldColorHelper(this);
         dayFieldColorHelper.setPressedColor(getColorFromResource(R.color.red));
         dayFieldColorHelper.setCalendarHourLabelColor(getColorFromResource(R.color.orange));
         dayFieldColorHelper.setCalendarGridLineInnerHorizontalColor(getColorFromResource(R.color.purple));
-        dayFieldColorHelper.setBgColor(getColorFromResource(R.color.darkest_orange));*/
+        dayFieldColorHelper.setBgColor(getColorFromResource(R.color.darkest_orange));
         return dayFieldColorHelper;
     }
 

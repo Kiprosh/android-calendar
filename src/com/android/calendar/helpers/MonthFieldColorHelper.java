@@ -357,32 +357,4 @@ public class MonthFieldColorHelper implements Parcelable {
         dest.writeInt(todayOutlineColor);
         dest.writeInt(weekNumColor);
     }
-
-
-    @Override
-    public String toString() {
-        return "MonthFieldColorHelper{" +
-                "monthWeekNumColor=" + monthWeekNumColor +
-                ", monthNumColor=" + monthNumColor +
-                ", monthNumOtherColor=" + monthNumOtherColor +
-                ", monthNumTodayColor=" + monthNumTodayColor +
-                ", monthEventColor=" + monthEventColor +
-                ", monthDeclinedEventColor=" + monthDeclinedEventColor +
-                ", monthDeclinedExtrasColor=" + monthDeclinedExtrasColor +
-                ", monthEventExtraColor=" + monthEventExtraColor +
-                ", monthEventOtherColor=" + monthEventOtherColor +
-                ", monthEventExtraOtherColor=" + monthEventExtraOtherColor +
-                ", monthBGTodayColor=" + monthBGTodayColor +
-                ", monthBGFocusMonthColor=" + monthBGFocusMonthColor +
-                ", monthBGOtherColor=" + monthBGOtherColor +
-                ", monthBGColor=" + monthBGColor +
-                ", daySeparatorInnerColor=" + daySeparatorInnerColor +
-                ", todayAnimateColor=" + todayAnimateColor +
-                ", clickedDayColor=" + clickedDayColor +
-                ", monthSaturdayColor=" + monthSaturdayColor +
-                ", monthSundayColor=" + monthSundayColor +
-                ", monthDayNameColor=" + monthDayNameColor +
-                '}';
-    }
-
 }
