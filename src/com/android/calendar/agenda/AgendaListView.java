@@ -94,7 +94,6 @@ public class AgendaListView extends ListView implements OnItemClickListener {
     }
 
     public void setAgendaFieldColors(AgendaFieldColorHelper agendaFieldColors) {
-        Log.d("djsadkjhsd", "setAgendaFieldColors--->" + agendaFieldColors);
         this.agendaFieldColors = agendaFieldColors;
     }
 
@@ -104,7 +103,6 @@ public class AgendaListView extends ListView implements OnItemClickListener {
         mTime = new Time(mTimeZone);
         setOnItemClickListener(this);
         setVerticalScrollBarEnabled(false);
-        Log.d("sdjsdjs", "AgendaListView initView");
 
         mWindowAdapter = new AgendaWindowAdapter(context, this,
                 Utils.getConfigBool(context, R.bool.show_event_details_with_agenda), null);
@@ -221,7 +219,6 @@ public class AgendaListView extends ListView implements OnItemClickListener {
 
     public void goTo(Time time, long id, String searchQuery, boolean forced,
                      boolean refreshEventInfo) {
-        Log.d("sdjsdjs", "AgendaListView goTo()");
         if (time == null) {
             time = mTime;
             long goToTime = getFirstVisibleTime(null);
@@ -384,7 +381,6 @@ public class AgendaListView extends ListView implements OnItemClickListener {
     // Move the currently selected or visible focus down by offset amount.
     // offset could be negative.
     public void shiftSelection(int offset) {
-        Log.d("sdjsdjs", "AgendaListView shiftSelection");
 
         shiftPosition(offset);
         int position = getSelectedItemPosition();

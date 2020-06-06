@@ -113,7 +113,6 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        Log.d("sdjsdjs", "onCreate() outside.........." + calledConstructor);
         Bundle args = getArguments();
         agendaFieldColorHelper = args.getParcelable(IntentKeys.KEY_COLOR_HELPER);
         if (!calledConstructor) {

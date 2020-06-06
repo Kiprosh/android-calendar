@@ -165,7 +165,6 @@ public class MonthWeekEventsView extends SimpleWeekView {
      */
     public MonthWeekEventsView(MonthFieldColorHelper monthFieldColors, Context context) {
         super(monthFieldColors, context);
-        Log.d("dashdisa", "MonthWeekEventsView C'tor-->" + monthFieldColors);
 
         this.monthFieldColors = monthFieldColors;
 
@@ -284,7 +283,6 @@ public class MonthWeekEventsView extends SimpleWeekView {
     @Override
     protected void initView() {
         super.initView();
-        Log.d("dashdisa", "void initView().....");
         if (!mInitialized) {
             Resources resources = getContext().getResources();
             mShowDetailsInMonth = Utils.getConfigBool(getContext(), R.bool.show_details_in_month);
@@ -329,7 +327,6 @@ public class MonthWeekEventsView extends SimpleWeekView {
             mInitialized = true;
         }
         mPadding = mDefaultEdgeSpacing;
-        Log.d("dashdisa", "******************* LOAD COLOR method call-->" + monthFieldColors);
         loadColors(getContext());
         // TODO modify paint properties depending on isMini
 

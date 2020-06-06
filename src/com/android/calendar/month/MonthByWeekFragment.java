@@ -228,7 +228,6 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
         monthFieldColors = args.getParcelable(IntentKeys.KEY_COLOR_HELPER);
         super.setColorData(monthFieldColors);
 
-        Log.d("dashdisa", "onAttach MonthByWeekFragment monthFieldColors-->" + monthFieldColors);
         super.onAttach(activity);
         mTZUpdater.run();
         if (mAdapter != null) {
@@ -273,7 +272,6 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
                 Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff));
         weekParams.put(SimpleWeeksAdapter.WEEK_PARAMS_DAYS_PER_WEEK, mDaysPerWeek);
         if (mAdapter == null) {
-            Log.d("dashdisa", "setUpAdapter MonthByWeekFragment-->" + monthFieldColors);
             mAdapter = new MonthByWeekAdapter(monthFieldColors, getActivity(), weekParams, mEventDialogHandler);
             mAdapter.registerDataSetObserver(mObserver);
         } else {
@@ -302,7 +300,6 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
         super.onActivityCreated(savedInstanceState);
         mListView.setSelector(new StateListDrawable());
         mListView.setOnTouchListener(this);
-        Log.d("dashdisa", "OnActivityCreated MonthByWeekFragment");
 
         if (!mIsMiniMonth) {
             if (monthFieldColors == null) {

@@ -224,8 +224,6 @@ public class AgendaWindowAdapter extends BaseAdapter
     public AgendaWindowAdapter(Context context,
                                AgendaListView agendaListView, boolean showEventOnStart, AgendaFieldColorHelper agendaFieldColors) {
         mContext = context;
-        Log.d("sdjsdjs", "AgendaWindowAdapter c'tor");
-
         mResources = context.getResources();
         mSelectedItemBackgroundColor = mResources
                 .getColor(R.color.agenda_selected_background_color);
@@ -592,7 +590,6 @@ public class AgendaWindowAdapter extends BaseAdapter
         if (searchQuery != null) {
             mSearchQuery = searchQuery;
         }
-        Log.d("sdjsdjs", "AgendaWindowAdapter refresh");
         if (DEBUGLOG) {
             Log.e(TAG, this + ": refresh " + goToTime.toString() + " id " + id
                     + ((searchQuery != null) ? searchQuery : "")
@@ -1053,7 +1050,6 @@ public class AgendaWindowAdapter extends BaseAdapter
         int size; // dayAdapter.getCount()
 
         public DayAdapterInfo(Context context, AgendaFieldColorHelper agendaFieldColors) {
-            Log.d("djsadkjhsd", "mAgendaListView.getAgendaFieldColors()--->" + agendaFieldColors);
             dayAdapter = new AgendaByDayAdapter(context, agendaFieldColors);
         }
 
@@ -1358,7 +1354,6 @@ public class AgendaWindowAdapter extends BaseAdapter
                 DayAdapterInfo info = pruneAdapterInfo(data.queryType);
                 int listPositionOffset = 0;
                 if (info == null) {
-                    Log.d("sdjsdjs", "AgendaWindowAdapter processNewCursor");
                     info = new DayAdapterInfo(mContext, mAgendaListView.getAgendaFieldColors());
                 } else {
                     if (DEBUGLOG)

@@ -22,7 +22,6 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,8 +66,6 @@ public class AgendaByDayAdapter extends BaseAdapter {
 
     public AgendaByDayAdapter(Context context, AgendaFieldColorHelper agendaFieldColors) {
         mContext = context;
-        Log.d("sdjsdjs", "AgendaByDayAdapter c'tor");
-        Log.d("djsadkjhsd", "mAgendaListView.getAgendaFieldColors()" + agendaFieldColors);
         mAgendaAdapter = new AgendaAdapter(agendaFieldColors, context, R.layout.agenda_item);
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mStringBuilder = new StringBuilder(50);

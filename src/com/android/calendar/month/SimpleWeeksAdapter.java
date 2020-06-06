@@ -102,7 +102,6 @@ public class SimpleWeeksAdapter extends BaseAdapter implements OnTouchListener {
     public SimpleWeeksAdapter(MonthFieldColorHelper monthFieldColors, Context context, HashMap<String, Integer> params) {
         mContext = context;
         this.monthFieldColors = monthFieldColors;
-        Log.d("dashdisa", "SimpleWeeksAdapter-->" + monthFieldColors);
 
         // Get default week start based on locale, subtracting one for use with android Time.
         Calendar cal = Calendar.getInstance(Locale.getDefault());
@@ -215,7 +214,6 @@ public class SimpleWeeksAdapter extends BaseAdapter implements OnTouchListener {
             // We store the drawing parameters in the view so it can be recycled
             drawingParams = (HashMap<String, Integer>) v.getTag();
         } else {
-            Log.d("dashdisa", "SimpleWeeksAdapter getView-->" + monthFieldColors);
 
             v = new SimpleWeekView(monthFieldColors, mContext);
             // Set up the new view

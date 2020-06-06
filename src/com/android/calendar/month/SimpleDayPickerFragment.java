@@ -162,7 +162,6 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.d("dashdisa", "onAttach SimpledDayPickerFragment");
         mContext = activity;
         String tz = Time.getCurrentTimezone();
         ViewConfiguration viewConfig = ViewConfiguration.get(activity);
@@ -282,7 +281,6 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("dashdisa", "onResume SimpledDayPickerFragment");
         setUpAdapter(monthFieldColors);
         doResumeUpdates();
     }
@@ -354,9 +352,6 @@ public class SimpleDayPickerFragment extends ListFragment implements OnScrollLis
         boolean mIsMiniMonth = args.getBoolean(IntentKeys.KEY_IS_MINI_MONTH);
         MonthFieldColorHelper monthFieldColors = args.getParcelable(IntentKeys.KEY_COLOR_HELPER);
 
-        Log.d("dashdisa", "SimpleDayPickerFragment onCreateView-->" + monthFieldColors);
-        Log.d("dashdisa", "mIsMiniMonth-->" + mIsMiniMonth);
-        Log.d("dashdisa", "timeInMillis-->" + timeInMillis);
         mDayNamesHeader = (ViewGroup) v.findViewById(R.id.day_names);
         return v;
     }

@@ -242,14 +242,12 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                     isAnimatingToday = true;
                     // There is a bug that causes invalidates to not work some
                     // of the time unless we recreate the view.
-                    Log.d("dashdisa", "1. MonthByWeekAdapter-->" + monthFieldColors);
                     v = new MonthWeekEventsView(monthFieldColors, mContext);
                 }
             } else {
                 drawingParams = (HashMap<String, Integer>) v.getTag();
             }
         } else {
-            Log.d("dashdisa", "2. MonthByWeekAdapter-->" + monthFieldColors);
             v = new MonthWeekEventsView(monthFieldColors, mContext);
         }
         if (drawingParams == null) {
