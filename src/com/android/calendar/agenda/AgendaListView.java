@@ -105,7 +105,7 @@ public class AgendaListView extends ListView implements OnItemClickListener {
         setVerticalScrollBarEnabled(false);
 
         mWindowAdapter = new AgendaWindowAdapter(context, this,
-                Utils.getConfigBool(context, R.bool.show_event_details_with_agenda), null);
+                Utils.getConfigBool(context, R.bool.show_event_details_with_agenda));
         mWindowAdapter.setSelectedInstanceId(-1/* TODO:instanceId */);
         setAdapter(mWindowAdapter);
         setCacheColorHint(context.getResources().getColor(R.color.agenda_item_not_selected));

@@ -80,7 +80,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     private static final int LOADER_THROTTLE_DELAY = 500;
     protected static boolean mShowDetailsInMonth = false;
     private final Time mDesiredDay = new Time();
-    static MonthFieldColorHelper monthFieldColors;
+    private MonthFieldColorHelper monthFieldColors;
     private final Runnable mTZUpdater = new Runnable() {
         @Override
         public void run() {
@@ -306,7 +306,6 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
                 monthFieldColors = new MonthFieldColorHelper(mContext);
             }
             mListView.setBackgroundColor(monthFieldColors.getMonthBGColor());
-            //mListView.setBackgroundColor(new DynamicTheme().getColor(getActivity(), "month_bgcolor"));
         }
 
         // To get a smoother transition when showing this fragment, delay loading of events until

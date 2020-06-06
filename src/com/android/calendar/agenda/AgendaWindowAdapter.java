@@ -166,7 +166,6 @@ public class AgendaWindowAdapter extends BaseAdapter
     private final int mSelectedItemBackgroundColor;
     private final int mSelectedItemTextColor;
     private final float mItemRightMargin;
-    AgendaFieldColorHelper agendaFieldColors;
     boolean mCleanQueryInitiated = false;
     // Used to stop a fling motion if the ListView is set to a specific position
     int mListViewScrollState = OnScrollListener.SCROLL_STATE_IDLE;
@@ -221,8 +220,7 @@ public class AgendaWindowAdapter extends BaseAdapter
     private long mSelectedInstanceId = -1;
     private AgendaAdapter.ViewHolder mSelectedVH = null;
 
-    public AgendaWindowAdapter(Context context,
-                               AgendaListView agendaListView, boolean showEventOnStart, AgendaFieldColorHelper agendaFieldColors) {
+    public AgendaWindowAdapter(Context context, AgendaListView agendaListView, boolean showEventOnStart) {
         mContext = context;
         mResources = context.getResources();
         mSelectedItemBackgroundColor = mResources

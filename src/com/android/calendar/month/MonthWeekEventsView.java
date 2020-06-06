@@ -43,7 +43,6 @@ import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 
-import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.LunarUtils;
 import com.android.calendar.Utils;
@@ -233,26 +232,7 @@ public class MonthWeekEventsView extends SimpleWeekView {
 
     protected void loadColors(Context context) {
         Resources res = context.getResources();
-        DynamicTheme dynamicTheme = new DynamicTheme();
 
-       /* mMonthWeekNumColor = dynamicTheme.getColor(context, "month_week_num_color");
-        mMonthNumColor = dynamicTheme.getColor(context, "month_day_number");
-        mMonthNumOtherColor = dynamicTheme.getColor(context, "month_day_number_other");
-        mMonthNumTodayColor = dynamicTheme.getColor(context, "month_today_number");
-        mMonthEventColor = dynamicTheme.getColor(context, "month_event_color");
-        mMonthDeclinedEventColor = dynamicTheme.getColor(context, "agenda_item_declined_color");
-        mMonthDeclinedExtrasColor = dynamicTheme.getColor(context, "agenda_item_where_declined_text_color");
-        mMonthEventExtraColor = dynamicTheme.getColor(context, "month_event_extra_color");
-        mMonthEventOtherColor = dynamicTheme.getColor(context, "month_event_other_color");
-        mMonthEventExtraOtherColor = dynamicTheme.getColor(context, "month_event_extra_other_color");
-        mMonthBGTodayColor = dynamicTheme.getColor(context, "month_today_bgcolor");
-        mMonthBGFocusMonthColor = dynamicTheme.getColor(context, "month_focus_month_bgcolor");
-        mMonthBGOtherColor = dynamicTheme.getColor(context, "month_other_bgcolor");
-        mMonthBGColor = dynamicTheme.getColor(context, "month_bgcolor");
-        mDaySeparatorInnerColor = dynamicTheme.getColor(context, "month_grid_lines");
-        mTodayAnimateColor = dynamicTheme.getColor(context, "today_highlight_color");
-        mClickedDayColor = dynamicTheme.getColor(context, "day_clicked_background_color");
-*/
         if (super.monthFieldColors == null) {
             super.monthFieldColors = new MonthFieldColorHelper(context);
         }
