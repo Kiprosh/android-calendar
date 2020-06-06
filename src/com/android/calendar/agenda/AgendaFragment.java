@@ -98,16 +98,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
         Bundle args = getArguments();
         mInitialTimeMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
         mUsedForSearch = args.getBoolean(IntentKeys.KEY_IS_USED_FOR_SEARCH);
-
-        mTime = new Time();
-        mLastHandledEventTime = new Time();
-        if (mInitialTimeMillis == 0) {
-            mTime.setToNow();
-        } else {
-            mTime.set(mInitialTimeMillis);
-        }
-        mLastHandledEventTime.set(mTime);
-
+        updateTime();
         mTimeZone = Utils.getTimeZone(getActivity(), mTZUpdater);
         mTime.switchTimezone(mTimeZone);
         mActivity = getActivity();
@@ -305,16 +296,20 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
 //        Utils.setDefaultView(this, CalendarApplication.AGENDA_VIEW_ID);
     }
 
+    private void updateTime() {
+        mTime = new Time();
+        mLastHandledEventTime = new Time();
+        if (mInitialTimeMillis == 0) {
+            mTime.setToNow();
+        } else {
+            mTime.set(mInitialTimeMillis);
+        }
+        mLastHandledEventTime.set(mTime);
+    }
+
     private void goTo(EventInfo event, boolean animate) {
         if (mTime == null) {
-            mTime = new Time();
-            mLastHandledEventTime = new Time();
-            if (mInitialTimeMillis == 0) {
-                mTime.setToNow();
-            } else {
-                mTime.set(mInitialTimeMillis);
-            }
-            mLastHandledEventTime.set(mTime);
+            updateTime();
         }
         if (event.selectedTime != null) {
             mTime.set(event.selectedTime);
