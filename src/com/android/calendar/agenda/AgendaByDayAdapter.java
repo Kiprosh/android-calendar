@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
 import com.android.calendar.agenda.AgendaWindowAdapter.DayAdapterInfo;
+import com.android.calendar.helpers.AgendaFieldColorHelper;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -63,9 +64,9 @@ public class AgendaByDayAdapter extends BaseAdapter {
         }
     };
 
-    public AgendaByDayAdapter(Context context) {
+    public AgendaByDayAdapter(Context context, AgendaFieldColorHelper agendaFieldColors) {
         mContext = context;
-        mAgendaAdapter = new AgendaAdapter(context, R.layout.agenda_item);
+        mAgendaAdapter = new AgendaAdapter(agendaFieldColors, context, R.layout.agenda_item);
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mStringBuilder = new StringBuilder(50);
         mFormatter = new Formatter(mStringBuilder, Locale.getDefault());

@@ -31,8 +31,8 @@ import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
 import com.android.calendar.ColorChipView;
-import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.AgendaFieldColorHelper;
 
 import java.util.Formatter;
 import java.util.Locale;
@@ -43,10 +43,10 @@ import ws.xsoh.etar.R;
 public class AgendaAdapter extends ResourceCursorAdapter {
     private final String mNoTitleLabel;
     private final Resources mResources;
-    private final int mDeclinedColor;
-    private final int mStandardColor;
-    private final int mWhereColor;
-    private final int mWhereDeclinedColor;
+    private int mDeclinedColor;
+    private int mStandardColor;
+    private int mWhereColor;
+    private int mWhereDeclinedColor;
     // Note: Formatter is not thread safe. Fine for now as it is only used by the main thread.
     private final Formatter mFormatter;
     private final StringBuilder mStringBuilder;
@@ -60,16 +60,18 @@ public class AgendaAdapter extends ResourceCursorAdapter {
     private int COLOR_CHIP_ALL_DAY_HEIGHT;
     private int COLOR_CHIP_HEIGHT;
 
-    public AgendaAdapter(Context context, int resource) {
+    public AgendaAdapter(AgendaFieldColorHelper agendaFieldColors, Context context, int resource) {
         super(context, resource, null);
-
-        DynamicTheme theme = new DynamicTheme();
         mResources = context.getResources();
         mNoTitleLabel = mResources.getString(R.string.no_title_label);
-        mDeclinedColor = theme.getColor(context, "agenda_item_declined_color");
-        mStandardColor = theme.getColor(context, "agenda_item_standard_color");
-        mWhereDeclinedColor = theme.getColor(context, "agenda_item_where_declined_text_color");
-        mWhereColor = theme.getColor(context, "agenda_item_where_text_color");
+
+        if (agendaFieldColors == null) {
+            agendaFieldColors = new AgendaFieldColorHelper(context);
+        }
+        mDeclinedColor = agendaFieldColors.getDeclinedColor();
+        mStandardColor = agendaFieldColors.getStandardColor();
+        mWhereDeclinedColor = agendaFieldColors.getWhereDeclinedColor();
+        mWhereColor = agendaFieldColors.getWhereColor();
         mStringBuilder = new StringBuilder(50);
         mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
 

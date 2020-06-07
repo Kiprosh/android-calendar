@@ -46,6 +46,7 @@ import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.StickyHeaderListView;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.AgendaFieldColorHelper;
 
 import java.util.Date;
 import java.util.Formatter;
@@ -219,8 +220,7 @@ public class AgendaWindowAdapter extends BaseAdapter
     private long mSelectedInstanceId = -1;
     private AgendaAdapter.ViewHolder mSelectedVH = null;
 
-    public AgendaWindowAdapter(Context context,
-                               AgendaListView agendaListView, boolean showEventOnStart) {
+    public AgendaWindowAdapter(Context context, AgendaListView agendaListView, boolean showEventOnStart) {
         mContext = context;
         mResources = context.getResources();
         mSelectedItemBackgroundColor = mResources
@@ -588,7 +588,6 @@ public class AgendaWindowAdapter extends BaseAdapter
         if (searchQuery != null) {
             mSearchQuery = searchQuery;
         }
-
         if (DEBUGLOG) {
             Log.e(TAG, this + ": refresh " + goToTime.toString() + " id " + id
                     + ((searchQuery != null) ? searchQuery : "")
@@ -1048,8 +1047,8 @@ public class AgendaWindowAdapter extends BaseAdapter
         int offset; // offset in position in the list view
         int size; // dayAdapter.getCount()
 
-        public DayAdapterInfo(Context context) {
-            dayAdapter = new AgendaByDayAdapter(context);
+        public DayAdapterInfo(Context context, AgendaFieldColorHelper agendaFieldColors) {
+            dayAdapter = new AgendaByDayAdapter(context, agendaFieldColors);
         }
 
         @Override
@@ -1353,7 +1352,7 @@ public class AgendaWindowAdapter extends BaseAdapter
                 DayAdapterInfo info = pruneAdapterInfo(data.queryType);
                 int listPositionOffset = 0;
                 if (info == null) {
-                    info = new DayAdapterInfo(mContext);
+                    info = new DayAdapterInfo(mContext, mAgendaListView.getAgendaFieldColors());
                 } else {
                     if (DEBUGLOG)
                         Log.e(TAG, "processNewCursor listPositionOffsetA="

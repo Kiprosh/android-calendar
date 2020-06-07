@@ -78,7 +78,10 @@ import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.agenda.AgendaFragment;
 import com.android.calendar.alerts.AlertService;
 import com.android.calendar.alerts.NotificationMgr;
+import com.android.calendar.helpers.AgendaFieldColorHelper;
+import com.android.calendar.helpers.DayFieldColorHelper;
 import com.android.calendar.helpers.IntentKeys;
+import com.android.calendar.helpers.MonthFieldColorHelper;
 import com.android.calendar.month.MonthByWeekFragment;
 import com.android.calendar.selectcalendars.SelectVisibleCalendarsFragment;
 import com.android.datetimepicker.date.DatePickerDialog;
@@ -712,6 +715,49 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         return false;
     }
 
+    MonthFieldColorHelper monthFieldColors;
+    AgendaFieldColorHelper agendaFieldColorHelper;
+    DayFieldColorHelper dayFieldColorHelper;
+
+    int getColorFromResource(int id) {
+        return ContextCompat.getColor(this, id);
+    }
+
+    private MonthFieldColorHelper setMonthViewColor() {
+        /*monthFieldColors = new MonthFieldColorHelper(this);
+        monthFieldColors.setMonthNumColor(getColorFromResource(R.color.calendar_number_text));
+        monthFieldColors.setMonthNumTodayColor(getColorFromResource(R.color.calendar_selected_text));
+        monthFieldColors.setMonthBGOtherColor(getColorFromResource(R.color.calendar_background));
+        monthFieldColors.setMonthNumOtherColor(getColorFromResource(R.color.calendar_other_number_text));
+        monthFieldColors.setMonthBGTodayColor(getColorFromResource(R.color.calendar_selected_background));
+        monthFieldColors.setMonthDayNameColor(getColorFromResource(R.color.calendar_day_text));
+        monthFieldColors.setMonthSaturdayColor(getColorFromResource(R.color.calendar_day_text));
+        monthFieldColors.setMonthSundayColor(getColorFromResource(R.color.calendar_day_text));
+        */
+        return monthFieldColors;
+    }
+
+    private AgendaFieldColorHelper getAgendaFieldColor() {
+        /*agendaFieldColorHelper = new AgendaFieldColorHelper(this);
+        agendaFieldColorHelper.setDeclinedColor(getColorFromResource(R.color.purple));
+        agendaFieldColorHelper.setStandardColor(getColorFromResource(R.color.red));
+        agendaFieldColorHelper.setWhereDeclinedColor(getColorFromResource(R.color.green));
+        agendaFieldColorHelper.setWhereColor(getColorFromResource(R.color.orange));
+        */
+        return agendaFieldColorHelper;
+    }
+
+    private DayFieldColorHelper getDayFieldColor() {
+        /*dayFieldColorHelper = new DayFieldColorHelper(this);
+        dayFieldColorHelper.setPressedColor(getColorFromResource(R.color.red));
+        dayFieldColorHelper.setCalendarHourLabelColor(getColorFromResource(R.color.orange));
+        dayFieldColorHelper.setCalendarGridLineInnerHorizontalColor(getColorFromResource(R.color.purple));
+        dayFieldColorHelper.setBgColor(getColorFromResource(R.color.darkest_orange));
+        */
+        return dayFieldColorHelper;
+    }
+
+
     private void initFragments(long timeMillis, int viewType, Bundle icicle) {
         if (DEBUG) {
             Log.d(TAG, "Initializing to " + timeMillis + " for view " + viewType);
@@ -720,9 +766,12 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
 
         if (mShowCalendarControls) {
             Fragment miniMonthFrag = new MonthByWeekFragment();
+            monthFieldColors = setMonthViewColor();
+
             Bundle bundle = new Bundle();
             bundle.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
             bundle.putBoolean(IntentKeys.KEY_IS_MINI_MONTH, true);
+            bundle.putParcelable(IntentKeys.KEY_COLOR_HELPER, monthFieldColors);
             miniMonthFrag.setArguments(bundle);
             ft.replace(R.id.mini_month, miniMonthFrag);
             mController.registerEventHandler(R.id.mini_month, (EventHandler) miniMonthFrag);
@@ -1045,34 +1094,42 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.agenda_view);
                 }
+                agendaFieldColorHelper = getAgendaFieldColor();
                 Bundle bundleAgenda = new Bundle();
                 bundleAgenda.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
                 bundleAgenda.putBoolean(IntentKeys.KEY_IS_USED_FOR_SEARCH, false);
+                bundleAgenda.putParcelable(IntentKeys.KEY_COLOR_HELPER, agendaFieldColorHelper);
                 frag.setArguments(bundleAgenda);
                 break;
             case ViewType.DAY:
                 mNavigationView.getMenu().findItem(R.id.day_menu_item).setChecked(true);
                 frag = new DayFragment();
                 Bundle args = new Bundle();
-                args.putLong("timeInMillis", timeMillis);
-                args.putInt("numOfDays", 1);
+                dayFieldColorHelper = getDayFieldColor();
+                args.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
+                args.putInt(IntentKeys.KEY_NUMBER_OF_DAYS, 1);
+                args.putParcelable(IntentKeys.KEY_COLOR_HELPER, dayFieldColorHelper);
                 frag.setArguments(args);
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.day_view);
                 }
                 break;
             case ViewType.MONTH:
+                monthFieldColors = setMonthViewColor();
                 mNavigationView.getMenu().findItem(R.id.month_menu_item).setChecked(true);
                 frag = new MonthByWeekFragment();
                 Bundle bundle = new Bundle();
                 bundle.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
                 bundle.putBoolean(IntentKeys.KEY_IS_MINI_MONTH, false);
+                bundle.putParcelable(IntentKeys.KEY_COLOR_HELPER, monthFieldColors);
                 frag.setArguments(bundle);
                 if (mShowAgendaWithMonth) {
                     secFrag = new AgendaFragment();
+                    agendaFieldColorHelper = getAgendaFieldColor();
                     bundle = new Bundle();
                     bundle.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
                     bundle.putBoolean(IntentKeys.KEY_IS_USED_FOR_SEARCH, false);
+                    bundle.putParcelable(IntentKeys.KEY_COLOR_HELPER, agendaFieldColorHelper);
                     secFrag.setArguments(bundle);
                 }
                 if (mIsTabletConfig) {
@@ -1083,10 +1140,12 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             default:
                 mNavigationView.getMenu().findItem(R.id.week_menu_item).setChecked(true);
                 frag = new DayFragment();
-                Bundle bundle = new Bundle();
-                bundle.putLong("timeInMillis", timeMillis);
-                bundle.putInt("numOfDays", Utils.getDaysPerWeek(this));
-                frag.setArguments(bundle);
+                dayFieldColorHelper = getDayFieldColor();
+                Bundle bundleDayFragment = new Bundle();
+                bundleDayFragment.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
+                bundleDayFragment.putInt(IntentKeys.KEY_NUMBER_OF_DAYS, Utils.getDaysPerWeek(this));
+                bundleDayFragment.putParcelable(IntentKeys.KEY_COLOR_HELPER, dayFieldColorHelper);
+                frag.setArguments(bundleDayFragment);
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.week_view);
                 }

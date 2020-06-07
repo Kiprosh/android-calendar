@@ -42,6 +42,7 @@ import com.android.calendar.EventInfoFragment;
 import com.android.calendar.GeneralPreferences;
 import com.android.calendar.StickyHeaderListView;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.AgendaFieldColorHelper;
 import com.android.calendar.helpers.IntentKeys;
 
 import java.util.Date;
@@ -75,6 +76,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     private EventInfoFragment mEventFragment;
     private String mQuery;
     private boolean mUsedForSearch = false;
+    private AgendaFieldColorHelper agendaFieldColorHelper;
     private boolean mIsTabletConfig;
     private EventInfo mOnAttachedInfo = null;
     private boolean mOnAttachAllDay = false;
@@ -111,8 +113,9 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        Bundle args = getArguments();
+        agendaFieldColorHelper = args.getParcelable(IntentKeys.KEY_COLOR_HELPER);
         if (!calledConstructor) {
-            Bundle args = getArguments();
             mInitialTimeMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
             mUsedForSearch = args.getBoolean(IntentKeys.KEY_IS_USED_FOR_SEARCH);
 
@@ -160,7 +163,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
 
         mAgendaListView = (AgendaListView) v.findViewById(R.id.agenda_events_list);
         mAgendaListView.setClickable(true);
-
+        mAgendaListView.setAgendaFieldColors(agendaFieldColorHelper);
         if (savedInstanceState != null) {
             long instanceId = savedInstanceState.getLong(BUNDLE_KEY_RESTORE_INSTANCE_ID, -1);
             if (instanceId != -1) {
@@ -357,7 +360,6 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
         }
         mAgendaListView.goTo(time, -1, mQuery, true, false);
     }
-
     @Override
     public void eventsChanged() {
         if (mAgendaListView != null) {

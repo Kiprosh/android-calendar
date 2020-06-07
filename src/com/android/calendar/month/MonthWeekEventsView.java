@@ -43,11 +43,11 @@ import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 
-import com.android.calendar.DynamicTheme;
 import com.android.calendar.Event;
 import com.android.calendar.LunarUtils;
 import com.android.calendar.Utils;
 import com.android.calendar.ViewDetailsPreferences;
+import com.android.calendar.helpers.MonthFieldColorHelper;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -157,12 +157,16 @@ public class MonthWeekEventsView extends SimpleWeekView {
     private int mAnimateTodayAlpha = 0;
     private ObjectAnimator mTodayAnimator = null;
     private int[] mDayXs;
+    public MonthFieldColorHelper monthFieldColors;
 
     /**
      * Shows up as an error if we don't include this.
      */
-    public MonthWeekEventsView(Context context) {
-        super(context);
+    public MonthWeekEventsView(MonthFieldColorHelper monthFieldColors, Context context) {
+        super(monthFieldColors, context);
+
+        this.monthFieldColors = monthFieldColors;
+
     }
 
     // Sets the list of events for this week. Takes a sorted list of arrays
@@ -228,25 +232,27 @@ public class MonthWeekEventsView extends SimpleWeekView {
 
     protected void loadColors(Context context) {
         Resources res = context.getResources();
-        DynamicTheme dynamicTheme = new DynamicTheme();
 
-        mMonthWeekNumColor = dynamicTheme.getColor(context, "month_week_num_color");
-        mMonthNumColor = dynamicTheme.getColor(context, "month_day_number");
-        mMonthNumOtherColor = dynamicTheme.getColor(context, "month_day_number_other");
-        mMonthNumTodayColor = dynamicTheme.getColor(context, "month_today_number");
-        mMonthEventColor = dynamicTheme.getColor(context, "month_event_color");
-        mMonthDeclinedEventColor = dynamicTheme.getColor(context, "agenda_item_declined_color");
-        mMonthDeclinedExtrasColor = dynamicTheme.getColor(context, "agenda_item_where_declined_text_color");
-        mMonthEventExtraColor = dynamicTheme.getColor(context, "month_event_extra_color");
-        mMonthEventOtherColor = dynamicTheme.getColor(context, "month_event_other_color");
-        mMonthEventExtraOtherColor = dynamicTheme.getColor(context, "month_event_extra_other_color");
-        mMonthBGTodayColor = dynamicTheme.getColor(context, "month_today_bgcolor");
-        mMonthBGFocusMonthColor = dynamicTheme.getColor(context, "month_focus_month_bgcolor");
-        mMonthBGOtherColor = dynamicTheme.getColor(context, "month_other_bgcolor");
-        mMonthBGColor = dynamicTheme.getColor(context, "month_bgcolor");
-        mDaySeparatorInnerColor = dynamicTheme.getColor(context, "month_grid_lines");
-        mTodayAnimateColor = dynamicTheme.getColor(context, "today_highlight_color");
-        mClickedDayColor = dynamicTheme.getColor(context, "day_clicked_background_color");
+        if (super.monthFieldColors == null) {
+            super.monthFieldColors = new MonthFieldColorHelper(context);
+        }
+        mMonthWeekNumColor = super.monthFieldColors.getMonthWeekNumColor();
+        mMonthNumColor = super.monthFieldColors.getMonthNumColor();
+        mMonthNumOtherColor = super.monthFieldColors.getMonthNumOtherColor();
+        mMonthNumTodayColor = super.monthFieldColors.getMonthNumTodayColor();
+        mMonthEventColor = super.monthFieldColors.getMonthEventColor();
+        mMonthDeclinedEventColor = super.monthFieldColors.getMonthDeclinedEventColor();
+        mMonthDeclinedExtrasColor = super.monthFieldColors.getMonthDeclinedExtrasColor();
+        mMonthEventExtraColor = super.monthFieldColors.getMonthEventExtraColor();
+        mMonthEventOtherColor = super.monthFieldColors.getMonthEventOtherColor();
+        mMonthEventExtraOtherColor = super.monthFieldColors.getMonthEventExtraOtherColor();
+        mMonthBGTodayColor = super.monthFieldColors.getMonthBGTodayColor();
+        mMonthBGFocusMonthColor = super.monthFieldColors.getMonthBGFocusMonthColor();
+        mMonthBGOtherColor = super.monthFieldColors.getMonthBGOtherColor();
+        mMonthBGColor = super.monthFieldColors.getMonthBGColor();
+        mDaySeparatorInnerColor = super.monthFieldColors.getDaySeparatorInnerColor();
+        mTodayAnimateColor = super.monthFieldColors.getTodayAnimateColor();
+        mClickedDayColor = super.monthFieldColors.getClickedDayColor();
         mTodayDrawable = res.getDrawable(R.drawable.today_blue_week_holo_light);
     }
 
@@ -257,7 +263,6 @@ public class MonthWeekEventsView extends SimpleWeekView {
     @Override
     protected void initView() {
         super.initView();
-
         if (!mInitialized) {
             Resources resources = getContext().getResources();
             mShowDetailsInMonth = Utils.getConfigBool(getContext(), R.bool.show_details_in_month);

@@ -36,6 +36,7 @@ import com.android.calendar.Utils;
 import com.android.calendar.agenda.AgendaAdapter.ViewHolder;
 import com.android.calendar.agenda.AgendaWindowAdapter.AgendaItem;
 import com.android.calendar.agenda.AgendaWindowAdapter.DayAdapterInfo;
+import com.android.calendar.helpers.AgendaFieldColorHelper;
 
 import ws.xsoh.etar.R;
 
@@ -50,6 +51,8 @@ public class AgendaListView extends ListView implements OnItemClickListener {
     private Context mContext;
     private String mTimeZone;
     private Time mTime;
+    private AgendaFieldColorHelper agendaFieldColors;
+
     private final Runnable mTZUpdater = new Runnable() {
         @Override
         public void run() {
@@ -57,6 +60,7 @@ public class AgendaListView extends ListView implements OnItemClickListener {
             mTime.switchTimezone(mTimeZone);
         }
     };
+
     private boolean mShowEventDetailsWithAgenda;
     private Handler mHandler = null;
     // runs every midnight and refreshes the view in order to update the past/present
@@ -85,12 +89,21 @@ public class AgendaListView extends ListView implements OnItemClickListener {
         initView(context);
     }
 
+    public AgendaFieldColorHelper getAgendaFieldColors() {
+        return agendaFieldColors;
+    }
+
+    public void setAgendaFieldColors(AgendaFieldColorHelper agendaFieldColors) {
+        this.agendaFieldColors = agendaFieldColors;
+    }
+
     private void initView(Context context) {
         mContext = context;
         mTimeZone = Utils.getTimeZone(context, mTZUpdater);
         mTime = new Time(mTimeZone);
         setOnItemClickListener(this);
         setVerticalScrollBarEnabled(false);
+
         mWindowAdapter = new AgendaWindowAdapter(context, this,
                 Utils.getConfigBool(context, R.bool.show_event_details_with_agenda));
         mWindowAdapter.setSelectedInstanceId(-1/* TODO:instanceId */);
@@ -368,6 +381,7 @@ public class AgendaListView extends ListView implements OnItemClickListener {
     // Move the currently selected or visible focus down by offset amount.
     // offset could be negative.
     public void shiftSelection(int offset) {
+
         shiftPosition(offset);
         int position = getSelectedItemPosition();
         if (position != INVALID_POSITION) {

@@ -33,6 +33,7 @@ import android.widget.ListView;
 
 import com.android.calendar.CalendarController;
 import com.android.calendar.Utils;
+import com.android.calendar.helpers.MonthFieldColorHelper;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -96,9 +97,11 @@ public class SimpleWeeksAdapter extends BaseAdapter implements OnTouchListener {
     protected int mDaysPerWeek = DEFAULT_DAYS_PER_WEEK;
     protected int mFocusMonth = DEFAULT_MONTH_FOCUS;
     ListView mListView;
+    MonthFieldColorHelper monthFieldColors;
 
-    public SimpleWeeksAdapter(Context context, HashMap<String, Integer> params) {
+    public SimpleWeeksAdapter(MonthFieldColorHelper monthFieldColors, Context context, HashMap<String, Integer> params) {
         mContext = context;
+        this.monthFieldColors = monthFieldColors;
 
         // Get default week start based on locale, subtracting one for use with android Time.
         Calendar cal = Calendar.getInstance(Locale.getDefault());
@@ -211,7 +214,8 @@ public class SimpleWeeksAdapter extends BaseAdapter implements OnTouchListener {
             // We store the drawing parameters in the view so it can be recycled
             drawingParams = (HashMap<String, Integer>) v.getTag();
         } else {
-            v = new SimpleWeekView(mContext);
+
+            v = new SimpleWeekView(monthFieldColors, mContext);
             // Set up the new view
             LayoutParams params = new LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
