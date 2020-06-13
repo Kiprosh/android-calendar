@@ -16,22 +16,26 @@
 
 package com.android.calendar.month;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Instances;
+import android.support.v4.content.ContextCompat;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
@@ -337,7 +341,11 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
                             - (mNumWeeks * 7 / 2);
             mEventUri = updateUri();
             String where = updateWhere();
-
+            if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(mContext,
+                    Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                //If permission is not granted then return.
+                return null;
+            }
             loader = new CursorLoader(
                     getActivity(), mEventUri, Event.EVENT_PROJECTION, where,
                     null /* WHERE_CALENDARS_SELECTED_ARGS */, INSTANCES_SORT_ORDER);
