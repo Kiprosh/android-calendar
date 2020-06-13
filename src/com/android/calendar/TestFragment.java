@@ -32,6 +32,7 @@ import com.android.calendar.month.MonthByWeekFragment;
 import com.android.calendar.selectcalendars.SelectVisibleCalendarsFragment;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -114,6 +115,7 @@ public class TestFragment extends AbstractCalendarActivity implements CalendarCo
     @Override
     protected void onNewIntent(Intent intent) {
         String action = intent.getAction();
+        Log.d("shajsda", "onNewIntent().... TestFragment");
         if (DEBUG)
             Log.d(TAG, "New intent received " + intent.toString());
         // Don't change the date if we're just returning to the app's home
@@ -135,6 +137,7 @@ public class TestFragment extends AbstractCalendarActivity implements CalendarCo
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("shajsda", "onResume().... TestFragment");
         dynamicTheme.onResume(this);
 
         // Must register as the first activity because this activity can modify
@@ -252,6 +255,7 @@ public class TestFragment extends AbstractCalendarActivity implements CalendarCo
 
     @Override
     public void handleEvent(CalendarController.EventInfo event) {
+        Log.d("shajsda", "handleEvent().... TestFragment");
 
         long displayTime = -1;
         if (event.eventType == CalendarController.EventType.GO_TO) {
@@ -421,6 +425,8 @@ public class TestFragment extends AbstractCalendarActivity implements CalendarCo
 
     @Override
     public void eventsChanged() {
+        Log.d("shajsda", "eventsChanged()....");
+
         Toast.makeText(getBaseContext(), "eventsChanged", Toast.LENGTH_LONG).show();
         mController.sendEvent(this, CalendarController.EventType.EVENTS_CHANGED, null, null, -1, CalendarController.ViewType.CURRENT);
     }
@@ -498,6 +504,7 @@ public class TestFragment extends AbstractCalendarActivity implements CalendarCo
     }
 
     private void initFragments(long timeMillis, int viewType, Bundle icicle) {
+        Log.d("shajsda", "initFragments().... TestFragment");
         if (DEBUG) {
             Log.d(TAG, "Initializing to " + timeMillis + " for view " + viewType);
         }
@@ -505,12 +512,20 @@ public class TestFragment extends AbstractCalendarActivity implements CalendarCo
 
         if (mShowCalendarControls) {
             Fragment miniMonthFrag = new MonthByWeekFragment();
+            ArrayList<Event> events = new ArrayList<Event>();
+            events.add(new Event(1058, getResources().getColor(R.color.colorRedPrimaryDark), "Feb Session", "", true, "kavitamp19@googlemail.com", false
+                    , 2458893, 2458893, 990, 1050, 1580619630000l, 1580623230000l, false, false));
+
+            events.add(new Event(1059, getResources().getColor(R.color.colorOrangeAccent), "June Session", "", true, "kavitamp19@googlemail.com", false
+                    , 2459014, 2459014, 990, 1050, 1592010030000l, 1592024430000l, false, false));
+
             monthFieldColors = setMonthViewColor();
 
             Bundle bundle = new Bundle();
             bundle.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
             bundle.putBoolean(IntentKeys.KEY_IS_MINI_MONTH, true);
-            bundle.putParcelable(IntentKeys.KEY_COLOR_HELPER, monthFieldColors);
+            //bundle.putParcelable(IntentKeys.KEY_COLOR_HELPER, monthFieldColors);
+            bundle.putParcelableArrayList(IntentKeys.KEY_EVENT_LIST, events);
             miniMonthFrag.setArguments(bundle);
             ft.replace(R.id.mini_month, miniMonthFrag);
             mController.registerEventHandler(R.id.mini_month, (CalendarController.EventHandler) miniMonthFrag);
@@ -612,11 +627,19 @@ public class TestFragment extends AbstractCalendarActivity implements CalendarCo
         switch (viewType) {
             case CalendarController.ViewType.MONTH:
                 monthFieldColors = setMonthViewColor();
+                ArrayList<Event> events = new ArrayList<Event>();
+                events.add(new Event(1058, getResources().getColor(R.color.colorRedPrimaryDark), "Feb Session", "", true, "kavitamp19@googlemail.com", false
+                        , 2458893, 2458893, 990, 1050, 1580619630000l, 1580623230000l, false, false));
+
+                events.add(new Event(1059, getResources().getColor(R.color.colorOrangeAccent), "June Session", "", true, "kavitamp19@googlemail.com", false
+                        , 2459014, 2459014, 990, 1050, 1592010030000l, 1592024430000l, false, false));
+
                 frag = new MonthByWeekFragment();
                 Bundle bundle = new Bundle();
                 bundle.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
                 bundle.putBoolean(IntentKeys.KEY_IS_MINI_MONTH, false);
-                bundle.putParcelable(IntentKeys.KEY_COLOR_HELPER, monthFieldColors);
+                bundle.putParcelableArrayList(IntentKeys.KEY_EVENT_LIST, events);
+                //bundle.putParcelable(IntentKeys.KEY_COLOR_HELPER, monthFieldColors);
                 frag.setArguments(bundle);
                 break;
         }

@@ -27,6 +27,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Debug;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
@@ -44,7 +46,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ws.xsoh.etar.R;
 
 // TODO: should Event be Parcelable so it can be passed via Intents?
-public class Event implements Cloneable {
+public class Event implements Cloneable, Parcelable {
 
     private static final String TAG = "CalEvent";
     private static final boolean PROFILE = false;
@@ -148,6 +150,47 @@ public class Event implements Cloneable {
     private int dayViewDrawableId;
     private boolean isAllDayIconVisible;
 
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
+
+    protected Event(Parcel in) {
+        id = in.readLong();
+        color = in.readInt();
+        allDay = in.readByte() != 0;
+        organizer = in.readString();
+        guestsCanModify = in.readByte() != 0;
+        startDay = in.readInt();
+        endDay = in.readInt();
+        startTime = in.readInt();
+        endTime = in.readInt();
+        startMillis = in.readLong();
+        endMillis = in.readLong();
+        hasAlarm = in.readByte() != 0;
+        isRepeating = in.readByte() != 0;
+        selfAttendeeStatus = in.readInt();
+        left = in.readFloat();
+        right = in.readFloat();
+        top = in.readFloat();
+        bottom = in.readFloat();
+        nextRight = in.readParcelable(Event.class.getClassLoader());
+        nextLeft = in.readParcelable(Event.class.getClassLoader());
+        nextUp = in.readParcelable(Event.class.getClassLoader());
+        nextDown = in.readParcelable(Event.class.getClassLoader());
+        mColumn = in.readInt();
+        mMaxColumns = in.readInt();
+        dayViewDrawableId = in.readInt();
+        isAllDayIconVisible = in.readByte() != 0;
+    }
+
     public static final Event newInstance() {
         Event e = new Event();
 
@@ -168,6 +211,27 @@ public class Event implements Cloneable {
         e.selfAttendeeStatus = Attendees.ATTENDEE_STATUS_NONE;
 
         return e;
+    }
+
+    public Event() {
+    }
+
+    public Event(long id, int color, CharSequence title, CharSequence location, boolean allDay, String organizer, boolean guestsCanModify, int startDay, int endDay, int startTime, int endTime, long startMillis, long endMillis, boolean hasAlarm, boolean isRepeating) {
+        this.id = id;
+        this.color = color;
+        this.title = title;
+        this.location = location;
+        this.allDay = allDay;
+        this.organizer = organizer;
+        this.guestsCanModify = guestsCanModify;
+        this.startDay = startDay;
+        this.endDay = endDay;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startMillis = startMillis;
+        this.endMillis = endMillis;
+        this.hasAlarm = hasAlarm;
+        this.isRepeating = isRepeating;
     }
 
     /**
@@ -324,6 +388,8 @@ public class Event implements Cloneable {
             }
             events.add(e);
         }
+        Log.d("shajsda", "events-->" + events.size());
+        //Log.d("shajsda","events-->"+events.toString());
     }
 
     /**
@@ -660,5 +726,55 @@ public class Event implements Cloneable {
 
     public void setAllDayIconVisible(boolean allDayIconVisible) {
         isAllDayIconVisible = allDayIconVisible;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "title=" + title +
+                ", allDay=" + allDay +
+                ", organizer='" + organizer + '\'' +
+                ", startDay=" + startDay +
+                ", endDay=" + endDay +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", startMillis=" + startMillis +
+                ", endMillis=" + endMillis +
+                '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeInt(color);
+        dest.writeByte((byte) (allDay ? 1 : 0));
+        dest.writeString(organizer);
+        dest.writeByte((byte) (guestsCanModify ? 1 : 0));
+        dest.writeInt(startDay);
+        dest.writeInt(endDay);
+        dest.writeInt(startTime);
+        dest.writeInt(endTime);
+        dest.writeLong(startMillis);
+        dest.writeLong(endMillis);
+        dest.writeByte((byte) (hasAlarm ? 1 : 0));
+        dest.writeByte((byte) (isRepeating ? 1 : 0));
+        dest.writeInt(selfAttendeeStatus);
+        dest.writeFloat(left);
+        dest.writeFloat(right);
+        dest.writeFloat(top);
+        dest.writeFloat(bottom);
+        dest.writeParcelable(nextRight, flags);
+        dest.writeParcelable(nextLeft, flags);
+        dest.writeParcelable(nextUp, flags);
+        dest.writeParcelable(nextDown, flags);
+        dest.writeInt(mColumn);
+        dest.writeInt(mMaxColumns);
+        dest.writeInt(dayViewDrawableId);
+        dest.writeByte((byte) (isAllDayIconVisible ? 1 : 0));
     }
 }

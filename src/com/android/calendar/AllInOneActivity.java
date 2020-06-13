@@ -1083,10 +1083,10 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             default:
                 mNavigationView.getMenu().findItem(R.id.week_menu_item).setChecked(true);
                 frag = new DayFragment();
-                Bundle bundle = new Bundle();
-                bundle.putLong("timeInMillis", timeMillis);
-                bundle.putInt("numOfDays", Utils.getDaysPerWeek(this));
-                frag.setArguments(bundle);
+                Bundle bundleNew = new Bundle();
+                bundleNew.putLong("timeInMillis", timeMillis);
+                bundleNew.putInt("numOfDays", Utils.getDaysPerWeek(this));
+                frag.setArguments(bundleNew);
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.week_view);
                 }

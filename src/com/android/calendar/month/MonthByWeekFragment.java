@@ -98,17 +98,11 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     };
     protected float mMinimumTwoMonthFlingVelocity;
     protected boolean mIsMiniMonth;
-    protected boolean mHideDeclined;
-    protected int mFirstLoadedJulianDay;
-    protected int mLastLoadedJulianDay;
-    private CreateEventDialogFragment mEventDialog;
-    private CursorLoader mLoader;
-    private Uri mEventUri;
-    private volatile boolean mShouldLoad = true;
     private final Runnable mUpdateLoader = new Runnable() {
         @Override
         public void run() {
             synchronized (this) {
+                Log.d("shajsda", "mUpdateLoader Runnable....");
                 if (!mShouldLoad || mLoader == null) {
                     return;
                 }
@@ -127,6 +121,14 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
             }
         }
     };
+    protected boolean mHideDeclined;
+    protected int mFirstLoadedJulianDay;
+    protected int mLastLoadedJulianDay;
+    private CreateEventDialogFragment mEventDialog;
+    private CursorLoader mLoader;
+    private Uri mEventUri;
+    private volatile boolean mShouldLoad = true;
+    ArrayList<Event> newEvents;
     private boolean mUserScrolled = false;
     private int mEventsLoadingDelay;
     private boolean mShowCalendarControls;
@@ -207,6 +209,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     }
 
     private void stopLoader() {
+        Log.d("shajsda", "stopLoader()....");
         synchronized (mUpdateLoader) {
             mHandler.removeCallbacks(mUpdateLoader);
             if (mLoader != null) {
@@ -220,6 +223,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
 
     @Override
     public void onAttach(Activity activity) {
+        Log.d("shajsda", "onAttach()....");
         super.onAttach(activity);
         mTZUpdater.run();
         if (mAdapter != null) {
@@ -276,9 +280,12 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v;
+        Log.d("shajsda", "onCreateView()....");
         Bundle args = getArguments();
         long timeInMillis = args.getLong(IntentKeys.KEY_TIME_IN_MILLIS);
         mIsMiniMonth = args.getBoolean(IntentKeys.KEY_IS_MINI_MONTH);
+        newEvents = new ArrayList<Event>();
+        newEvents = args.getParcelableArrayList(IntentKeys.KEY_EVENT_LIST);
         populateData(timeInMillis);
 
         if (mIsMiniMonth) {
@@ -292,6 +299,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d("shajsda", "onActivityCreated()....");
         super.onActivityCreated(savedInstanceState);
         mListView.setSelector(new StateListDrawable());
         mListView.setOnTouchListener(this);
@@ -327,6 +335,8 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     // TODO
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d("shajsda", "onCreateLoader()....");
+
         if (mIsMiniMonth) {
             return null;
         }
@@ -336,6 +346,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
                     Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff)
                             - (mNumWeeks * 7 / 2);
             mEventUri = updateUri();
+            // add check here if Calendar permission is not added
             String where = updateWhere();
 
             loader = new CursorLoader(
@@ -351,6 +362,8 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
 
     @Override
     public void doResumeUpdates() {
+        Log.d("shajsda", "doResumeUpdates()....MonthByWeekFragment");
+
         mFirstDayOfWeek = Utils.getFirstDayOfWeek(mContext);
         mShowWeekNumber = Utils.getShowWeekNumber(mContext);
         boolean prevHideDeclined = mHideDeclined;
@@ -368,6 +381,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d("shajsda", "onLoadFinished()....");
         synchronized (mUpdateLoader) {
             if (Log.isLoggable(TAG, Log.DEBUG)) {
                 Log.d(TAG, "Found " + data.getCount() + " cursor entries for uri " + mEventUri);
@@ -383,6 +397,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
                 return;
             }
             ArrayList<Event> events = new ArrayList<Event>();
+            events.addAll(newEvents);
             Event.buildEventsFromCursor(
                     events, data, mContext, mFirstLoadedJulianDay, mLastLoadedJulianDay);
             ((MonthByWeekAdapter) mAdapter).setEvents(mFirstLoadedJulianDay,
@@ -409,6 +424,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
 
     @Override
     public void handleEvent(EventInfo event) {
+        Log.d("shajsda", "handleEvent() MonthByWeekFragment");
         if (event.eventType == EventType.GO_TO) {
             boolean animate = true;
             if (mDaysPerWeek * mNumWeeks * 2 < Math.abs(

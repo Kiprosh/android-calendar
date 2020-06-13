@@ -237,6 +237,7 @@ public class EventLoader {
         public LoaderThread(LinkedBlockingQueue<LoadRequest> queue, EventLoader eventLoader) {
             mQueue = queue;
             mEventLoader = eventLoader;
+            Log.d("shajsda", "LoaderThread()......");
         }
 
         public void shutdown() {

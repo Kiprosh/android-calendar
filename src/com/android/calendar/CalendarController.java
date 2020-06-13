@@ -257,7 +257,7 @@ public class CalendarController {
 
     public void sendEvent(Object sender, final EventInfo event) {
         // TODO Throw exception on invalid events
-
+        Log.d("shajsda", "sendEvent(...) CalendarController");
         if (DEBUG) {
             Log.d(TAG, eventInfoToString(event));
         }
@@ -357,6 +357,8 @@ public class CalendarController {
                 EventHandler handler = mFirstEventHandler.second;
                 if (handler != null && (handler.getSupportedEventTypes() & event.eventType) != 0
                         && !mToBeRemovedEventHandlers.contains(mFirstEventHandler.first)) {
+                    Log.d("shajsda", "handler.handleEvent(event) CalendarController");
+                    Log.d("sdahdashsad", "CalendarController event--->" + event.toString());
                     handler.handleEvent(event);
                     handled = true;
                 }
@@ -375,6 +377,7 @@ public class CalendarController {
                     if (mToBeRemovedEventHandlers.contains(key)) {
                         continue;
                     }
+                    Log.d("shajsda", "eventHandler.handleEvent(event) CalendarController");
                     eventHandler.handleEvent(event);
                     handled = true;
                 }
@@ -869,6 +872,15 @@ public class CalendarController {
                     Log.wtf(TAG, "Unknown attendee response " + response);
             }
             return ATTENDEE_STATUS_NONE_MASK;
+        }
+
+        @Override
+        public String toString() {
+            return "EventInfo{" +
+                    "startTime=" + startTime +
+                    ", endTime=" + endTime +
+                    ", eventTitle='" + eventTitle + '\'' +
+                    '}';
         }
     }
 }
