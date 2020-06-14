@@ -98,6 +98,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     };
     protected float mMinimumTwoMonthFlingVelocity;
     protected boolean mIsMiniMonth;
+    protected boolean displayExistingCalendarEvents;
     private final Runnable mUpdateLoader = new Runnable() {
         @Override
         public void run() {
@@ -286,6 +287,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
         mIsMiniMonth = args.getBoolean(IntentKeys.KEY_IS_MINI_MONTH);
         newEvents = new ArrayList<Event>();
         newEvents = args.getParcelableArrayList(IntentKeys.KEY_EVENT_LIST);
+        displayExistingCalendarEvents = args.getBoolean(IntentKeys.KEY_DISPLAY_CALENDAR_DB_EVENTS);
         populateData(timeInMillis);
 
         if (mIsMiniMonth) {
@@ -348,16 +350,23 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
             mEventUri = updateUri();
             // add check here if Calendar permission is not added
             String where = updateWhere();
-
-            loader = new CursorLoader(
-                    getActivity(), mEventUri, Event.EVENT_PROJECTION, where,
-                    null /* WHERE_CALENDARS_SELECTED_ARGS */, INSTANCES_SORT_ORDER);
-            loader.setUpdateThrottle(LOADER_THROTTLE_DELAY);
+            if (displayExistingCalendarEvents) {
+                loader = new CursorLoader(
+                        getActivity(), mEventUri, Event.EVENT_PROJECTION, where,
+                        null /* WHERE_CALENDARS_SELECTED_ARGS */, INSTANCES_SORT_ORDER);
+                loader.setUpdateThrottle(LOADER_THROTTLE_DELAY);
+                return loader;
+            } else {
+                /*ArrayList<Event> events = new ArrayList<Event>();
+                events.addAll(newEvents);
+                ((MonthByWeekAdapter) mAdapter).setEvents(mFirstLoadedJulianDay,
+                        mLastLoadedJulianDay - mFirstLoadedJulianDay + 1, events);*/
+            }
         }
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log.d(TAG, "Returning new loader with uri: " + mEventUri);
         }
-        return loader;
+        return null;
     }
 
     @Override
@@ -483,6 +492,16 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
         }
     }
 
+    public void loadData(ArrayList<Event> events) {
+        mFirstLoadedJulianDay =
+                Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff)
+                        - (mNumWeeks * 7 / 2);
+        mEventUri = updateUri();
+
+        ((MonthByWeekAdapter) mAdapter).setEvents(mFirstLoadedJulianDay,
+                mLastLoadedJulianDay - mFirstLoadedJulianDay + 1, events);
+    }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -492,6 +511,11 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
                 stopLoader();
                 mDesiredDay.setToNow();
             } else {
+                if (!displayExistingCalendarEvents) {
+                    Log.d("ashksasa", "displayExistingCalendarEvents");
+                    Log.d("ashksasa", "newEvents-->" + newEvents.size());
+                    loadData(newEvents);
+                }
                 mHandler.removeCallbacks(mUpdateLoader);
                 mShouldLoad = true;
                 mHandler.postDelayed(mUpdateLoader, LOADER_DELAY);

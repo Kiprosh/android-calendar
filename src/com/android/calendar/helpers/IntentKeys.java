@@ -15,4 +15,5 @@ public class IntentKeys {
     public static final String KEY_LIST_REMINDER_ENTRY = "LIST_REMINDER_ENTRY";
     public static final String KEY_COLOR_HELPER = "COLOR_HELPER";
     public static final String KEY_EVENT_LIST = "EVENT_LIST";
+    public static final String KEY_DISPLAY_CALENDAR_DB_EVENTS = "DISPLAY_CALENDAR_DB_EVENTS";
 }

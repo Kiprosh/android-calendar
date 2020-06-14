@@ -526,6 +526,7 @@ public class TestFragment extends AbstractCalendarActivity implements CalendarCo
             bundle.putBoolean(IntentKeys.KEY_IS_MINI_MONTH, true);
             //bundle.putParcelable(IntentKeys.KEY_COLOR_HELPER, monthFieldColors);
             bundle.putParcelableArrayList(IntentKeys.KEY_EVENT_LIST, events);
+            bundle.putBoolean(IntentKeys.KEY_DISPLAY_CALENDAR_DB_EVENTS, false);
             miniMonthFrag.setArguments(bundle);
             ft.replace(R.id.mini_month, miniMonthFrag);
             mController.registerEventHandler(R.id.mini_month, (CalendarController.EventHandler) miniMonthFrag);
@@ -625,6 +626,13 @@ public class TestFragment extends AbstractCalendarActivity implements CalendarCo
         Fragment frag = null;
         Fragment secFrag = null;
         switch (viewType) {
+            case CalendarController.ViewType.DAY:
+                frag = new DayFragment();
+                Bundle args = new Bundle();
+                args.putLong("timeInMillis", timeMillis);
+                args.putInt("numOfDays", 1);
+                frag.setArguments(args);
+                break;
             case CalendarController.ViewType.MONTH:
                 monthFieldColors = setMonthViewColor();
                 ArrayList<Event> events = new ArrayList<Event>();
@@ -639,6 +647,7 @@ public class TestFragment extends AbstractCalendarActivity implements CalendarCo
                 bundle.putLong(IntentKeys.KEY_TIME_IN_MILLIS, timeMillis);
                 bundle.putBoolean(IntentKeys.KEY_IS_MINI_MONTH, false);
                 bundle.putParcelableArrayList(IntentKeys.KEY_EVENT_LIST, events);
+                bundle.putBoolean(IntentKeys.KEY_DISPLAY_CALENDAR_DB_EVENTS, false);
                 //bundle.putParcelable(IntentKeys.KEY_COLOR_HELPER, monthFieldColors);
                 frag.setArguments(bundle);
                 break;
