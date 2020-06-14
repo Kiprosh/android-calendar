@@ -16,19 +16,23 @@
 
 package com.android.calendar.agenda;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Instances;
+import android.support.v4.content.ContextCompat;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
@@ -1085,7 +1089,11 @@ public class AgendaWindowAdapter extends BaseAdapter
 
             if (cursor == null) {
                 if (mAgendaListView != null && mAgendaListView.getContext() instanceof Activity) {
-                    ((Activity) mAgendaListView.getContext()).finish();
+                    if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(mContext,
+                            Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                        //If permission is not granted then return.
+                        mHeaderView.setText(R.string.calendar_permission_not_granted);
+                    }
                 }
                 return;
             }

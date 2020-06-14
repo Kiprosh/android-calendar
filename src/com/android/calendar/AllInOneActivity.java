@@ -413,9 +413,10 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                     // permission was granted, yay!
-
+                    if (mController.getViewType() == ViewType.MONTH) {
+                        initFragments(mController.getTime(), ViewType.MONTH, null);
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.user_rejected_calendar_write_permission, Toast.LENGTH_LONG).show();
                 }
@@ -1083,10 +1084,10 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             default:
                 mNavigationView.getMenu().findItem(R.id.week_menu_item).setChecked(true);
                 frag = new DayFragment();
-                Bundle bundle = new Bundle();
-                bundle.putLong("timeInMillis", timeMillis);
-                bundle.putInt("numOfDays", Utils.getDaysPerWeek(this));
-                frag.setArguments(bundle);
+                Bundle dayViewBundle = new Bundle();
+                dayViewBundle.putLong("timeInMillis", timeMillis);
+                dayViewBundle.putInt("numOfDays", Utils.getDaysPerWeek(this));
+                frag.setArguments(dayViewBundle);
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.week_view);
                 }
